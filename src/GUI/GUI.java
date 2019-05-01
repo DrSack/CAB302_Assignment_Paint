@@ -5,6 +5,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.*;
 
 public class GUI extends JFrame implements ActionListener{
@@ -78,7 +79,6 @@ public class GUI extends JFrame implements ActionListener{
             DrawCanvas file = new DrawCanvas("Untitled", "");
         }
         if(btnSrc == openFile) {
-
             BufferedReader reader;
             BufferedReader readerT;
             BufferedReader readerChoose;
@@ -124,7 +124,6 @@ public class GUI extends JFrame implements ActionListener{
                         }
                         System.out.println(getFile);
                         DrawCanvas cool = new DrawCanvas(filename, getFile);
-
 
                         if(file.length() == 0){
                             cool.setVisible(false);

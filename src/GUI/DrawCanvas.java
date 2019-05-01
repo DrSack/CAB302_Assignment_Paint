@@ -17,6 +17,8 @@ public class DrawCanvas extends JFrame implements ActionListener{
     private boolean RecTruth = false;
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
+    private String Title;
+
     private double arrayLines[] = new double[300];
     private String Truth[] = new String[50];
     private int counter = 0;
@@ -43,6 +45,8 @@ public class DrawCanvas extends JFrame implements ActionListener{
 
     public DrawCanvas(String title, String file){
         vecFile = file;
+        Title = title;
+
         PlaceButtons();
         save.add(grid);
         save.setSize(100, 500);
@@ -55,6 +59,9 @@ public class DrawCanvas extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
+    public String returnFile(){
+        return vecFile;
+    }
     private void PlaceButtons(){
         SetupButtons();
         grid.add(saveFile);
@@ -201,7 +208,7 @@ public class DrawCanvas extends JFrame implements ActionListener{
                     try {
                         FileWriter filewrite = new FileWriter(file);
                         filewrite.flush();
-                        filewrite.write(vecFile);
+                        filewrite.write(returnFile());
                         filewrite.close();
                         file.createNewFile();
 
