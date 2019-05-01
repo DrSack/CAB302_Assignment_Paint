@@ -25,8 +25,8 @@ public class DrawCanvas extends JFrame implements ActionListener{
     private int counter = 0;
     private int truecounter = 0;
 
-    private int width = 500;
-    private int height = 500;
+    private int width = 600;
+    private int height = 600;
 
 
     private double x1 = 0;
@@ -213,7 +213,17 @@ public class DrawCanvas extends JFrame implements ActionListener{
                     int real_y2 = (int) (arrayLines[x] * height);
                     x++;
 
-                    g.drawOval(real_x1, real_y1, real_x2, real_y2);
+                    System.out.println(real_x1+" "+real_y1+" "+real_x2+" "+ real_y2);
+                    if(real_x2 == width && real_y2 == height){
+                    g.drawOval(real_x1+8,real_y1+31, real_x2-17, real_y2-40);
+                    }
+                    else if(real_x1 < width/2 && real_y1 < height/2){
+                        g.drawOval(real_x1+8,real_y1+31, real_x2-17, real_y2-31);
+                    }
+                    else{
+                        g.drawOval(real_x1+8,real_y1 , real_x2-17, real_y2-9);
+                    }
+
 
             }
         }
