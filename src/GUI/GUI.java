@@ -173,11 +173,6 @@ public class GUI extends JFrame implements ActionListener{
 
                                 cool.SetCoordinateDrawingPlotting(x1,y1,x1,y1);
 
-                                cool.repaint();
-                                cool.revalidate();
-                                cool.setVisible(true);
-
-
                             }
 
                             if (data.contains("RECTANGLE")) {
@@ -202,15 +197,15 @@ public class GUI extends JFrame implements ActionListener{
 
                                 cool.SetCoordinateRectangle(x1,y1,x2,y2);
 
-                                cool.repaint();
-                                cool.revalidate();
-                                cool.setVisible(true);
                             }
 
                             data = reader.readLine();
+
                         }
 
-
+                        cool.repaint();
+                        cool.revalidate();
+                        cool.setVisible(true);
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
