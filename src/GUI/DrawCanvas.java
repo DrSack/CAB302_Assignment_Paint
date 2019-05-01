@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class DrawCanvas extends JFrame implements ActionListener{
+    // If true
     boolean LinePlotTruth = false;
     boolean RecTruth = false;
 
