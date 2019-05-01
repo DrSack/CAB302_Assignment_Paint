@@ -198,6 +198,30 @@ public class GUI extends JFrame implements ActionListener{
 
                             }
 
+                            if (data.contains("ELLIPSE")) {
+                                data = data.replace("ELLIPSE ", "");
+                                for(int i = 0; i < 3; i++){
+                                    String arr[] = data.split(" ", 2);
+                                    String firstWord = arr[0];
+                                    String theRest = arr[1];
+                                    if(i == 2){
+                                        x2 = Double.parseDouble(firstWord);
+                                    }
+                                    if(i == 1){
+                                        y1 = Double.parseDouble(firstWord);
+                                    }
+                                    if(i == 0){
+                                        x1 = Double.parseDouble(firstWord);
+                                    }
+                                    data = theRest;
+                                }
+                                counter++;
+                                y2 = Float.parseFloat(data);
+
+                                cool.SetCoordinateEllipse(x1,y1,x2,y2);
+
+                            }
+
                             data = reader.readLine();
 
                         }

@@ -15,6 +15,7 @@ public class DrawCanvas extends JFrame implements ActionListener{
     //Testing 4
     private boolean LinePlotTruth = false;
     private boolean RecTruth = false;
+    private boolean ElliTruth = false;
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
     private String Title;
@@ -141,6 +142,31 @@ public class DrawCanvas extends JFrame implements ActionListener{
         counter++;
     }
 
+    public void SetCoordinateEllipse(double X1, double Y1, double X2, double Y2){ int i = truecounter;
+        ElliTruth = true;
+        Truth[counter] = "ElliTruth";
+
+        this.x1 = X1;
+        arrayLines[i] = X1;
+        i++;
+
+        this.y1 = Y1;
+        arrayLines[i] = Y1;
+        i++;
+
+        this.x2 = X2;
+        arrayLines[i] = X2;
+        i++;
+
+        this.y2 = Y2;
+        arrayLines[i] = Y2;
+        i++;
+
+        truecounter = i;
+
+        counter++;
+    }
+
     public void paint(Graphics g){
         int x = 0;
 
@@ -176,9 +202,24 @@ public class DrawCanvas extends JFrame implements ActionListener{
                     g.drawLine(real_x1, real_y1, real_x2, real_y2);
 
             }
+
+            if (ElliTruth == true && Truth[o] == "ElliTruth"){
+                    int real_x1 = (int) (arrayLines[x] * width);
+                    x++;
+                    int real_y1 = (int) (arrayLines[x] * height);
+                    x++;
+                    int real_x2 = (int) (arrayLines[x] * width);
+                    x++;
+                    int real_y2 = (int) (arrayLines[x] * height);
+                    x++;
+
+                    g.drawOval(real_x1, real_y1, real_x2, real_y2);
+
+            }
         }
         LinePlotTruth = false;
         RecTruth = false;
+        ElliTruth = false;
     }
 
     @Override
