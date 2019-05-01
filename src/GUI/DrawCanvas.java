@@ -12,10 +12,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class DrawCanvas extends JFrame implements ActionListener{
+    boolean LinePlotTruth = false;
+    boolean RecTruth = false;
 
     double arrayLines[] = new double[300];
     int counter = 0;
     int truecounter = 0;
+
+
 
     double x1 = 0;
     double y1 = 0;
@@ -75,6 +79,7 @@ public class DrawCanvas extends JFrame implements ActionListener{
 
 
     public void SetCoordinateDrawingPlotting(double X1, double Y1, double X2, double Y2){
+        LinePlotTruth = true;
         int i = truecounter;
 
         this.x1 = X1;
@@ -98,22 +103,68 @@ public class DrawCanvas extends JFrame implements ActionListener{
         counter++;
     }
 
+    public void SetCoordinateRectangle(double X1, double Y1, double X2, double Y2){ int i = truecounter;
+        RecTruth = true;
+        this.x1 = X1;
+        arrayLines[i] = X1;
+        i++;
+
+        this.y1 = Y1;
+        arrayLines[i] = Y1;
+        i++;
+
+        this.x2 = X2;
+        arrayLines[i] = X2;
+        i++;
+
+        this.y2 = Y2;
+        arrayLines[i] = Y2;
+        i++;
+
+        truecounter = i;
+
+        counter++;
+    }
+
     public void paint(Graphics g){
         int x = 0;
-        for(int i = 0; i < counter; i++) {
-            int real_x1 = (int) (arrayLines[x] * 500);
-            x++;
-            int real_y1 = (int) (arrayLines[x] * 500);
-            x++;
-            int real_x2 = (int) (arrayLines[x] * 500);
-            x++;
-            int real_y2 = (int) (arrayLines[x] * 500);
-            x++;
 
+        if(RecTruth == true) {
+            for (int i = 0; i < counter; i++) {
+                int real_x1 = (int) (arrayLines[x] * 500);
+                x++;
+                int real_y1 = (int) (arrayLines[x] * 500);
+                x++;
+                int real_x2 = (int) (arrayLines[x] * 500);
+                x++;
+                int real_y2 = (int) (arrayLines[x] * 500);
+                x++;
 
-            g.drawLine(real_x1, real_y1, real_x2, real_y2);
+                g.drawLine(real_x1, real_y1, real_x1, real_y2);//down
+                g.drawLine(real_x1, real_y1, real_x2, real_y1);//right
+                g.drawLine(real_x2, real_y1, real_x2, real_y2);//corner_down
+                g.drawLine(real_x2, real_y2, real_x1, real_y2);//corner_left
+
+            }
         }
 
+        else if(LinePlotTruth == true) {
+            for (int i = 0; i < counter; i++) {
+                int real_x1 = (int) (arrayLines[x] * 500);
+                x++;
+                int real_y1 = (int) (arrayLines[x] * 500);
+                x++;
+                int real_x2 = (int) (arrayLines[x] * 500);
+                x++;
+                int real_y2 = (int) (arrayLines[x] * 500);
+                x++;
+
+
+                g.drawLine(real_x1, real_y1, real_x2, real_y2);
+            }
+        }
+        LinePlotTruth = false;
+        RecTruth = false;
     }
 
     @Override
