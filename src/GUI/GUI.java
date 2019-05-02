@@ -3,9 +3,7 @@ package GUI;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.*;
 
 public class GUI extends JFrame implements ActionListener{
@@ -77,7 +75,16 @@ public class GUI extends JFrame implements ActionListener{
         Object btnSrc = e.getSource();
         if(btnSrc == newFile) {
             DrawCanvas file = new DrawCanvas("Untitled", "");
+
+            file.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    file.SetCoordinateDrawingPlotting(0,0,600,600);
+                    file.repaint();
+                }
+            });
         }
+
         if(btnSrc == openFile) {
             BufferedReader reader;
             BufferedReader readerT;
@@ -106,6 +113,7 @@ public class GUI extends JFrame implements ActionListener{
 
                     if(file.exists()){
                         double x1 = 0, y1 = 0, x2 = 0, y2;
+                        int x[], y[];
                         String getFile ="";
 
                         int counter = 0;
@@ -229,6 +237,37 @@ public class GUI extends JFrame implements ActionListener{
                         cool.repaint();
                         cool.revalidate();
                         cool.setVisible(true);
+
+                        cool.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                if(cool.getLinePlotTruth() == true) {
+
+                                    if(cool.getMouseTrack()%2 == 0) {
+                                        cool.setMouseTrack();
+
+                                        cool.setMouseXY(e.getX(),e.getY());
+                                    }
+                                    else if(cool.getMouseTrack()%2 == 1) {
+                                        cool.setMouseTrack();
+
+                                        cool.setMouseXY2(e.getX(),e.getY());
+                                        String coordinates = cool.mousex1+" "+ cool.mousey1 +" "+cool.mousex2 +" "+cool.mousey2;
+                                        System.out.println(cool.mousex1+" "+ cool.mousey1 +" "+cool.mousex2 +" "+cool.mousey2);
+                                        cool.SetCoordinateDrawingPlotting(cool.mousex1,cool.mousey1,cool.mousex2,cool.mousey2);
+                                        double mx1 = cool.mousex1;
+                                        double my1 = cool.mousey1;
+                                        double mx2 = cool.mousex2;
+                                        double my2 = cool.mousey2;
+                                        cool.vecFile +="LINE "+mx1+" "+my1+" "+mx2+" "+my2+"\n";
+                                        cool.repaint();
+                                    }
+
+                                }
+
+
+                            }
+                        });
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();

@@ -1,29 +1,32 @@
 package GUI;
 
-import org.w3c.dom.events.MouseEvent;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class DrawCanvas extends JFrame implements ActionListener{
+public class DrawCanvas extends JFrame implements ActionListener, MouseListener {
     //Testing 4
     private boolean LinePlotTruth = false;
     private boolean RecTruth = false;
     private boolean ElliTruth = false;
+    private boolean ClearTruth = false;
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
     private String Title;
+
 
     private double arrayLines[] = new double[300];
     private String Truth[] = new String[50];
     private int counter = 0;
     private int truecounter = 0;
+
+    double mousex1, mousey1, mousex2, mousey2;
+    private int mouseTrack = 0;
 
     private int width = 600;
     private int height = 600;
@@ -34,13 +37,15 @@ public class DrawCanvas extends JFrame implements ActionListener{
     private double x2 = 0;
     private double y2 = 0;
 
-    private String vecFile = "";
+    String vecFile = "";
 
     private JFrame save = new JFrame("Paint Tool");
-    private  JPanel grid = new JPanel(new GridLayout(6,0));
+    private  JPanel grid = new JPanel(new GridLayout(7,2));
     private JButton saveFile;
 
     private JButton PLOT, LINE, RECTANGLE, ELLIPSE, POLYGON;
+
+    private JButton Clear;
 
 
 
@@ -56,9 +61,34 @@ public class DrawCanvas extends JFrame implements ActionListener{
 
         this.setSize(width,height);
         this.setLocation(dim.width/3, dim.height/4);
-        this.setTitle(title);
         this.setVisible(true);
     }
+
+
+    public Boolean getLinePlotTruth(){
+        return LinePlotTruth;
+    }
+
+    public int getMouseTrack(){
+        return mouseTrack;
+    }
+
+    public void setMouseTrack(){
+        mouseTrack++;
+    }
+
+    public void setMouseXY(int x, int y){
+        mousex1 = (double) x/600;
+        mousey1 = (double) y/600;
+
+    }
+
+    public void setMouseXY2(int x, int y){
+        mousex2 = (double) x/600;
+        mousey2 = (double) y/600;
+    }
+
+
 
     public String returnFile(){
         return vecFile;
@@ -71,6 +101,7 @@ public class DrawCanvas extends JFrame implements ActionListener{
         grid.add(RECTANGLE);
         grid.add(ELLIPSE);
         grid.add(POLYGON);
+        grid.add(Clear);
     }
 
     private void SetupButtons(){
@@ -80,6 +111,7 @@ public class DrawCanvas extends JFrame implements ActionListener{
         RECTANGLE = createButton("Rectangle");
         ELLIPSE = createButton("Ellipse");
         POLYGON = createButton("Polygon");
+        Clear = createButton("Clear");
     }
 
     private JButton createButton(String title){
@@ -91,7 +123,6 @@ public class DrawCanvas extends JFrame implements ActionListener{
 
 
     public void SetCoordinateDrawingPlotting(double X1, double Y1, double X2, double Y2){
-        LinePlotTruth = true;
         Truth[counter] = "LinePlotTruth";
 
         int i = truecounter;
@@ -167,11 +198,33 @@ public class DrawCanvas extends JFrame implements ActionListener{
         counter++;
     }
 
+    public void SetCoordinatePolygon(int x[], int y[]){
+        ElliTruth = true;
+        Truth[counter] = "PolyTruth";
+
+        for(int i = 0; i < x.length; i++)
+        {
+            for(int a = 0; a < 1; a++){
+                arrayLines[a] = y[a];
+                truecounter += 1;
+            }
+            arrayLines[i] = x[i];
+            truecounter += 1;
+
+        }
+
+        counter++;
+    }
+
     public void paint(Graphics g){
         int x = 0;
+        if(ClearTruth == true){
+            g.setColor(Color.white);
+            g.fillRect(0,0 ,width,height);
+        }
 
         for(int o = 0; o < counter; o++) {
-            if (RecTruth == true && Truth[o] == "RecTruth") {
+            if (Truth[o] == "RecTruth") {
                     int real_x1 = (int) (arrayLines[x] * width);
                     x++;
                     int real_y1 = (int) (arrayLines[x] * height);
@@ -188,7 +241,7 @@ public class DrawCanvas extends JFrame implements ActionListener{
 
             }
 
-            if (LinePlotTruth == true && Truth[o] == "LinePlotTruth") {
+            else if (Truth[o] == "LinePlotTruth") {
                     int real_x1 = (int) (arrayLines[x] * width);
                     x++;
                     int real_y1 = (int) (arrayLines[x] * height);
@@ -203,7 +256,7 @@ public class DrawCanvas extends JFrame implements ActionListener{
 
             }
 
-            if (ElliTruth == true && Truth[o] == "ElliTruth"){
+            else if (Truth[o] == "ElliTruth"){
                     int real_x1 = (int) (arrayLines[x] * width);
                     x++;
                     int real_y1 = (int) (arrayLines[x] * height);
@@ -213,7 +266,6 @@ public class DrawCanvas extends JFrame implements ActionListener{
                     int real_y2 = (int) (arrayLines[x] * height);
                     x++;
 
-                    System.out.println(real_x1+" "+real_y1+" "+real_x2+" "+ real_y2);
                     if(real_x2 == width && real_y2 == height){
                     g.drawOval(real_x1+8,real_y1+31, real_x2-17, real_y2-40);
                     }
@@ -227,9 +279,7 @@ public class DrawCanvas extends JFrame implements ActionListener{
 
             }
         }
-        LinePlotTruth = false;
-        RecTruth = false;
-        ElliTruth = false;
+
     }
 
     @Override
@@ -274,5 +324,47 @@ public class DrawCanvas extends JFrame implements ActionListener{
             }
 
         }
+
+        if(btnSrc == LINE){
+            ClearTruth = false;
+            LinePlotTruth = true;
+        }
+
+        if(btnSrc == Clear){
+            ClearTruth = true;
+            vecFile ="";
+            counter = 0;
+            truecounter = 0;
+            for(int i = 0; i < arrayLines.length; i++){
+                arrayLines[i]=0;
+            }
+            this.repaint();
+        }
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
