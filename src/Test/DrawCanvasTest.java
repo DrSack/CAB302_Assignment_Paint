@@ -3,9 +3,13 @@ package Test;
 import GUI.DrawCanvas;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.*;
+
+import java.awt.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class DrawCanvasTest {
+class DrawCanvasTest extends JPanel {
 
     @Test
     public void TestCanvas(){
@@ -18,4 +22,5 @@ class DrawCanvasTest {
         DrawCanvas Test = new DrawCanvas("Title", "VEC");
         assertEquals("VEC", Test.returnFile());
     }
+
 }
