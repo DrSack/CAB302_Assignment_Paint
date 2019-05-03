@@ -2,6 +2,7 @@ package GUI;
 
 import Coordinate.*;
 
+import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -12,9 +13,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class DrawCanvas extends JFrame implements ActionListener, MouseListener {
+public class DrawCanvas extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
     private boolean EnableMouseTrack = true;
-
     private boolean PlotTruth = false;
     private boolean LineTruth = false;
     private boolean RecTruth = false;
@@ -22,19 +22,16 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
     private boolean ClearTruth = false;
 
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
+    private  JPanel grid = new JPanel(new GridLayout(7,2));
     private String Title;
 
     private ArrayList<Double> arrayLine = new ArrayList<>();
     private ArrayList<String> Truth = new ArrayList<>();
 
     private int counter = 0;
-
     private int MouseIncrement = 0;
-
     private int width = 600;
     private int height = 600;
-
 
     private double x1;
     private double y1;
@@ -43,22 +40,19 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
 
     private String vecFile = "";
 
-    private JFrame save = new JFrame("Paint Tool");
-    private  JPanel grid = new JPanel(new GridLayout(7,2));
     private JButton saveFile;
-
     private JButton PLOT, LINE, RECTANGLE, ELLIPSE, POLYGON;
-
     private JButton Clear;
 
-    MouseCoordinates Mousetrack = new MouseCoordinates();
-    XY_Coordinates XYtrack = new XY_Coordinates();
+    private MouseCoordinates Mousetrack = new MouseCoordinates();
+    private XY_Coordinates XYtrack = new XY_Coordinates();
 
     public DrawCanvas(String title, String file){
         this.vecFile = file;
         this.Title = title;
 
         PlaceButtons();
+        JFrame save = new JFrame("Paint Tool");
         save.add(grid);
         save.setSize(100, 500);
         save.setLocation(dim.width/4, dim.height/4);
@@ -67,6 +61,8 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
         this.setSize(width,height);
         this.setLocation(dim.width/3, dim.height/4);
         this.setVisible(true);
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     private int getMouseTrack(){// Return the mouseTrack incremented value
@@ -164,6 +160,7 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
         if(ClearTruth){
             g.setColor(Color.white);
             g.fillRect(0,0 ,width,height);
+            ClearTruth = false;
         }
 
         for(int o = 0; o < counter; o++) {
@@ -173,17 +170,14 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
                 g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY1());//right
                 g.drawLine(XYtrack.getX2(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());//corner_down
                 g.drawLine(XYtrack.getX2(), XYtrack.getY2(), XYtrack.getX1(), XYtrack.getY2());//corner_left
-
             }
 
             else if (Truth.get(o).equals("LinePlotTruth")) {//If "LinePlotTruth" is within the array lineup then draw a Line or Plot
                 x = parseArrayIndex(x);
                 g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());
-
             }
 
-            else if (Truth.get(o).equals("ElliTruth")){//If "LinePlotTruth" is within the array lineup then draw an Ellipse
-
+            else if (Truth.get(o).equals("ElliTruth")){//If "ElliTruth" is within the array lineup then draw an Ellipse
                 x = parseArrayIndex(x);
                     if(XYtrack.getX2() == width && XYtrack.getY2() == height){
                     g.drawOval(XYtrack.getX1()+8,XYtrack.getY1()+31, XYtrack.getX2()-17, XYtrack.getY2()-40);
@@ -194,7 +188,6 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
                     else{
                         g.drawOval(XYtrack.getX1()+8,XYtrack.getY1() , XYtrack.getX2()-17, XYtrack.getY2()-9);
                     }
-
             }
         }
 
@@ -274,7 +267,8 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
             ClearTruth = false;
             PlotTruth = true;
             LineTruth = false;
-            addMouseListener(this);
+            MouseIncrement = 0;
+
 
         }
 
@@ -282,12 +276,14 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
             ClearTruth = false;
             PlotTruth = false;
             LineTruth = true;
-            addMouseListener(this);
+            MouseIncrement = 0;
+
         }
 
         if(btnSrc == Clear){// If Clear is selected then "ClearTruth" boolean is set to true
                             //then reset EVERYTHING e.g. including all arrays then repaint.
             ClearTruth = true;
+            MouseIncrement = 0;
             vecFile ="";
             counter = 0;
             arrayLine.clear();
@@ -297,7 +293,17 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
 
 
     @Override
-    public void mouseClicked(MouseEvent e) {//If mouse is clicked do something.....
+    public void mouseClicked(MouseEvent e) {
+
+
+
+
+        }
+
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //If mouse is clicked do something.....
         DecimalFormat df = new DecimalFormat("#.00");//Updates double variables to 2 decimal places.
 
         double mx1; //Declare double variables
@@ -305,39 +311,39 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
         double mx2;
         double my2;
 
-        String x1;
+        String x1;// Initialize stings for vecFile
         String y1;
         String x2;
         String y2;
-
 
         if(EnableMouseTrack){// inserts a new line into vecFile if the intention of the user is to draw something.
             this.vecFile +="\n";
             EnableMouseTrack = false;
         }
 
+        if(PlotTruth){
+            Mousetrack.setMouseXY(e.getX(),e.getY(),width,height);
+        }
 
+        if(LineTruth) {// IF LINE was selected.
+        if(getMouseTrack()%2 == 0) {// if the mouse is clicked once set the mouse X,Y values and INCREMENT mouse
+            // value by 1.
+            setMouseTrack();
+            Mousetrack.setMouseXY(e.getX(),e.getY(),this.width,this.height);
+        }
+        else if(getMouseTrack()%2 == 1) { //if the mouse is clicked when an increment has occured
+            // then INRCREMENT mouse again and set coordinates of mouse X2, Y2.
+            setMouseTrack();
+            Mousetrack.setMouseXY2(e.getX(),e.getY(),this.width,this.height);
+            mx1 = Mousetrack.getX1(); // assign x,y's to variables.
+            my1 = Mousetrack.getY1();
+            mx2 = Mousetrack.getX2();
+            my2 = Mousetrack.getY2();
 
-            if(getMouseTrack()%2 == 0) {// if the mouse is clicked once set the mouse X,Y values and INCREMENT mouse
-                                        // value by 1.
-                setMouseTrack();
-                Mousetrack.setMouseXY(e.getX(),e.getY(),this.width,this.height);
-            }
-            else if(getMouseTrack()%2 == 1) { //if the mouse is clicked when an increment has occured
-                                            // then INRCREMENT mouse again and set coordinates of mouse X2, Y2.
-                setMouseTrack();
-                Mousetrack.setMouseXY2(e.getX(),e.getY(),this.width,this.height);
-                mx1 = Mousetrack.getMousex1(); // assign x,y's to variables.
-                my1 = Mousetrack.getMousey1();
-                mx2 = Mousetrack.getMousex2();
-                my2 = Mousetrack.getMousey2();
+                // Call method to save coordinates to array
+                SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
 
-                if(LineTruth) {// IF LINE was selected.
-
-                    // Call method to save coordinates to array
-                    SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
-
-                    //Set String x,y's to 2 decimal places.
+                //Set String x,y's to 2 decimal places.
                 x1 = df.format(mx1);
                 y1 = df.format(my1);
                 x2 = df.format(mx2);
@@ -345,20 +351,42 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
 
                 //add mouse coordinates to vecFile
                 vecFile +="LINE "+"0"+x1+" 0"+y1+" 0"+x2+" 0"+y2+"\n";
-                }
-
-                //repaint the JFrame
-                this.repaint();
             }
-
+            //repaint the JFrame
+            this.repaint();
+        }
         }
 
-
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mouseDragged(MouseEvent e) {
+        DecimalFormat df = new DecimalFormat("#.00");//Updates double variables to 2 decimal places.
+
+        String x1;// Initialize Strings for vecFile.
+        String y1;
+        String x2;
+        String y2;
+
+    if(PlotTruth){// If "PlotTruth" is true then plot of frame.
+        Mousetrack.setMouseXY(e.getX(),e.getY(),width,height);
+        double mx1 = Mousetrack.getX1(); //Declare double variables
+        double my1 = Mousetrack.getY1();
+        double mx2 = Mousetrack.getX1();
+        double my2 = Mousetrack.getY1();
+
+
+        SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
+        vecFile +="PLOT "+mx1+" "+my1+"\n";
+        this.repaint();
 
     }
 
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
     @Override
     public void mouseReleased(MouseEvent e) {
 
@@ -373,4 +401,6 @@ public class DrawCanvas extends JFrame implements ActionListener, MouseListener 
     public void mouseExited(MouseEvent e) {
 
     }
+
+
 }

@@ -16,19 +16,19 @@ public class MouseCoordinates {
         mousey2 = (double) y/height;
     }
 
-    public double getMousex1(){
+    public double getX1(){
         return mousex1;
     }
 
-    public double getMousey1(){
+    public double getY1(){
         return mousey1;
     }
 
-    public double getMousex2(){
+    public double getX2(){
         return  mousex2;
     }
 
-    public double getMousey2(){
+    public double getY2(){
         return  mousey2;
     }
 
