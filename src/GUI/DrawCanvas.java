@@ -29,6 +29,8 @@ public class DrawCanvas extends JPanel implements MouseListener{
     private int width = 515;
     private int height = 538;
 
+    private int x1Cor[], y1Cor[];
+
     private String vecFile = "";
 
     private MouseCoordinates Mousetrack = new MouseCoordinates();
@@ -81,9 +83,27 @@ public class DrawCanvas extends JPanel implements MouseListener{
         counter++;
     }
 
-    public void SetCoordinatePolygon(int x[], int y[]){
-        ElliTruth = true;
+    public void SetCoordinatePolygon(double xP[], double yP[]){
         Truth.add("PolyTruth");
+        int num = xP.length;
+        double holderX;
+        double holderY;
+        //Initialize x1Cor and y1Cor
+        x1Cor = new int[num];
+        y1Cor = new int[num];
+        //For loop to add coordinates into arrayLine
+        for(int i = 0; i < num; i++)
+        {
+            arrayLine.add(xP[i]);
+            holderX = xP[i] * this.width;
+            x1Cor[i] = (int)holderX;
+            for(int a = 0; a < 1; a++)
+            {
+                arrayLine.add(yP[i]);
+                holderY = yP[i] * this.height;
+                y1Cor[i] = (int)holderY;
+            }
+        }
         counter++;
     }
 
@@ -131,6 +151,10 @@ public class DrawCanvas extends JPanel implements MouseListener{
                 x = parseArrayIndex(x);
                 g.drawOval(XYtrack.getX1(),XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());
 
+            }
+            else if (Truth.get(o).equals("PolyTruth")) {//If "PolyTruth" is within the array lineup then draw a Polygon
+                x = parseArrayIndex(x);
+                g.drawPolygon(x1Cor, y1Cor, x1Cor.length);
             }
         }
 

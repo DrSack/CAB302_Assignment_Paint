@@ -155,6 +155,12 @@ public class NewDraftGUI extends JFrame implements ActionListener {
         canvas.repaint();
     }
 
+    public void parsePolygon(double xP[], double yP[]){
+        canvas.SetCoordinatePolygon(xP, yP);
+        canvas.repaint();
+    }
+
+
     private String returnFile() {
         return canvas.returnFile();
     }
@@ -289,93 +295,77 @@ public class NewDraftGUI extends JFrame implements ActionListener {
 
                         while(data != null) {
                             if (data.contains("LINE")) {
-
+                                // Replaces PLOT with nothing
                                 data = data.replace("LINE ", "");
-                                for(int i = 0; i < 3; i++){
-                                    String arr[] = data.split(" ", 2);
-                                    String firstWord = arr[0];
-                                    String theRest = arr[1];
-                                    if(i == 2){
-                                        x2 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 1){
-                                        y1 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 0){
-                                        x1 = Double.parseDouble(firstWord);
-                                    }
-                                    data = theRest;
-                                }
-                                y2 = Float.parseFloat(data);
-
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                x1 = Double.parseDouble(param[0]);
+                                y1 = Double.parseDouble(param[1]);
+                                counter++;
                                 cool.parseLine(x1,y1,x2,y2);
 
                             }
 
                             if (data.contains("PLOT")) {
+                                // Replaces PLOT with nothing
                                 data = data.replace("PLOT ", "");
-                                for(int i = 0; i < 1; i++){
-                                    String arr[] = data.split(" ", 2);
-                                    String firstWord = arr[0];
-                                    String theRest = arr[1];
-                                    if(i == 0){
-                                        x1 = Double.parseDouble(firstWord);
-                                    }
-                                    data = theRest;
-                                }
-                                y1 = Float.parseFloat(data);
-
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                x1 = Double.parseDouble(param[0]);
+                                y1 = Double.parseDouble(param[1]);
+                                counter++;
                                 cool.parseLine(x1,y1,x1,y1);
 
                             }
 
                             if (data.contains("RECTANGLE")) {
+                                // Replaces RECTANGLE with nothing
                                 data = data.replace("RECTANGLE ", "");
-                                for(int i = 0; i < 3; i++){
-                                    String arr[] = data.split(" ", 2);
-                                    String firstWord = arr[0];
-                                    String theRest = arr[1];
-                                    if(i == 2){
-                                        x2 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 1){
-                                        y1 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 0){
-                                        x1 = Double.parseDouble(firstWord);
-                                    }
-                                    data = theRest;
-                                }
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                x1 = Double.parseDouble(param[0]);
+                                y1 = Double.parseDouble(param[1]);
+                                x2 = Double.parseDouble(param[2]);
+                                y2 = Double.parseDouble(param[3]);
                                 counter++;
-                                y2 = Float.parseFloat(data);
-
                                 cool.parseRect(x1,y1,x2,y2);
 
                             }
 
                             if (data.contains("ELLIPSE")) {
+                                // Replaces ELLIPSE with nothing
                                 data = data.replace("ELLIPSE ", "");
-                                for(int i = 0; i < 3; i++){
-                                    String arr[] = data.split(" ", 2);
-                                    String firstWord = arr[0];
-                                    String theRest = arr[1];
-                                    if(i == 2){
-                                        x2 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 1){
-                                        y1 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 0){
-                                        x1 = Double.parseDouble(firstWord);
-                                    }
-                                    data = theRest;
-                                }
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                x1 = Double.parseDouble(param[0]);
+                                y1 = Double.parseDouble(param[1]);
+                                x2 = Double.parseDouble(param[2]);
+                                y2 = Double.parseDouble(param[3]);
                                 counter++;
-                                y2 = Float.parseFloat(data);
-
                                 cool.parseEllipse(x1,y1,x2,y2);
 
                             }
+
+                            if (data.contains("POLYGON")) {
+                                int numbers;
+                                // Replaces POLYGON with nothing
+                                data = data.replace("POLYGON ", "");
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                numbers = param.length;
+                                //Initializing xP and yP
+                                double xP[] = new double[numbers / 2];
+                                double yP[] = new double[numbers / 2];
+                                //Parsing numbers into array
+                                for (int i = 0; i < numbers / 2; i++) {
+                                    xP[i] = Double.parseDouble(param[2 * i]);
+                                    yP[i] = Double.parseDouble(param[2 * i + 1]);
+                                    System.out.println(xP[i] + " " + yP[i]);
+                                }
+                                counter++;
+                                cool.parsePolygon(xP, yP);
+                            }
+
 
                             data = reader.readLine();
 
