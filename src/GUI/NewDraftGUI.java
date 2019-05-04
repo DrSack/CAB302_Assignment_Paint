@@ -3,10 +3,7 @@ package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -14,7 +11,7 @@ public class NewDraftGUI extends JFrame implements ActionListener {
 
     private JMenuBar menuBar;
     private JMenu file;
-    private JMenuItem create, open, save, saveAs, exit;
+    private JMenuItem create, open, saveAs, exit;
 
     private DrawCanvas canvas;
 
@@ -28,6 +25,7 @@ public class NewDraftGUI extends JFrame implements ActionListener {
 
     public NewDraftGUI(String File) {
         vecFile = File;
+
         JFrame frame = new JFrame("Painting Tool");
         frame.setBackground(Color.PINK);
         frame.setLayout(new BorderLayout(5, 5));
@@ -36,7 +34,8 @@ public class NewDraftGUI extends JFrame implements ActionListener {
         addMenuBar();
 
         // Canvas
-        canvas = new DrawCanvas();
+        canvas = new DrawCanvas(vecFile);
+
         canvas.setBackground(Color.WHITE);
 
         // Main board
@@ -105,7 +104,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
     public void setupMenuItemsFile(){
         create = createMenuItem("New");
         open = createMenuItem("Open...");
-        save = createMenuItem("Save");
         saveAs = createMenuItem("Save As...");
         exit = createMenuItem("Exit");
     }
@@ -125,7 +123,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
 
         file.add(create);
         file.add(open);
-        file.add(save);
         file.add(saveAs);
         file.addSeparator();
         file.add(exit);
@@ -158,6 +155,10 @@ public class NewDraftGUI extends JFrame implements ActionListener {
         canvas.repaint();
     }
 
+    private String returnFile() {
+        return canvas.returnFile();
+    }
+
     public void actionPerformed(ActionEvent e) {
         Object btnSrc = e.getSource();
 
@@ -167,12 +168,78 @@ public class NewDraftGUI extends JFrame implements ActionListener {
             file.setVisible(true);
         }
 
+        if(btnSrc == toolLine){
+            canvas.LineTruth = true;
+        }
+
+        if (btnSrc == saveAs) {// If Save button is pressed
+            final JFileChooser fcSave = new JFileChooser();
+            fcSave.setCurrentDirectory(new File("./"));// Set Directory to the src of the Program
+
+            fcSave.setAcceptAllFileFilterUsed(false);// Filter out extensions except for .VEC
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("VEC files", "VEC");
+            fcSave.addChoosableFileFilter(filter);
+
+            final String ext = ".VEC";
+            String filePathWithoutExt = "";
+            int value = fcSave.showSaveDialog(fcSave);
+            if (value == JFileChooser.APPROVE_OPTION) {// Save button is clicked.
+                // If the files name contains a .VEC replace it with nothing this is to prevent a double .VEC.VEC file
+                if (fcSave.getSelectedFile().getAbsolutePath().contains(".VEC")) {
+                    filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath().replace(".VEC", "");
+                }
+                //if there is no establish .VEC file set the file as is
+                else {
+                    filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath();
+                }
+
+                File file = new File(filePathWithoutExt + ".VEC");
+                // if the save button is pressed save the file followed with the file name inputted the .VEC extension
+
+                if (file.exists())//
+                { //If the file already exist pop up a confirm Dialog panel.
+                    value = JOptionPane.showConfirmDialog(this,
+                            "Replace existing file?");// Asks if the user wants to replace the file.
+                    if (value == JOptionPane.YES_OPTION) {
+                        try {// if yes then replace the file with the current vecFile string.
+                            FileWriter filewrite = new FileWriter(file);
+                            filewrite.flush();
+                            filewrite.write(returnFile());
+                            filewrite.close();
+                            file.createNewFile();
+                            this.setTitle(fcSave.getSelectedFile().getAbsolutePath());
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+
+                    if (value == JOptionPane.NO_OPTION)// if no then do nothing
+                        return;
+                }
+                if (!file.exists()) {//
+                    try {// if the file doesn't already exist, create it and write the file with the current vecFile string.
+                        FileWriter filewrite = new FileWriter(file);
+                        filewrite.flush();
+                        filewrite.write(returnFile());
+                        filewrite.close();
+                        file.createNewFile();
+                        this.setTitle(fcSave.getSelectedFile().getAbsolutePath());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+
+            }// if cancel is selected on the JFileChooser do nothing and return to normal operations.
+            else if (value == JFileChooser.CANCEL_OPTION) {
+
+            }
+
+        }
+
         if(btnSrc == open) {
             BufferedReader reader;
             BufferedReader readerT;
             BufferedReader readerChoose;
-
-
 
             final JFileChooser fc = new JFileChooser();
             fc.setCurrentDirectory( new File( "./") );
@@ -184,7 +251,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
             int returnVal = fc.showOpenDialog(this);
             if(returnVal==JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                String filename = file.getAbsolutePath();
                 try {
                     reader = new BufferedReader((new FileReader(file)));
                     readerT = new BufferedReader((new FileReader(file)));
@@ -214,7 +280,7 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                             VECfile = readerChoose.readLine();
                         }
                         System.out.println(getFile);
-                        NewDraftGUI cool = new NewDraftGUI(getFile);
+                        NewDraftGUI cool = new NewDraftGUI(getFile+"\n");
                         if(file.length() == 0){
                             canvas.setVisible(false);
                         }

@@ -10,11 +10,13 @@ import java.util.ArrayList;
 
 public class DrawCanvas extends JPanel implements MouseListener{
     private boolean EnableMouseTrack = true;
-    private boolean PlotTruth = false;
-    private boolean LineTruth = false;
-    private boolean RecTruth = false;
-    private boolean ElliTruth = false;
-    private boolean ClearTruth = false;
+    boolean EnableOpen = false;
+
+    boolean PlotTruth = false;
+    boolean LineTruth = false;
+    boolean RecTruth = false;
+    boolean ElliTruth = false;
+    boolean ClearTruth = false;
 
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private String Title;
@@ -27,18 +29,14 @@ public class DrawCanvas extends JPanel implements MouseListener{
     private int width = 515;
     private int height = 538;
 
-    private double x1;
-    private double y1;
-    private double x2;
-    private double y2;
-
     private String vecFile = "";
 
     private MouseCoordinates Mousetrack = new MouseCoordinates();
     private XY_Coordinates XYtrack = new XY_Coordinates();
 
+    public DrawCanvas(String vec){
+        vecFile = vec;
 
-    public DrawCanvas(){
         this.setVisible(true);
         addMouseListener(this);
     }
@@ -141,12 +139,90 @@ public class DrawCanvas extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println(e.getX()+" "+e.getY());
+
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {//If mouse is clicked do something.....
+        DecimalFormat df = new DecimalFormat("#.00");//Updates double variables to 2 decimal places.
 
+        double mx1; //Declare double variables
+        double my1;
+        double mx2;
+        double my2;
+
+        String x1;
+        String y1;
+        String x2;
+        String y2;
+
+
+        if(EnableOpen){// inserts a new line into vecFile if the intention of the user is to draw something.
+            this.vecFile +="\n";
+            EnableOpen = false;
+        }
+
+
+
+        if(getMouseTrack()%2 == 0) {// if the mouse is clicked once set the mouse X,Y values and INCREMENT mouse
+            // value by 1.
+            setMouseTrack();
+            Mousetrack.setMouseXY(e.getX(),e.getY(),this.width,this.height);
+        }
+        else if(getMouseTrack()%2 == 1) { //if the mouse is clicked when an increment has occured
+            // then INRCREMENT mouse again and set coordinates of mouse X2, Y2.
+            setMouseTrack();
+            Mousetrack.setMouseXY2(e.getX(),e.getY(),this.width,this.height);
+
+            mx1 = Mousetrack.getX1(); // assign x,y's to variables.
+            my1 = Mousetrack.getY1();
+            mx2 = Mousetrack.getX2();
+            my2 = Mousetrack.getY2();
+
+            if(LineTruth) {// IF LINE was selected.
+
+                // Call method to save coordinates to array
+                SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
+
+
+                //Set String x,y's to 2 decimal places.
+                x1 = df.format(mx1);
+                y1 = df.format(my1);
+                x2 = df.format(mx2);
+                y2 = df.format(my2);
+
+                //add mouse coordinates to vecFile
+                vecFile +="LINE "+"0"+x1+" 0"+y1+" 0"+x2+" 0"+y2+"\n";
+
+
+            }
+
+            if(RecTruth){
+                SetCoordinateRectangle(mx1, my1, mx2, my2);
+
+                x1 = df.format(mx1);
+                y1 = df.format(my1);
+                x2 = df.format(mx2);
+                y2 = df.format(my2);
+
+                //add mouse coordinates to vecFile
+                vecFile +="RECTANGLE "+"0"+x1+" 0"+y1+" 0"+x2+" 0"+y2+"\n";
+            }
+
+            if(ElliTruth){
+                SetCoordinateEllipse(mx1, my1, mx2, my2);
+
+                x1 = df.format(mx1);
+                y1 = df.format(my1);
+                x2 = df.format(mx2);
+                y2 = df.format(my2);
+
+                //add mouse coordinates to vecFile
+                vecFile +="ELLIPSE "+"0"+x1+" 0"+y1+" 0"+x2+" 0"+y2+"\n";
+            }
+            //repaint the JFrame
+            this.repaint();
+        }
     }
 
     @Override
