@@ -6,69 +6,57 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.util.*;
 
 public class NewDraftGUI extends JFrame implements ActionListener {
 
     private JMenuBar menuBar;
-    private JMenu file;
-    private JMenuItem create, open, saveAs, exit;
+    private JMenu file, edit;
+    private JMenuItem create, open, saveAs, exit, undo, clear;
 
+    private JPanel containerBoard, shapes, tools;
     private DrawCanvas canvas;
 
-    private JMenu edit;
-    private JMenuItem undo, clear;
-
     private JButton toolPlot, toolLine, toolRect, toolEllipse, toolPolygon;
+    private JButton outline, fill;
+
+    // Colors
+    private JPanel colors = new JPanel();
+    private ArrayList<JButton> colorButtons = new ArrayList<JButton>();
+    private JButton black = new JButton();
+    private JButton gray = new JButton();
+    private JButton lightGray = new JButton();
+    private JButton white = new JButton();
+    private JButton blue = new JButton();
+    private JButton cyan = new JButton();
+    private JButton green = new JButton();
+    private JButton yellow = new JButton();
+    private JButton orange = new JButton();
+    private JButton pink = new JButton();
+    private JButton magenta = new JButton();
+    private JButton red = new JButton();
 
     private String vecFile = "";
 
-
     public NewDraftGUI(String File) {
-        vecFile = File;
-
         JFrame frame = new JFrame("Painting Tool");
-        frame.setBackground(Color.PINK);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout(5, 5));
 
-        //Add the menubar
-        addMenuBar();
-
         // Canvas
+        vecFile = File;
         canvas = new DrawCanvas(vecFile);
-
         canvas.setBackground(Color.WHITE);
 
-        // Main board
-        JPanel board = new JPanel(new GridLayout(3, 1));
-
-        // Shapes board
-        JPanel shapes = new JPanel(new GridLayout(4,2));
-        board.add(shapes);
-
+        setupMenuBar();
         setupButtons();
-
-        shapes.add(toolPlot);
-        shapes.add(toolLine);
-        shapes.add(toolRect);
-        shapes.add(toolEllipse);
-        shapes.add(toolPolygon);
-
-        // Tools board
-        JPanel tools = new JPanel(new FlowLayout());
-        board.add(tools);
-
-        JButton outline = new JButton("Outline");
-        JButton fill = new JButton("Fill");
-
-        tools.add(outline);
-        tools.add(fill);
-
-        // Color chooser
-
+        setupPanels();
+        setupColors();
+        setupShapes();
 
         // Add the components to the frame
         frame.setJMenuBar(menuBar);
-        frame.add(board, BorderLayout.WEST);
+        frame.add(containerBoard, BorderLayout.WEST);
         frame.add(canvas, BorderLayout.CENTER);
 
         // Display window
@@ -79,21 +67,88 @@ public class NewDraftGUI extends JFrame implements ActionListener {
         frame.setVisible(true);
     }
 
-    public JMenuItem createMenuItem(String title){//Create Menu Item and return the object with action listener
+    public void setupShapes() {
+        shapes.add(toolPlot);
+        shapes.add(toolLine);
+        shapes.add(toolRect);
+        shapes.add(toolEllipse);
+        shapes.add(toolPolygon);
+    }
+
+    public void setupPanels() {
+        // Container board
+        containerBoard = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Shapes board
+        shapes = new JPanel(new GridLayout(5,1));
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        containerBoard.add(shapes, gbc);
+
+        // Tools board
+        tools = new JPanel(new FlowLayout());
+
+        outline = new JButton("Outline");
+        fill = new JButton("Fill");
+
+        tools.add(outline);
+        tools.add(fill);
+
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        containerBoard.add(tools, gbc);
+
+        // Colors board
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        containerBoard.add(colors, gbc);
+    }
+
+    public void setupColors() {
+        black.setBackground(Color.BLACK);
+        gray.setBackground(Color.GRAY);
+        lightGray.setBackground(Color.LIGHT_GRAY);
+        white.setBackground(Color.WHITE);
+        blue.setBackground(Color.BLUE);
+        cyan.setBackground(Color.CYAN);
+        green.setBackground(Color.GREEN);
+        yellow.setBackground(Color.YELLOW);
+        orange.setBackground(Color.ORANGE);
+        pink.setBackground(Color.PINK);
+        magenta.setBackground(Color.MAGENTA);
+        red.setBackground(Color.RED);
+
+        colorButtons.addAll(new ArrayList<JButton>(Arrays.asList(black, gray, lightGray, white,
+                blue, cyan, green, yellow, orange, pink, magenta, red)));
+
+        colors.setLayout(new GridLayout(3, 4));
+        for (int i = 0; i < colorButtons.size(); i++) {
+            colorButtons.get(i).setPreferredSize(new Dimension(25, 25));
+            colors.add(colorButtons.get(i));
+        }
+    }
+
+    // Create Menu Item and return the object with action listener
+    public JMenuItem createMenuItem(String title) {
         JMenuItem btn = new JMenuItem();
         btn.setText(title);
         btn.addActionListener(this);
         return  btn;
     }
 
-    public JButton createButton(String title){//Create Button and return the object with action listener
+    // Create Button and return the object with action listener
+    public JButton createButton(String title) {
         JButton btn = new JButton();
         btn.setText(title);
         btn.addActionListener(this);
         return  btn;
     }
 
-    public void setupButtons(){
+    public void setupButtons() {
         toolPlot = createButton("Plot");
         toolLine = createButton("Line");
         toolRect = createButton("Rectangle");
@@ -101,19 +156,19 @@ public class NewDraftGUI extends JFrame implements ActionListener {
         toolPolygon = createButton("Polygon");
     }
 
-    public void setupMenuItemsFile(){
+    public void setupMenuItemsFile() {
         create = createMenuItem("New");
         open = createMenuItem("Open...");
         saveAs = createMenuItem("Save As...");
         exit = createMenuItem("Exit");
     }
 
-    public void setupMenuItemsEdit(){
+    public void setupMenuItemsEdit() {
         undo = createMenuItem("Undo");
         clear = createMenuItem("Clear");
     }
 
-    public void addMenuBar(){
+    public void setupMenuBar() {
         // Menu bar
         menuBar = new JMenuBar();
 
@@ -139,23 +194,23 @@ public class NewDraftGUI extends JFrame implements ActionListener {
         menuBar.add(edit);
     }
 
-    //Pass coordinates to the Jpanel to Redraw the panel
-    public void parseLine(double x1, double y1, double x2, double y2){
+    //Pass coordinates to the JPanel to Redraw the panel
+    public void parseLine(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2);
         canvas.repaint();
     }
 
-    public void parseRect(double x1, double y1, double x2, double y2){
+    public void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
         canvas.repaint();
     }
 
-    public void parseEllipse(double x1, double y1, double x2, double y2){
+    public void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
         canvas.repaint();
     }
 
-    public void parsePolygon(double xP[], double yP[]){
+    public void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
         canvas.repaint();
     }
@@ -174,42 +229,42 @@ public class NewDraftGUI extends JFrame implements ActionListener {
             file.setVisible(true);
         }
 
-        if(btnSrc == toolLine){
+        if(btnSrc == toolLine) {
             canvas.RecTruth = false;
             canvas.LineTruth = true;
         }
 
-        if(btnSrc == toolRect){
+        if(btnSrc == toolRect) {
             canvas.LineTruth = false;
             canvas.RecTruth = true;
         }
 
-        if (btnSrc == saveAs) {// If Save button is pressed
+        if (btnSrc == saveAs) { // If Save button is pressed
             final JFileChooser fcSave = new JFileChooser();
-            fcSave.setCurrentDirectory(new File("./"));// Set Directory to the src of the Program
+            fcSave.setCurrentDirectory(new File("./")); // Set Directory to the src of the Program
 
-            fcSave.setAcceptAllFileFilterUsed(false);// Filter out extensions except for .VEC
+            fcSave.setAcceptAllFileFilterUsed(false); // Filter out extensions except for .VEC
             FileNameExtensionFilter filter = new FileNameExtensionFilter("VEC files", "VEC");
             fcSave.addChoosableFileFilter(filter);
 
             final String ext = ".VEC";
             String filePathWithoutExt = "";
             int value = fcSave.showSaveDialog(fcSave);
-            if (value == JFileChooser.APPROVE_OPTION) {// Save button is clicked.
+            if (value == JFileChooser.APPROVE_OPTION) { // Save button is clicked.
                 // If the files name contains a .VEC replace it with nothing this is to prevent a double .VEC.VEC file
                 if (fcSave.getSelectedFile().getAbsolutePath().contains(".VEC")) {
                     filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath().replace(".VEC", "");
                 }
-                //if there is no establish .VEC file set the file as is
+                // If there is no establish .VEC file set the file as is
                 else {
                     filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath();
                 }
 
                 File file = new File(filePathWithoutExt + ".VEC");
-                // if the save button is pressed save the file followed with the file name inputted the .VEC extension
+                // If the save button is pressed save the file followed with the file name inputted the .VEC extension
 
-                if (file.exists())//
-                { //If the file already exist pop up a confirm Dialog panel.
+                if (file.exists())
+                { // If the file already exist pop up a confirm Dialog panel.
                     value = JOptionPane.showConfirmDialog(this,
                             "Replace existing file?");// Asks if the user wants to replace the file.
                     if (value == JOptionPane.YES_OPTION) {
@@ -228,7 +283,7 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                     if (value == JOptionPane.NO_OPTION)// if no then do nothing
                         return;
                 }
-                if (!file.exists()) {//
+                if (!file.exists()) {
                     try {// if the file doesn't already exist, create it and write the file with the current vecFile string.
                         FileWriter filewrite = new FileWriter(file);
                         filewrite.flush();
@@ -245,7 +300,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
             else if (value == JFileChooser.CANCEL_OPTION) {
 
             }
-
         }
 
         if(btnSrc == open) {
@@ -296,8 +350,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                             canvas.setVisible(false);
                         }
 
-
-
                         while(data != null) {
                             if (data.contains("LINE")) {
                                 // Replaces PLOT with nothing
@@ -310,7 +362,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 y2 = Double.parseDouble(param[3]);
                                 counter++;
                                 cool.parseLine(x1,y1,x2,y2);
-
                             }
 
                             if (data.contains("PLOT")) {
@@ -322,7 +373,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 y1 = Double.parseDouble(param[1]);
                                 counter++;
                                 cool.parseLine(x1,y1,x1,y1);
-
                             }
 
                             if (data.contains("RECTANGLE")) {
@@ -336,7 +386,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 y2 = Double.parseDouble(param[3]);
                                 counter++;
                                 cool.parseRect(x1,y1,x2,y2);
-
                             }
 
                             if (data.contains("ELLIPSE")) {
@@ -350,7 +399,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 y2 = Double.parseDouble(param[3]);
                                 counter++;
                                 cool.parseEllipse(x1,y1,x2,y2);
-
                             }
 
                             if (data.contains("POLYGON")) {
@@ -372,11 +420,8 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 counter++;
                                 cool.parsePolygon(xP, yP);
                             }
-
                             data = reader.readLine();
-
                         }
-
                         canvas.revalidate();
                         canvas.repaint();
                         canvas.setVisible(true);
@@ -387,16 +432,10 @@ public class NewDraftGUI extends JFrame implements ActionListener {
             } else if(returnVal==JFileChooser.CANCEL_OPTION) {
 
             }
-
-
         }
-
-
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        JFrame.setDefaultLookAndFeelDecorated(true);
         new NewDraftGUI("");
     }
 }
