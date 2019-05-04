@@ -175,7 +175,13 @@ public class NewDraftGUI extends JFrame implements ActionListener {
         }
 
         if(btnSrc == toolLine){
+            canvas.RecTruth = false;
             canvas.LineTruth = true;
+        }
+
+        if(btnSrc == toolRect){
+            canvas.LineTruth = false;
+            canvas.RecTruth = true;
         }
 
         if (btnSrc == saveAs) {// If Save button is pressed
@@ -268,7 +274,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
 
                     if(file.exists()){
                         double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-                        int x[], y[];
                         String getFile ="";
 
                         int counter = 0;
@@ -301,6 +306,8 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 String param[] = data.split(" ");
                                 x1 = Double.parseDouble(param[0]);
                                 y1 = Double.parseDouble(param[1]);
+                                x2 = Double.parseDouble(param[2]);
+                                y2 = Double.parseDouble(param[3]);
                                 counter++;
                                 cool.parseLine(x1,y1,x2,y2);
 
@@ -366,11 +373,9 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 cool.parsePolygon(xP, yP);
                             }
 
-
                             data = reader.readLine();
 
                         }
-
 
                         canvas.revalidate();
                         canvas.repaint();

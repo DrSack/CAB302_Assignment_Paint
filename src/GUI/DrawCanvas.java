@@ -204,26 +204,19 @@ public class DrawCanvas extends JPanel implements MouseListener{
             my2 = Mousetrack.getY2();
 
             if(LineTruth) {// IF LINE was selected.
-
                 // Call method to save coordinates to array
                 SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
-
-
                 //Set String x,y's to 2 decimal places.
                 x1 = df.format(mx1);
                 y1 = df.format(my1);
                 x2 = df.format(mx2);
                 y2 = df.format(my2);
-
                 //add mouse coordinates to vecFile
                 vecFile +="LINE "+"0"+x1+" 0"+y1+" 0"+x2+" 0"+y2+"\n";
-
-
             }
 
             if(RecTruth){
                 SetCoordinateRectangle(mx1, my1, mx2, my2);
-
                 x1 = df.format(mx1);
                 y1 = df.format(my1);
                 x2 = df.format(mx2);
