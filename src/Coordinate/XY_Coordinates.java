@@ -1,7 +1,5 @@
 package Coordinate;
 
-import GUI.DrawCanvas;
-
 public class XY_Coordinates {
 
     private int x1, y1, x2, y2;
@@ -10,9 +8,7 @@ public class XY_Coordinates {
         this.x1 = real_x1;
     }
 
-    public void setY1(int real_y1) {
-        this.y1 = real_y1;
-    }
+    public void setY1(int real_y1) { this.y1 = real_y1; }
 
     public void setX2(int real_x2) {
         this.x2 = real_x2;
