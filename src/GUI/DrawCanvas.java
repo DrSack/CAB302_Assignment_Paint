@@ -169,7 +169,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
 
 
-        if(drawingline == true){// If currently drawing draw the shapes temporarily.
+        if(drawingline){// If currently drawing draw the shapes temporarily.
             g.setColor(c);
             if(LineTruth) {
                 //0.25 0.25 0.75 0.5

@@ -98,8 +98,8 @@ public class GUI extends JFrame implements ActionListener {
         outline = createButton("Outline");
         fill = createButton("Fill");
 
-        // Set outline to Bold
         Font f = outline.getFont();
+        // Set outline to Bold
         tools.add(outline);
         outline.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
         tools.add(fill);
@@ -241,14 +241,18 @@ public class GUI extends JFrame implements ActionListener {
 
         if(btnSrc == outline){//Change outline colour of Shape and set font to BOLD
             Font f = outline.getFont();
+            Font f2 = fill.getFont();
             OutlineOrFill= true;
             outline.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+            fill.setFont(f2.deriveFont(f2.getStyle() | ~Font.BOLD));
         }
 
         if(btnSrc == fill){// Fill in Shape and set font to BOLD
             Font f = outline.getFont();
+            Font f2 = fill.getFont();;
             OutlineOrFill= false;
             fill.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+            outline.setFont(f2.deriveFont(f2.getStyle() | ~Font.BOLD));
         }
 
         for (JButton colorButton : colorButtons) {
