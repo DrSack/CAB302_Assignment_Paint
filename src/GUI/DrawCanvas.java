@@ -234,7 +234,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
             if (Truth.get(o).equals("ElliTruth")){//If "ElliTruth" is within the array lineup then draw an Ellipse
                 x = parseArrayIndex(x);
-                g.drawOval(XYtrack.getX1(),XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());
+                g.drawOval(XYtrack.getX1(),XYtrack.getY1(), XYtrack.getX2() - XYtrack.getX1(), XYtrack.getY2() - XYtrack.getY1());
 
             }
             if (Truth.get(o).equals("PolyTruth")) {//If "PolyTruth" is within the array lineup then draw a Polygon
