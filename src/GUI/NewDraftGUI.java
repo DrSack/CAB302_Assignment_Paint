@@ -40,7 +40,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
 
     public NewDraftGUI(String File) {
         JFrame frame = new JFrame("Painting Tool");
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout(5, 5));
 
         // Canvas
@@ -215,6 +214,9 @@ public class NewDraftGUI extends JFrame implements ActionListener {
         canvas.repaint();
     }
 
+    public void parseColour(String colour){
+        canvas.SetColour(colour);
+    }
 
     private String returnFile() {
         return canvas.returnFile();
@@ -229,14 +231,32 @@ public class NewDraftGUI extends JFrame implements ActionListener {
             file.setVisible(true);
         }
 
-        if(btnSrc == toolLine) {
+        if(btnSrc == clear){
+            canvas.clearCanvas();
+            canvas.repaint();
+        }
+
+        if(btnSrc == toolPlot){
+            canvas.PlotTruth = true;
+            canvas.LineTruth = false;
             canvas.RecTruth = false;
+
+        }
+
+        if(btnSrc == toolLine) {
+            canvas.PlotTruth = false;
             canvas.LineTruth = true;
+            canvas.RecTruth = false;
         }
 
         if(btnSrc == toolRect) {
+            canvas.PlotTruth = false;
             canvas.LineTruth = false;
             canvas.RecTruth = true;
+        }
+
+        if(btnSrc == create){
+            NewDraftGUI NewWindow = new NewDraftGUI("");
         }
 
         if (btnSrc == saveAs) { // If Save button is pressed
@@ -346,6 +366,8 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                         }
                         System.out.println(getFile);
                         NewDraftGUI cool = new NewDraftGUI(getFile+"\n");
+                        int ColourTrack = 0;
+
                         if(file.length() == 0){
                             canvas.setVisible(false);
                         }
@@ -360,7 +382,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 y1 = Double.parseDouble(param[1]);
                                 x2 = Double.parseDouble(param[2]);
                                 y2 = Double.parseDouble(param[3]);
-                                counter++;
                                 cool.parseLine(x1,y1,x2,y2);
                             }
 
@@ -371,7 +392,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 String param[] = data.split(" ");
                                 x1 = Double.parseDouble(param[0]);
                                 y1 = Double.parseDouble(param[1]);
-                                counter++;
                                 cool.parseLine(x1,y1,x1,y1);
                             }
 
@@ -384,7 +404,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 y1 = Double.parseDouble(param[1]);
                                 x2 = Double.parseDouble(param[2]);
                                 y2 = Double.parseDouble(param[3]);
-                                counter++;
                                 cool.parseRect(x1,y1,x2,y2);
                             }
 
@@ -397,7 +416,6 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 y1 = Double.parseDouble(param[1]);
                                 x2 = Double.parseDouble(param[2]);
                                 y2 = Double.parseDouble(param[3]);
-                                counter++;
                                 cool.parseEllipse(x1,y1,x2,y2);
                             }
 
@@ -415,13 +433,22 @@ public class NewDraftGUI extends JFrame implements ActionListener {
                                 for (int i = 0; i < numbers / 2; i++) {
                                     xP[i] = Double.parseDouble(param[2 * i]);
                                     yP[i] = Double.parseDouble(param[2 * i + 1]);
-                                    System.out.println(xP[i] + " " + yP[i]);
                                 }
-                                counter++;
                                 cool.parsePolygon(xP, yP);
                             }
+
+
+                            if (data.contains("PEN")) {// If the line contains pen
+                                data = data.replace("PEN ", "");
+                                cool.parseColour(data);// Set the colour on the JPanel
+
+
+                            }
+
                             data = reader.readLine();
+                            ColourTrack++;
                         }
+                        //Redraw the canvas and display shapes/lines.
                         canvas.revalidate();
                         canvas.repaint();
                         canvas.setVisible(true);
@@ -436,6 +463,7 @@ public class NewDraftGUI extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         new NewDraftGUI("");
     }
 }

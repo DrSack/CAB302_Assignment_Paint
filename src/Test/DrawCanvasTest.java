@@ -1,6 +1,6 @@
 package Test;
 
-import GUI.DrawCanvas;
+import GUI.*;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
