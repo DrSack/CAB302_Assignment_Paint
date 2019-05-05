@@ -81,7 +81,7 @@ public class DrawCanvas extends JPanel implements MouseListener{
         vecFile ="";
     }
 
-    public void SetColour(String hex){
+    public void SetColour(String hex){//Add the hexicode pen value to an Arraylist and add the counter value.
         Colourtrack.add(counter);
         Colour.add(Color.decode(hex));
     }
@@ -149,16 +149,17 @@ public class DrawCanvas extends JPanel implements MouseListener{
         super.paint(g);
         int x = 0;
         int i = 0;
+        int triggered = 0;
         for(int o = 0; o < counter; o++) {
 
-            if(i < Colourtrack.size()) {//Default is black if no colours are present
+            if(i < Colourtrack.size() && triggered == 0) {//Default is black if no colours are present
                 c = Color.black;
             }
 
             if(i < Colourtrack.size()) {
                 if (o == Colourtrack.get(i)) {// If colours are present switch the colour
+                    triggered = 1;
                     c = Colour.get(i);
-                    System.out.println(o);
                     i++;
                 }
             }
@@ -196,7 +197,6 @@ public class DrawCanvas extends JPanel implements MouseListener{
         if(PlotTruth){
             Mousetrack.setMouseXY(e.getX(), e.getY(),this.width,this.height);
             SetCoordinateDrawingPlotting(Mousetrack.getX1(),Mousetrack.getY1(),Mousetrack.getX1(),Mousetrack.getY1());
-            System.out.println(e.getX()+" "+e.getY());
             vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) +"\n";
             this.repaint();
         }

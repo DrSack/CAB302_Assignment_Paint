@@ -107,7 +107,7 @@ public class GUI extends JFrame implements ActionListener {
         containerBoard.add(colors, gbc);
     }
 
-    public void setupColors() {
+    private void setupColors() {
         black.setBackground(Color.BLACK);
         gray.setBackground(Color.GRAY);
         lightGray.setBackground(Color.LIGHT_GRAY);
@@ -125,14 +125,14 @@ public class GUI extends JFrame implements ActionListener {
                 blue, cyan, green, yellow, orange, pink, magenta, red)));
 
         colors.setLayout(new GridLayout(3, 4));
-        for (int i = 0; i < colorButtons.size(); i++) {
-            colorButtons.get(i).setPreferredSize(new Dimension(25, 25));
-            colors.add(colorButtons.get(i));
+        for (JButton colorButton : colorButtons) {
+            colorButton.setPreferredSize(new Dimension(25, 25));
+            colors.add(colorButton);
         }
     }
 
     // Create Menu Item and return the object with action listener
-    public JMenuItem createMenuItem(String title) {
+    private JMenuItem createMenuItem(String title) {
         JMenuItem btn = new JMenuItem();
         btn.setText(title);
         btn.addActionListener(this);
@@ -140,14 +140,14 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     // Create Button and return the object with action listener
-    public JButton createButton(String title) {
+    private JButton createButton(String title) {
         JButton btn = new JButton();
         btn.setText(title);
         btn.addActionListener(this);
         return  btn;
     }
 
-    public void setupButtons() {
+    private void setupButtons() {
         toolPlot = createButton("Plot");
         toolLine = createButton("Line");
         toolRect = createButton("Rectangle");
@@ -155,19 +155,19 @@ public class GUI extends JFrame implements ActionListener {
         toolPolygon = createButton("Polygon");
     }
 
-    public void setupMenuItemsFile() {
+    private void setupMenuItemsFile() {
         create = createMenuItem("New");
         open = createMenuItem("Open...");
         saveAs = createMenuItem("Save As...");
         exit = createMenuItem("Exit");
     }
 
-    public void setupMenuItemsEdit() {
+    private void setupMenuItemsEdit() {
         undo = createMenuItem("Undo");
         clear = createMenuItem("Clear");
     }
 
-    public void setupMenuBar() {
+    private void setupMenuBar() {
         // Menu bar
         menuBar = new JMenuBar();
 
@@ -279,7 +279,7 @@ public class GUI extends JFrame implements ActionListener {
                 else {
                     filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath();
                 }
-                this.setTitle(filePathWithoutExt+ ".VEC");
+
 
                 File file = new File(filePathWithoutExt + ".VEC");
                 // If the save button is pressed save the file followed with the file name inputted the .VEC extension
@@ -311,7 +311,7 @@ public class GUI extends JFrame implements ActionListener {
                         filewrite.write(returnFile());
                         filewrite.close();
                         file.createNewFile();
-                        this.setTitle(fcSave.getSelectedFile().getAbsolutePath());
+                        this.setTitle(fcSave.getSelectedFile().getAbsolutePath()+".VEC");
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -359,15 +359,14 @@ public class GUI extends JFrame implements ActionListener {
                         }
                         while(VECfile != null){
                             getFile += VECfile;
-                            if(counterSTOP < counter-1){
+                            if(counterSTOP < counter-1){//if the file isn't at the end add another line
                                 getFile += "\n";
                             }
                             counterSTOP++;
                             VECfile = readerChoose.readLine();
                         }
-                        System.out.println(getFile);
+                        System.out.println(getFile);// Parse file through contructor and open new JFrame.
                         GUI cool = new GUI(getFile+"\n",fc.getSelectedFile().getAbsolutePath());
-                        int ColourTrack = 0;
 
                         if(file.length() == 0){
                             canvas.setVisible(false);
@@ -447,7 +446,6 @@ public class GUI extends JFrame implements ActionListener {
                             }
 
                             data = reader.readLine();
-                            ColourTrack++;
                         }
                         //Redraw the canvas and display shapes/lines.
                         canvas.revalidate();
