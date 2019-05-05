@@ -11,7 +11,9 @@ import java.util.*;
 
 public class GUI extends JFrame implements ActionListener {
     private Color c = Color.black;
-    private String hex;
+
+    private String penC = "#000000";
+    private String fillC = "#FFFFFF";
 
     private boolean OutlineOrFill = true;
     private JMenuBar menuBar;
@@ -206,31 +208,31 @@ public class GUI extends JFrame implements ActionListener {
     //Pass coordinates to the JPanel to Redraw the panel
     private void parseLine(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2);
-        canvas.repaint();
     }
 
     private void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
-        canvas.repaint();
     }
 
     private void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
-        canvas.repaint();
     }
 
     private void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
-        canvas.repaint();
     }
 
     private void parseColour(String colour){
         canvas.SetColour(colour);
     }
 
-    private void ColourClick(String hex){
-        canvas.setColourClick(hex);
-    }
+    private void parseFill(String colour){ canvas.SetFill(colour); }
+
+    private  void parseFillOff(){ canvas.offFill(); }
+
+    private void ColourClick(String hex){ canvas.setColourClick(hex);}
+
+    private  void FillClick(String hex){canvas.setFillClick(hex);}
 
     public String returnFile() {
         return canvas.returnFile();
@@ -245,6 +247,7 @@ public class GUI extends JFrame implements ActionListener {
             OutlineOrFill= true;
             outline.setFont(f.deriveFont(Font.BOLD));
             fill.setFont(f2.deriveFont(~Font.BOLD));
+            ColourClick(penC);
         }
 
         if(btnSrc == fill){// Fill in Shape and set font to BOLD
@@ -253,16 +256,19 @@ public class GUI extends JFrame implements ActionListener {
             OutlineOrFill= false;
             fill.setFont(f.deriveFont(Font.BOLD));
             outline.setFont(f2.deriveFont(~Font.BOLD));
+            FillClick(fillC);
         }
 
         for (JButton colorButton : colorButtons) {
             if (btnSrc == colorButton) {
                     c = colorButton.getBackground();
-                    hex = "#" + Integer.toHexString(c.getRGB()).substring(2);
                     if(OutlineOrFill){
-                        c = Color.decode(hex);
-                        System.out.println(hex);
-                        ColourClick(hex);
+                        penC = "#" + Integer.toHexString(c.getRGB()).substring(2);
+                        ColourClick(penC);
+                    }
+                    if(!OutlineOrFill){
+                        fillC = "#" + Integer.toHexString(c.getRGB()).substring(2);
+                        FillClick(fillC);
                     }
 
             }
@@ -491,6 +497,19 @@ public class GUI extends JFrame implements ActionListener {
                                 data = data.replace("PEN ", "");
                                 cool.parseColour(data);// Set the colour on the JPanel
 
+
+                            }
+
+                            if (data.contains("FILL")) {// If the line contains Fill
+                                data = data.replace("FILL ", "");
+                                if(data.contains("OFF")){
+                                    System.out.println("OFF");
+                                    cool.parseFillOff();// Set the colour on the JPanel
+                                }
+                                else{
+                                    System.out.println(data);
+                                    cool.parseFill(data);// Set the colour on the JPanel
+                                }
 
                             }
 

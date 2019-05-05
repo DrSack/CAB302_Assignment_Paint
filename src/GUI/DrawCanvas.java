@@ -11,7 +11,8 @@ import java.util.ArrayList;
 public class DrawCanvas extends JPanel implements MouseListener, MouseMotionListener{
     boolean EnableOpen = false;
     private boolean drawingline = false;
-    private  boolean colourtruth= false;
+    private  boolean FillTruth= false;
+
 
     boolean PlotTruth = false;
     boolean LineTruth = false;
@@ -23,10 +24,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private DecimalFormat df = new DecimalFormat("#.00");//Updates double variables to 2 decimal places.
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private Color c = Color.black;
+    private Color f;
     private String Title;
 
     private ArrayList<Double> arrayLine = new ArrayList<>();
     private ArrayList<String> Truth = new ArrayList<>();
+
+    private ArrayList<Integer> offFill = new ArrayList<>();
+    private ArrayList<Integer> Filltrack = new ArrayList<>();
+    private ArrayList<Color> Fill = new ArrayList<>();
+
     private ArrayList<Integer> Colourtrack = new ArrayList<>();
     private ArrayList<Color> Colour = new ArrayList<>();
 
@@ -50,19 +57,19 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         addMouseMotionListener(this);
     }
 
-    private int getMouseTrack(){// Return the mouseTrack incremented value
-        return MouseIncrement;
-    }
-
-    private void setMouseTrack(){// Increment mouseTrack value
-        MouseIncrement++;
+    public void setFillClick(String hex){
+            Filltrack.add(counter);
+            Fill.add(Color.decode(hex));
+            vecFile+="FILL "+hex.toUpperCase()+"\n";
     }
 
     public void setColourClick(String hex){
         Colourtrack.add(counter);
         Colour.add(Color.decode(hex));
+        vecFile+="FILL OFF"+"\n";
         vecFile+="PEN "+hex+"\n";
         c = Color.decode(hex);
+
     }
 
     private void inputLines(double X1, double Y1, double X2, double Y2){// Pass coordinates within the Arraylist.
@@ -95,6 +102,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void SetColour(String hex){//Add the hexicode pen value to an Arraylist and add the counter value.
         Colourtrack.add(counter);
         Colour.add(Color.decode(hex));
+    }
+
+    public void SetFill(String hex){
+        Filltrack.add(counter);
+        Fill.add(Color.decode(hex));
+    }
+
+    public void offFill(){
+        offFill.add(counter);
     }
 
     //Set coordinates for Lines or Plotting
@@ -158,16 +174,19 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     public void paint(Graphics g){
         super.paint(g);
+
         int x = 0;
+        int p = 0;
         int i = 0;
-        int triggered = 0;
+        int z = 0;
+
+        int triggered = 0;//Keeps track if no pen commands are present.
+        FillTruth = false;
 
         int x1 = (int)(Mousetrack.getX1()* width);// Set current mouse X,Y coordinates
         int y1 = (int) (Mousetrack.getY1()*height);
         int x2 = (int)(Mousetrack.getX2()*width);
         int y2 = (int)(Mousetrack.getY2()*height);
-
-
 
         if(drawingline){// If currently drawing draw the shapes temporarily.
             g.setColor(c);
@@ -192,14 +211,12 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             }
         }
 
-
-
         for(int o = 0; o < counter; o++) {
 
             if(i < Colourtrack.size() && triggered == 0) {//Default is black if no colours are present
-                c = Color.black;
+            c = Color.black;
             }
-
+            
             if(i < Colourtrack.size()) {
                 if (o == Colourtrack.get(i)) {// If colours are present switch the colour
                     triggered = 1;
@@ -207,11 +224,30 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     i++;
                 }
             }
+            if(p < Filltrack.size()) {//If fill is present set f to fill colour
+                if (o == Filltrack.get(p)) {
+                    FillTruth = true;
+                    f = Fill.get(p);
+                    p++;
+                }
+            }
+            if(z < offFill.size()){//set FillTruth to false
+                if(o == offFill.get(z)){
+                    FillTruth = false;
+                    z++;
+                }
+            }
 
-
-            g.setColor(c);// Set colour
+            g.setColor(c);
              if (Truth.get(o).equals("RecTruth")) {// If "RecTruth" is within the array lineup then draw a rectangle
                 x = parseArrayIndex(x);
+
+                 if (FillTruth){//If true fill shape
+                     g.setColor(f);
+                     g.fillRect(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2() - XYtrack.getX1(), XYtrack.getY2() - XYtrack.getY1());
+                 }
+
+                 g.setColor(c);
                  if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()){
                      g.drawRect(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
                  }
@@ -318,8 +354,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void mouseMoved(MouseEvent e) {
         this.repaint();
     }
-
-
 
     @Override
     public void mouseEntered(MouseEvent e) {
