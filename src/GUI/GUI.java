@@ -3,6 +3,7 @@ package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -60,6 +61,7 @@ public class GUI extends JFrame implements ActionListener {
 
         // Display window
         this.setResizable(false);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(700, 600));
         this.setLocation(new Point(100, 100));
         this.pack();
@@ -127,6 +129,7 @@ public class GUI extends JFrame implements ActionListener {
         colors.setLayout(new GridLayout(3, 4));
         for (JButton colorButton : colorButtons) {
             colorButton.setPreferredSize(new Dimension(25, 25));
+            colorButton.addActionListener(this);
             colors.add(colorButton);
         }
     }
@@ -218,6 +221,10 @@ public class GUI extends JFrame implements ActionListener {
         canvas.SetColour(colour);
     }
 
+    private void ColourClick(String hex){
+        canvas.setColourClick(hex);
+    }
+
     public String returnFile() {
         return canvas.returnFile();
     }
@@ -225,10 +232,24 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object btnSrc = e.getSource();
 
+        for(JButton colorButton : colorButtons) {
+            if (btnSrc == colorButton) {
+                Color c = colorButton.getBackground();
+                String hex = "#"+Integer.toHexString(c.getRGB()).substring(2);
+                ColourClick(hex.toUpperCase());
+                System.out.println(hex.toUpperCase());
+            }
+        }
+
         if(btnSrc == create) {
             file.isVisible();
             file.repaint();
             file.setVisible(true);
+        }
+
+        if(btnSrc == exit){
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            this.dispose();
         }
 
         if(btnSrc == clear){

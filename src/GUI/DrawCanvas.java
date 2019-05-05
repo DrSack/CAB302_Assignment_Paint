@@ -9,14 +9,15 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class DrawCanvas extends JPanel implements MouseListener{
-    private boolean EnableMouseTrack = true;
     boolean EnableOpen = false;
 
+    boolean ColourTruth = false;
     boolean PlotTruth = false;
     boolean LineTruth = false;
     boolean RecTruth = false;
     boolean ElliTruth = false;
     boolean ClearTruth = false;
+
 
     private DecimalFormat df = new DecimalFormat("#.00");//Updates double variables to 2 decimal places.
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -55,6 +56,13 @@ public class DrawCanvas extends JPanel implements MouseListener{
         MouseIncrement++;
     }
 
+    public void setColourClick(String hex){
+        Colourtrack.add(counter);
+        Colour.add(Color.decode(hex));
+        vecFile+="PEN "+hex+"\n";
+        ColourTruth = true;
+    }
+
     private void inputLines(double X1, double Y1, double X2, double Y2){// Pass coordinates within the Arraylist.
         arrayLine.add(X1);
         arrayLine.add(Y1);
@@ -69,7 +77,6 @@ public class DrawCanvas extends JPanel implements MouseListener{
     public void clearCanvas(){
         arrayLine.clear();
         Truth.clear();
-        EnableMouseTrack = true;
         EnableOpen = false;
         PlotTruth = false;
         LineTruth = false;

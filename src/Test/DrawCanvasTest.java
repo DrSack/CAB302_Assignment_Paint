@@ -10,13 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class DrawCanvasTest extends JPanel {
 
     @Test
-    public void TestCanvas(){
+    void TestCanvas(){
         GUI Test = new GUI("VEC", "Title");
         assertEquals("Title", Test.getTitle());
     }
 
     @Test
-    public void TestCanvasFileContents(){
+    void TestCanvasFileContents(){
         GUI Test = new GUI("VEC", "Title");
         assertEquals("VEC", Test.returnFile());
     }
