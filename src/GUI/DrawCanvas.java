@@ -172,13 +172,23 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         if(drawingline == true){// If currently drawing draw the shapes temporarily.
             g.setColor(c);
             if(LineTruth) {
+                //0.25 0.25 0.75 0.5
                 g.drawLine(x1, y1, x2, y2);
             }
             if(RecTruth){
-                g.drawLine(x1, y1, x1, y2);//down
-                g.drawLine(x1, y1, x2, y1);//down
-                g.drawLine(x2, y1, x2, y2);//down
-                g.drawLine(x2, y2, x1, y2);//down
+                if(x2 <= x1 && y2 <= y1){
+                    g.drawRect(x2,y2,x1-x2,y1-y2);
+                }
+                else if(x2 <= x1){
+                    g.drawRect(x2,y1,x1-x2,y2-y1);
+                }
+                else if(y2 <= y1){
+                    g.drawRect(x1,y2,x2-x1,y1-y2);
+                }
+                else{
+                    g.drawRect(x1,y1,x2-x1,y2-y1);
+                }
+
             }
         }
 
@@ -202,10 +212,19 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             g.setColor(c);// Set colour
              if (Truth.get(o).equals("RecTruth")) {// If "RecTruth" is within the array lineup then draw a rectangle
                 x = parseArrayIndex(x);
-                g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX1(), XYtrack.getY2());//down
-                g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY1());//right
-                g.drawLine(XYtrack.getX2(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());//corner_down
-                g.drawLine(XYtrack.getX2(), XYtrack.getY2(), XYtrack.getX1(), XYtrack.getY2());//corner_left
+                 if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()){
+                     g.drawRect(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
+                 }
+                 else if(XYtrack.getX2() <= XYtrack.getX1()){
+                     g.drawRect(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
+                 }
+                 else if(XYtrack.getY2() <= XYtrack.getY1()){
+                     g.drawRect(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
+                 }
+                 else{
+                     g.drawRect(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
+                 }
+
             }
 
             if (Truth.get(o).equals("LinePlotTruth")) {//If "LinePlotTruth" is within the array lineup then draw a Line or Plot

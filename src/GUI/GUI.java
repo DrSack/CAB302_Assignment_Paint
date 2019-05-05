@@ -10,7 +10,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.*;
 
 public class GUI extends JFrame implements ActionListener {
+    private Color c = Color.black;
+    private String hex;
 
+    private boolean OutlineOrFill = true;
     private JMenuBar menuBar;
     private JMenu file, edit;
     private JMenuItem create, open, saveAs, exit, undo, clear;
@@ -91,10 +94,14 @@ public class GUI extends JFrame implements ActionListener {
         // Tools board
         tools = new JPanel(new FlowLayout());
 
-        outline = new JButton("Outline");
-        fill = new JButton("Fill");
+         //Set font variable.
+        outline = createButton("Outline");
+        fill = createButton("Fill");
 
+        // Set outline to Bold
+        Font f = outline.getFont();
         tools.add(outline);
+        outline.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
         tools.add(fill);
 
         gbc.weighty = 1;
@@ -232,14 +239,31 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object btnSrc = e.getSource();
 
-        for(JButton colorButton : colorButtons) {
+        if(btnSrc == outline){//Change outline colour of Shape and set font to BOLD
+            Font f = outline.getFont();
+            OutlineOrFill= true;
+            outline.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+        }
+
+        if(btnSrc == fill){// Fill in Shape and set font to BOLD
+            Font f = outline.getFont();
+            OutlineOrFill= false;
+            fill.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+        }
+
+        for (JButton colorButton : colorButtons) {
             if (btnSrc == colorButton) {
-                Color c = colorButton.getBackground();
-                String hex = "#"+Integer.toHexString(c.getRGB()).substring(2);
-                ColourClick(hex.toUpperCase());
-                System.out.println(hex.toUpperCase());
+                    c = colorButton.getBackground();
+                    hex = "#" + Integer.toHexString(c.getRGB()).substring(2);
+                    if(OutlineOrFill){
+                        c = Color.decode(hex);
+                        System.out.println(hex);
+                        ColourClick(hex);
+                    }
+
             }
         }
+
 
         if(btnSrc == create) {
             file.isVisible();
