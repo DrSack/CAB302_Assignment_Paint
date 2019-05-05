@@ -40,7 +40,7 @@ public class DrawCanvas extends JPanel implements MouseListener{
     private MouseCoordinates Mousetrack = new MouseCoordinates();
     private XY_Coordinates XYtrack = new XY_Coordinates();
 
-    public DrawCanvas(String vec){
+    DrawCanvas(String vec){
         vecFile = vec;
 
         this.setVisible(true);

@@ -1,82 +1,332 @@
 package GUI;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.util.*;
 
-public class GUI extends JFrame implements ActionListener{
+public class GUI extends JFrame implements ActionListener {
 
-    private JPanel ButtonsWindow = new JPanel();
-    private JPanel container = new JPanel();
+    private JMenuBar menuBar;
+    private JMenu file, edit;
+    private JMenuItem create, open, saveAs, exit, undo, clear;
 
+    private JPanel containerBoard, shapes, tools;
+    private DrawCanvas canvas;
 
-    private JButton openFile, newFile;
+    private JButton toolPlot, toolLine, toolRect, toolEllipse, toolPolygon;
+    private JButton outline, fill;
 
+    // Colors
+    private JPanel colors = new JPanel();
+    private ArrayList<JButton> colorButtons = new ArrayList<JButton>();
+    private JButton black = new JButton();
+    private JButton gray = new JButton();
+    private JButton lightGray = new JButton();
+    private JButton white = new JButton();
+    private JButton blue = new JButton();
+    private JButton cyan = new JButton();
+    private JButton green = new JButton();
+    private JButton yellow = new JButton();
+    private JButton orange = new JButton();
+    private JButton pink = new JButton();
+    private JButton magenta = new JButton();
+    private JButton red = new JButton();
 
-    public GUI(String Title){
-        super(Title);
-        createAndShowGUI();
-    }
+    private String vecFile = "";
 
-    private void createAndShowGUI() {
-        openFile = createButton("OPEN VEC");
-        newFile = createButton("NEW VEC");
+    public GUI(String File, String title) {
+        this.setTitle(title);
+        this.setLayout(new BorderLayout(5, 5));
 
-        setcoloursJPanel();
+        // Canvas
+        vecFile = File;
+        canvas = new DrawCanvas(vecFile);
+        canvas.setBackground(Color.WHITE);
+
+        setupMenuBar();
         setupButtons();
-        JPanelContainer();
+        setupPanels();
+        setupColors();
+        setupShapes();
 
-        this.setSize(375, 100);
-        this.add(container);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // Add the components to the frame
+        this.setJMenuBar(menuBar);
+        this.add(containerBoard, BorderLayout.WEST);
+        this.add(canvas, BorderLayout.CENTER);
+
+        // Display window
+        this.setResizable(false);
+        this.setPreferredSize(new Dimension(700, 600));
+        this.setLocation(new Point(100, 100));
+        this.pack();
+        this.setVisible(true);
     }
 
-    private JButton createButton(String title){
+    public void setupShapes() {
+        shapes.add(toolPlot);
+        shapes.add(toolLine);
+        shapes.add(toolRect);
+        shapes.add(toolEllipse);
+        shapes.add(toolPolygon);
+    }
+
+    public void setupPanels() {
+        // Container board
+        containerBoard = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Shapes board
+        shapes = new JPanel(new GridLayout(5,1));
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        containerBoard.add(shapes, gbc);
+
+        // Tools board
+        tools = new JPanel(new FlowLayout());
+
+        outline = new JButton("Outline");
+        fill = new JButton("Fill");
+
+        tools.add(outline);
+        tools.add(fill);
+
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        containerBoard.add(tools, gbc);
+
+        // Colors board
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        containerBoard.add(colors, gbc);
+    }
+
+    public void setupColors() {
+        black.setBackground(Color.BLACK);
+        gray.setBackground(Color.GRAY);
+        lightGray.setBackground(Color.LIGHT_GRAY);
+        white.setBackground(Color.WHITE);
+        blue.setBackground(Color.BLUE);
+        cyan.setBackground(Color.CYAN);
+        green.setBackground(Color.GREEN);
+        yellow.setBackground(Color.YELLOW);
+        orange.setBackground(Color.ORANGE);
+        pink.setBackground(Color.PINK);
+        magenta.setBackground(Color.MAGENTA);
+        red.setBackground(Color.RED);
+
+        colorButtons.addAll(new ArrayList<JButton>(Arrays.asList(black, gray, lightGray, white,
+                blue, cyan, green, yellow, orange, pink, magenta, red)));
+
+        colors.setLayout(new GridLayout(3, 4));
+        for (int i = 0; i < colorButtons.size(); i++) {
+            colorButtons.get(i).setPreferredSize(new Dimension(25, 25));
+            colors.add(colorButtons.get(i));
+        }
+    }
+
+    // Create Menu Item and return the object with action listener
+    public JMenuItem createMenuItem(String title) {
+        JMenuItem btn = new JMenuItem();
+        btn.setText(title);
+        btn.addActionListener(this);
+        return  btn;
+    }
+
+    // Create Button and return the object with action listener
+    public JButton createButton(String title) {
         JButton btn = new JButton();
         btn.setText(title);
         btn.addActionListener(this);
         return  btn;
     }
 
-    private void JPanelContainer(){
-        container.setLayout(new GridLayout(1,0));
-        container.add(ButtonsWindow);
+    public void setupButtons() {
+        toolPlot = createButton("Plot");
+        toolLine = createButton("Line");
+        toolRect = createButton("Rectangle");
+        toolEllipse = createButton("Ellipse");
+        toolPolygon = createButton("Polygon");
     }
 
-    private void setcoloursJPanel(){
-        ButtonsWindow.setBackground(Color.GRAY);
-        ButtonsWindow.setOpaque(true);
+    public void setupMenuItemsFile() {
+        create = createMenuItem("New");
+        open = createMenuItem("Open...");
+        saveAs = createMenuItem("Save As...");
+        exit = createMenuItem("Exit");
     }
 
-    private void setupButtons(){
-        newFile.setPreferredSize(new Dimension(100,25));
-        openFile.setPreferredSize(new Dimension(100,25));
-        ButtonsWindow.add(openFile);
-        ButtonsWindow.add(newFile);
-
+    public void setupMenuItemsEdit() {
+        undo = createMenuItem("Undo");
+        clear = createMenuItem("Clear");
     }
 
+    public void setupMenuBar() {
+        // Menu bar
+        menuBar = new JMenuBar();
 
+        // File menu
+        file = new JMenu("File");
+        setupMenuItemsFile();
 
+        file.add(create);
+        file.add(open);
+        file.add(saveAs);
+        file.addSeparator();
+        file.add(exit);
 
-    public void run(){
-        this.setVisible(true);
+        // Edit menu
+        edit = new JMenu("Edit");
+        setupMenuItemsEdit();
+
+        edit.add(undo);
+        edit.add(clear);
+
+        // Add menus to menu bar
+        menuBar.add(file);
+        menuBar.add(edit);
     }
 
-    @Override
+    //Pass coordinates to the JPanel to Redraw the panel
+    private void parseLine(double x1, double y1, double x2, double y2) {
+        canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2);
+        canvas.repaint();
+    }
+
+    private void parseRect(double x1, double y1, double x2, double y2) {
+        canvas.SetCoordinateRectangle(x1,y1,x2,y2);
+        canvas.repaint();
+    }
+
+    private void parseEllipse(double x1, double y1, double x2, double y2) {
+        canvas.SetCoordinateEllipse(x1,y1,x2,y2);
+        canvas.repaint();
+    }
+
+    private void parsePolygon(double xP[], double yP[]) {
+        canvas.SetCoordinatePolygon(xP, yP);
+        canvas.repaint();
+    }
+
+    private void parseColour(String colour){
+        canvas.SetColour(colour);
+    }
+
+    public String returnFile() {
+        return canvas.returnFile();
+    }
+
     public void actionPerformed(ActionEvent e) {
         Object btnSrc = e.getSource();
-        if(btnSrc == newFile) {
-            DrawCanvas file = new DrawCanvas("Untitled", "");
+
+        if(btnSrc == create) {
+            file.isVisible();
+            file.repaint();
+            file.setVisible(true);
         }
 
-        if(btnSrc == openFile) {
+        if(btnSrc == clear){
+            canvas.clearCanvas();
+            canvas.repaint();
+        }
+
+        if(btnSrc == toolPlot){
+            canvas.PlotTruth = true;
+            canvas.LineTruth = false;
+            canvas.RecTruth = false;
+
+        }
+
+        if(btnSrc == toolLine) {
+            canvas.PlotTruth = false;
+            canvas.LineTruth = true;
+            canvas.RecTruth = false;
+        }
+
+        if(btnSrc == toolRect) {
+            canvas.PlotTruth = false;
+            canvas.LineTruth = false;
+            canvas.RecTruth = true;
+        }
+
+        if(btnSrc == create){
+            GUI NewWindow = new GUI("","untitled");
+        }
+
+        if (btnSrc == saveAs) { // If Save button is pressed
+            final JFileChooser fcSave = new JFileChooser();
+            fcSave.setCurrentDirectory(new File("./")); // Set Directory to the src of the Program
+
+            fcSave.setAcceptAllFileFilterUsed(false); // Filter out extensions except for .VEC
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("VEC files", "VEC");
+            fcSave.addChoosableFileFilter(filter);
+
+            final String ext = ".VEC";
+            String filePathWithoutExt = "";
+            int value = fcSave.showSaveDialog(fcSave);
+            if (value == JFileChooser.APPROVE_OPTION) { // Save button is clicked.
+                // If the files name contains a .VEC replace it with nothing this is to prevent a double .VEC.VEC file
+                if (fcSave.getSelectedFile().getAbsolutePath().contains(".VEC")) {
+                    filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath().replace(".VEC", "");
+                }
+                // If there is no establish .VEC file set the file as is
+                else {
+                    filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath();
+                }
+                this.setTitle(filePathWithoutExt+ ".VEC");
+
+                File file = new File(filePathWithoutExt + ".VEC");
+                // If the save button is pressed save the file followed with the file name inputted the .VEC extension
+
+                if (file.exists())
+                { // If the file already exist pop up a confirm Dialog panel.
+                    value = JOptionPane.showConfirmDialog(this,
+                            "Replace existing file?");// Asks if the user wants to replace the file.
+                    if (value == JOptionPane.YES_OPTION) {
+                        try {// if yes then replace the file with the current vecFile string.
+                            FileWriter filewrite = new FileWriter(file);
+                            filewrite.flush();
+                            filewrite.write(returnFile());
+                            filewrite.close();
+                            file.createNewFile();
+                            this.setTitle(fcSave.getSelectedFile().getAbsolutePath());
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+
+                    if (value == JOptionPane.NO_OPTION)// if no then do nothing
+                        return;
+                }
+                if (!file.exists()) {
+                    try {// if the file doesn't already exist, create it and write the file with the current vecFile string.
+                        FileWriter filewrite = new FileWriter(file);
+                        filewrite.flush();
+                        filewrite.write(returnFile());
+                        filewrite.close();
+                        file.createNewFile();
+                        this.setTitle(fcSave.getSelectedFile().getAbsolutePath());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+
+            }// if cancel is selected on the JFileChooser do nothing and return to normal operations.
+            else if (value == JFileChooser.CANCEL_OPTION) {
+
+            }
+        }
+
+        if(btnSrc == open) {
             BufferedReader reader;
             BufferedReader readerT;
             BufferedReader readerChoose;
-
 
             final JFileChooser fc = new JFileChooser();
             fc.setCurrentDirectory( new File( "./") );
@@ -88,7 +338,6 @@ public class GUI extends JFrame implements ActionListener{
             int returnVal = fc.showOpenDialog(this);
             if(returnVal==JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                String filename = file.getAbsolutePath();
                 try {
                     reader = new BufferedReader((new FileReader(file)));
                     readerT = new BufferedReader((new FileReader(file)));
@@ -99,8 +348,7 @@ public class GUI extends JFrame implements ActionListener{
                     String data = reader.readLine();
 
                     if(file.exists()){
-                        double x1 = 0, y1 = 0, x2 = 0, y2;
-                        int x[], y[];
+                        double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
                         String getFile ="";
 
                         int counter = 0;
@@ -118,112 +366,93 @@ public class GUI extends JFrame implements ActionListener{
                             VECfile = readerChoose.readLine();
                         }
                         System.out.println(getFile);
-                        DrawCanvas cool = new DrawCanvas(filename, getFile);
+                        GUI cool = new GUI(getFile+"\n",fc.getSelectedFile().getAbsolutePath());
+                        int ColourTrack = 0;
 
                         if(file.length() == 0){
-                            cool.setVisible(false);
+                            canvas.setVisible(false);
                         }
 
                         while(data != null) {
                             if (data.contains("LINE")) {
-
+                                // Replaces PLOT with nothing
                                 data = data.replace("LINE ", "");
-                                for(int i = 0; i < 3; i++){
-                                    String arr[] = data.split(" ", 2);
-                                    String firstWord = arr[0];
-                                    String theRest = arr[1];
-                                    if(i == 2){
-                                        x2 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 1){
-                                        y1 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 0){
-                                        x1 = Double.parseDouble(firstWord);
-                                    }
-                                    data = theRest;
-                                }
-                                y2 = Float.parseFloat(data);
-
-                                cool.SetCoordinateDrawingPlotting(x1,y1,x2,y2);
-
-                                cool.repaint();
-                                cool.revalidate();
-                                cool.setVisible(true);
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                x1 = Double.parseDouble(param[0]);
+                                y1 = Double.parseDouble(param[1]);
+                                x2 = Double.parseDouble(param[2]);
+                                y2 = Double.parseDouble(param[3]);
+                                cool.parseLine(x1,y1,x2,y2);
                             }
 
                             if (data.contains("PLOT")) {
+                                // Replaces PLOT with nothing
                                 data = data.replace("PLOT ", "");
-                                for(int i = 0; i < 1; i++){
-                                    String arr[] = data.split(" ", 2);
-                                    String firstWord = arr[0];
-                                    String theRest = arr[1];
-                                    if(i == 0){
-                                        x1 = Double.parseDouble(firstWord);
-                                    }
-                                    data = theRest;
-                                }
-                                y1 = Float.parseFloat(data);
-
-                                cool.SetCoordinateDrawingPlotting(x1,y1,x1,y1);
-
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                x1 = Double.parseDouble(param[0]);
+                                y1 = Double.parseDouble(param[1]);
+                                cool.parseLine(x1,y1,x1,y1);
                             }
 
                             if (data.contains("RECTANGLE")) {
+                                // Replaces RECTANGLE with nothing
                                 data = data.replace("RECTANGLE ", "");
-                                for(int i = 0; i < 3; i++){
-                                    String arr[] = data.split(" ", 2);
-                                    String firstWord = arr[0];
-                                    String theRest = arr[1];
-                                    if(i == 2){
-                                        x2 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 1){
-                                        y1 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 0){
-                                        x1 = Double.parseDouble(firstWord);
-                                    }
-                                    data = theRest;
-                                }
-                                counter++;
-                                y2 = Float.parseFloat(data);
-
-                                cool.SetCoordinateRectangle(x1,y1,x2,y2);
-
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                x1 = Double.parseDouble(param[0]);
+                                y1 = Double.parseDouble(param[1]);
+                                x2 = Double.parseDouble(param[2]);
+                                y2 = Double.parseDouble(param[3]);
+                                cool.parseRect(x1,y1,x2,y2);
                             }
 
                             if (data.contains("ELLIPSE")) {
+                                // Replaces ELLIPSE with nothing
                                 data = data.replace("ELLIPSE ", "");
-                                for(int i = 0; i < 3; i++){
-                                    String arr[] = data.split(" ", 2);
-                                    String firstWord = arr[0];
-                                    String theRest = arr[1];
-                                    if(i == 2){
-                                        x2 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 1){
-                                        y1 = Double.parseDouble(firstWord);
-                                    }
-                                    if(i == 0){
-                                        x1 = Double.parseDouble(firstWord);
-                                    }
-                                    data = theRest;
-                                }
-                                counter++;
-                                y2 = Float.parseFloat(data);
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                x1 = Double.parseDouble(param[0]);
+                                y1 = Double.parseDouble(param[1]);
+                                x2 = Double.parseDouble(param[2]);
+                                y2 = Double.parseDouble(param[3]);
+                                cool.parseEllipse(x1,y1,x2,y2);
+                            }
 
-                                cool.SetCoordinateEllipse(x1,y1,x2,y2);
+                            if (data.contains("POLYGON")) {
+                                int numbers;
+                                // Replaces POLYGON with nothing
+                                data = data.replace("POLYGON ", "");
+                                // Splits params into an array
+                                String param[] = data.split(" ");
+                                numbers = param.length;
+                                //Initializing xP and yP
+                                double xP[] = new double[numbers / 2];
+                                double yP[] = new double[numbers / 2];
+                                //Parsing numbers into array
+                                for (int i = 0; i < numbers / 2; i++) {
+                                    xP[i] = Double.parseDouble(param[2 * i]);
+                                    yP[i] = Double.parseDouble(param[2 * i + 1]);
+                                }
+                                cool.parsePolygon(xP, yP);
+                            }
+
+
+                            if (data.contains("PEN")) {// If the line contains pen
+                                data = data.replace("PEN ", "");
+                                cool.parseColour(data);// Set the colour on the JPanel
+
 
                             }
 
                             data = reader.readLine();
-
+                            ColourTrack++;
                         }
-
-                        cool.repaint();
-                        cool.revalidate();
-                        cool.setVisible(true);
+                        //Redraw the canvas and display shapes/lines.
+                        canvas.revalidate();
+                        canvas.repaint();
+                        canvas.setVisible(true);
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -231,18 +460,11 @@ public class GUI extends JFrame implements ActionListener{
             } else if(returnVal==JFileChooser.CANCEL_OPTION) {
 
             }
-
-
         }
-
-
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        GUI Tool = new GUI("Paint Tool");
-        Tool.run();
-
+        new GUI("", "untitled");
     }
-
 }

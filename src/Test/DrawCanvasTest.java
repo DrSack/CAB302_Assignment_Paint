@@ -13,13 +13,13 @@ class DrawCanvasTest extends JPanel {
 
     @Test
     public void TestCanvas(){
-        DrawCanvas Test = new DrawCanvas("Title", "VEC");
+        GUI Test = new GUI("VEC", "Title");
         assertEquals("Title", Test.getTitle());
     }
 
     @Test
     public void TestCanvasFileContents(){
-        DrawCanvas Test = new DrawCanvas("Title", "VEC");
+        GUI Test = new GUI("VEC", "Title");
         assertEquals("VEC", Test.returnFile());
     }
 
