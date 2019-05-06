@@ -224,17 +224,17 @@ public class GUI extends JFrame implements ActionListener {
         canvas.SetCoordinatePolygon(xP, yP);
     }
 
-    private void parseColour(String colour){
+    private void parseColour(String colour) {
         canvas.SetColour(colour);
     }
 
-    private void parseFill(String colour){ canvas.SetFill(colour); }
+    private void parseFill(String colour) { canvas.SetFill(colour); }
 
-    private  void parseFillOff(){ canvas.offFill(); }
+    private  void parseFillOff() { canvas.offFill(); }
 
-    private void ColourClick(String hex){ canvas.setColourClick(hex);}
+    private void ColourClick(String hex) { canvas.setColourClick(hex);}
 
-    private  void FillClick(String hex){canvas.setFillClick(hex);}
+    private  void FillClick(String hex) {canvas.setFillClick(hex);}
 
     public String returnFile() {
         return canvas.returnFile();
@@ -243,7 +243,7 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object btnSrc = e.getSource();
 
-        if(btnSrc == outline){//Change outline colour of Shape and set font to BOLD
+        if(btnSrc == outline) {//Change outline colour of Shape and set font to BOLD
             Font f = outline.getFont();
             Font f2 = fill.getFont();
             OutlineOrFill= true;
@@ -252,7 +252,7 @@ public class GUI extends JFrame implements ActionListener {
             ColourClick(penC);
         }
 
-        if(btnSrc == fill){// Fill in Shape and set font to BOLD
+        if(btnSrc == fill) {// Fill in Shape and set font to BOLD
             Font f = outline.getFont();
             Font f2 = fill.getFont();
             OutlineOrFill= false;
@@ -264,11 +264,11 @@ public class GUI extends JFrame implements ActionListener {
         for (JButton colorButton : colorButtons) {
             if (btnSrc == colorButton) {
                     c = colorButton.getBackground();
-                    if(OutlineOrFill){
+                    if(OutlineOrFill) {
                         penC = "#" + Integer.toHexString(c.getRGB()).substring(2);
                         ColourClick(penC);
                     }
-                    if(!OutlineOrFill){
+                    if(!OutlineOrFill) {
                         fillC = "#" + Integer.toHexString(c.getRGB()).substring(2);
                         FillClick(fillC);
                     }
@@ -283,17 +283,17 @@ public class GUI extends JFrame implements ActionListener {
             file.setVisible(true);
         }
 
-        if(btnSrc == exit){
+        if(btnSrc == exit) {
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             this.dispose();
         }
 
-        if(btnSrc == clear){
+        if(btnSrc == clear) {
             canvas.clearCanvas();
             canvas.repaint();
         }
 
-        if(btnSrc == toolPlot){
+        if(btnSrc == toolPlot) {
             canvas.PlotTruth = true;
             canvas.LineTruth = false;
             canvas.RecTruth = false;
@@ -312,7 +312,7 @@ public class GUI extends JFrame implements ActionListener {
             canvas.RecTruth = true;
         }
 
-        if(btnSrc == create){
+        if(btnSrc == create) {
             GUI NewWindow = new GUI("","untitled");
         }
 
@@ -404,19 +404,19 @@ public class GUI extends JFrame implements ActionListener {
                     String VECfileTEST = readerT.readLine();
                     String data = reader.readLine();
 
-                    if(file.exists()){
+                    if(file.exists()) {
                         double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
                         String getFile ="";
 
                         int counter = 0;
                         int counterSTOP = 0;
-                        while(VECfileTEST != null){
+                        while(VECfileTEST != null) {
                             VECfileTEST = readerT.readLine();
                             counter++;
                         }
-                        while(VECfile != null){
+                        while(VECfile != null) {
                             getFile += VECfile;
-                            if(counterSTOP < counter-1){//if the file isn't at the end add another line
+                            if(counterSTOP < counter-1) {//if the file isn't at the end add another line
                                 getFile += "\n";
                             }
                             counterSTOP++;
@@ -425,7 +425,7 @@ public class GUI extends JFrame implements ActionListener {
                         System.out.println(getFile);// Parse file through contructor and open new JFrame.
                         GUI cool = new GUI(getFile+"\n",fc.getSelectedFile().getAbsolutePath());
 
-                        if(file.length() == 0){
+                        if(file.length() == 0) {
                             canvas.setVisible(false);
                         }
 
@@ -504,7 +504,7 @@ public class GUI extends JFrame implements ActionListener {
 
                             if (data.contains("FILL")) {// If the line contains Fill
                                 data = data.replace("FILL ", "");
-                                if(data.contains("OFF")){
+                                if(data.contains("OFF")) {
                                     System.out.println("OFF");
                                     cool.parseFillOff();// Set the colour on the JPanel
                                 }
