@@ -297,6 +297,8 @@ public class GUI extends JFrame implements ActionListener {
             canvas.PlotTruth = true;
             canvas.LineTruth = false;
             canvas.RecTruth = false;
+            canvas.ElliTruth = false;
+            canvas.PolyTruth = false;
 
         }
 
@@ -304,12 +306,33 @@ public class GUI extends JFrame implements ActionListener {
             canvas.PlotTruth = false;
             canvas.LineTruth = true;
             canvas.RecTruth = false;
+            canvas.ElliTruth = false;
+            canvas.PolyTruth = false;
         }
 
         if (btnSrc == toolRect) {
             canvas.PlotTruth = false;
             canvas.LineTruth = false;
             canvas.RecTruth = true;
+            canvas.ElliTruth = false;
+            canvas.PolyTruth = false;
+        }
+
+        if (btnSrc == toolEllipse){
+            canvas.PlotTruth = false;
+            canvas.LineTruth = false;
+            canvas.RecTruth = false;
+            canvas.ElliTruth = true;
+            canvas.PolyTruth = false;
+        }
+
+        if(btnSrc == toolPolygon){
+            canvas.PlotTruth = false;
+            canvas.LineTruth = false;
+            canvas.RecTruth = false;
+            canvas.ElliTruth = false;
+            canvas.PolyTruth = true;
+
         }
 
         if (btnSrc == create) {

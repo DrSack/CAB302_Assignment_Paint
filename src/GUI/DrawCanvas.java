@@ -17,6 +17,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     boolean LineTruth = false;
     boolean RecTruth = false;
     boolean ElliTruth = false;
+    boolean PolyTruth = false;
     boolean ClearTruth = false;
 
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
@@ -211,6 +212,20 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     g.drawRect(x1,y1,x2-x1,y2-y1);
                 }
 
+            }
+            if (ElliTruth){
+                if (x2 <= x1 && y2 <= y1) {
+                    g.drawOval(x2,y2,x1-x2,y1-y2);
+                }
+                else if (x2 <= x1) {
+                    g.drawOval(x2,y1,x1-x2,y2-y1);
+                }
+                else if (y2 <= y1) {
+                    g.drawOval(x1,y2,x2-x1,y1-y2);
+                }
+                else {
+                    g.drawOval(x1,y1,x2-x1,y2-y1);
+                }
             }
         }
 
