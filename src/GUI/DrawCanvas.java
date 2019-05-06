@@ -13,13 +13,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private boolean drawingline = false;
     private  boolean FillTruth= false;
 
-
     boolean PlotTruth = false;
     boolean LineTruth = false;
     boolean RecTruth = false;
     boolean ElliTruth = false;
     boolean ClearTruth = false;
-
 
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -39,8 +37,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     private int counter = 0;
     private int MouseIncrement = 0;
-    private int width = 546;
-    private int height = 540;
 
     private int x1Cor[], y1Cor[];
 
@@ -71,14 +67,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         c = Color.decode(hex);
     }
 
-    private void inputLines(double X1, double Y1, double X2, double Y2) { // Pass coordinates within the Arraylist
+    // Pass coordinates within the ArrayList
+    private void inputLines(double X1, double Y1, double X2, double Y2) {
         arrayLine.add(X1);
         arrayLine.add(Y1);
         arrayLine.add(X2);
         arrayLine.add(Y2);
     }
 
-    public String returnFile() { //Return the vecFile String
+    // Return the vecFile String
+    public String returnFile() {
         return vecFile;
     }
 
@@ -98,7 +96,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         vecFile ="";
     }
 
-    public void SetColour(String hex) { //Add the hexicode pen value to an Arraylist and add the counter value.
+    // Add the hex code pen value to an ArrayList and add the counter value.
+    public void SetColour(String hex) {
         Colourtrack.add(counter);
         Colour.add(Color.decode(hex));
     }
@@ -146,29 +145,31 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         // For loop to add coordinates into arrayLine
         for(int i = 0; i < num; i++)
         {
-            holderX = xP[i] * this.width;
+            holderX = xP[i] * this.getWidth();
             x1Cor[i] = (int)holderX;
             for(int a = 0; a < 1; a++)
             {
-                holderY = yP[i] * this.height;
+                holderY = yP[i] * this.getHeight();
                 y1Cor[i] = (int)holderY;
             }
         }
         counter++;
     }
 
-    public int parseArrayValue(int index, int dim) { // pass index value, and dimensions to return the arraylist Coordinate.
+    // Pass index value and dimensions to return the ArrayList Coordinate.
+    public int parseArrayValue(int index, int dim) {
         return (int) (arrayLine.get(index) * dim);
     }
 
-    public int parseArrayIndex(int index) { // Pass an index, and sets each X,Y value within the XYtrack class. Return the index value.
-        XYtrack.setX1(parseArrayValue(index, width));
+    // Pass an index and sets each X,Y value within the XYtrack class. Return the index value.
+    public int parseArrayIndex(int index) {
+        XYtrack.setX1(parseArrayValue(index, this.getWidth()));
         index++;
-        XYtrack.setY1(parseArrayValue(index, height));
+        XYtrack.setY1(parseArrayValue(index, this.getHeight()));
         index++;
-        XYtrack.setX2(parseArrayValue(index, width));
+        XYtrack.setX2(parseArrayValue(index, this.getWidth()));
         index++;
-        XYtrack.setY2(parseArrayValue(index, height));
+        XYtrack.setY2(parseArrayValue(index, this.getHeight()));
         index++;
         return index;
     }
@@ -184,10 +185,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int triggered = 0; // Keeps track if no pen commands are present.
         FillTruth = false;
 
-        int x1 = (int)(Mousetrack.getX1()* width); // Set current mouse X,Y coordinates
-        int y1 = (int) (Mousetrack.getY1()*height);
-        int x2 = (int)(Mousetrack.getX2()*width);
-        int y2 = (int)(Mousetrack.getY2()*height);
+        // Set current mouse X,Y coordinates
+        int x1 = (int)(Mousetrack.getX1()* this.getWidth());
+        int y1 = (int) (Mousetrack.getY1()* this.getHeight());
+        int x2 = (int)(Mousetrack.getX2()* this.getWidth());
+        int y2 = (int)(Mousetrack.getY2()* this.getHeight());
 
         if (drawingline) { // If currently drawing draw the shapes temporarily.
             g.setColor(c);
@@ -283,7 +285,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mouseClicked(MouseEvent e) {
         if(PlotTruth) {
-            Mousetrack.setMouseXY(e.getX(), e.getY(),this.width,this.height);
+            Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
             SetCoordinateDrawingPlotting(Mousetrack.getX1(),Mousetrack.getY1(),Mousetrack.getX1(),Mousetrack.getY1());
             vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) +"\n";
             this.repaint();
@@ -293,7 +295,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mousePressed(MouseEvent e) { // If mouse is clicked do something.....
         System.out.println(e.getX()+" "+e.getY());
-        Mousetrack.setMouseXY(e.getX(), e.getY(), this.width, this.height);
+        Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
 
         if(EnableOpen) { // Inserts a new line into vecFile if the intention of the user is to draw something.
             this.vecFile +="\n";
@@ -303,7 +305,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void mouseDragged(MouseEvent e) { // Whenever the mouse is dragged get the X,Y2 coordinates then repaint
-        Mousetrack.setMouseXY2(e.getX(), e.getY(), this.width, this.height);
+        Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = true;
         this.repaint();
     }
@@ -311,20 +313,21 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mouseReleased(MouseEvent e) {
         DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
-        Mousetrack.setMouseXY2(e.getX(), e.getY(), this.width, this.height);
+        Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = false;
 
-        double mx1 = Mousetrack.getX1(); // Assign x,y's to variables.
+        // Assign x,y to variables.
+        double mx1 = Mousetrack.getX1();
         double my1 = Mousetrack.getY1();
         double mx2 = Mousetrack.getX2();
         double my2 = Mousetrack.getY2();
 
-        if (mx2 > this.width) {
-            mx2 = this.width;
+        if (mx2 > this.getWidth()) {
+            mx2 = this.getWidth();
         }
 
-        if (my2 > this.height) {
-            my2 = this.height;
+        if (my2 > this.getHeight()) {
+            my2 = this.getHeight();
         }
 
         String x1 = df.format(mx1);

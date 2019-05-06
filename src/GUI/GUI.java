@@ -66,6 +66,7 @@ public class GUI extends JFrame implements ActionListener {
         this.add(canvas, BorderLayout.CENTER);
 
         // Display window
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(750, 600));
         this.setLocation(new Point(100, 100));
@@ -150,7 +151,7 @@ public class GUI extends JFrame implements ActionListener {
         JMenuItem btn = new JMenuItem();
         btn.setText(title);
         btn.addActionListener(this);
-        return  btn;
+        return btn;
     }
 
     // Create Button and return the object with action listener
@@ -158,7 +159,7 @@ public class GUI extends JFrame implements ActionListener {
         JButton btn = new JButton();
         btn.setText(title);
         btn.addActionListener(this);
-        return  btn;
+        return btn;
     }
 
     private void setupButtons() {
@@ -230,11 +231,11 @@ public class GUI extends JFrame implements ActionListener {
 
     private void parseFill(String colour) { canvas.SetFill(colour); }
 
-    private  void parseFillOff() { canvas.offFill(); }
+    private void parseFillOff() { canvas.offFill(); }
 
     private void ColourClick(String hex) { canvas.setColourClick(hex);}
 
-    private  void FillClick(String hex) {canvas.setFillClick(hex);}
+    private void FillClick(String hex) {canvas.setFillClick(hex);}
 
     public String returnFile() {
         return canvas.returnFile();
@@ -243,7 +244,7 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object btnSrc = e.getSource();
 
-        if(btnSrc == outline) {//Change outline colour of Shape and set font to BOLD
+        if (btnSrc == outline) { // Change outline colour of Shape and set font to BOLD
             Font f = outline.getFont();
             Font f2 = fill.getFont();
             OutlineOrFill= true;
@@ -252,7 +253,7 @@ public class GUI extends JFrame implements ActionListener {
             ColourClick(penC);
         }
 
-        if(btnSrc == fill) {// Fill in Shape and set font to BOLD
+        if (btnSrc == fill) { // Fill in Shape and set font to BOLD
             Font f = outline.getFont();
             Font f2 = fill.getFont();
             OutlineOrFill= false;
@@ -263,56 +264,55 @@ public class GUI extends JFrame implements ActionListener {
 
         for (JButton colorButton : colorButtons) {
             if (btnSrc == colorButton) {
-                    c = colorButton.getBackground();
-                    if(OutlineOrFill) {
-                        penC = "#" + Integer.toHexString(c.getRGB()).substring(2);
-                        ColourClick(penC);
-                    }
-                    if(!OutlineOrFill) {
-                        fillC = "#" + Integer.toHexString(c.getRGB()).substring(2);
-                        FillClick(fillC);
-                    }
+                c = colorButton.getBackground();
 
+                if (OutlineOrFill) {
+                    penC = "#" + Integer.toHexString(c.getRGB()).substring(2);
+                    ColourClick(penC);
+                }
+                if (!OutlineOrFill) {
+                    fillC = "#" + Integer.toHexString(c.getRGB()).substring(2);
+                    FillClick(fillC);
+                }
             }
         }
 
-
-        if(btnSrc == create) {
+        if (btnSrc == create) {
             file.isVisible();
             file.repaint();
             file.setVisible(true);
         }
 
-        if(btnSrc == exit) {
+        if (btnSrc == exit) {
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             this.dispose();
         }
 
-        if(btnSrc == clear) {
+        if (btnSrc == clear) {
             canvas.clearCanvas();
             canvas.repaint();
         }
 
-        if(btnSrc == toolPlot) {
+        if (btnSrc == toolPlot) {
             canvas.PlotTruth = true;
             canvas.LineTruth = false;
             canvas.RecTruth = false;
 
         }
 
-        if(btnSrc == toolLine) {
+        if (btnSrc == toolLine) {
             canvas.PlotTruth = false;
             canvas.LineTruth = true;
             canvas.RecTruth = false;
         }
 
-        if(btnSrc == toolRect) {
+        if (btnSrc == toolRect) {
             canvas.PlotTruth = false;
             canvas.LineTruth = false;
             canvas.RecTruth = true;
         }
 
-        if(btnSrc == create) {
+        if (btnSrc == create) {
             GUI NewWindow = new GUI("","untitled");
         }
 
@@ -332,21 +332,21 @@ public class GUI extends JFrame implements ActionListener {
                 if (fcSave.getSelectedFile().getAbsolutePath().contains(".VEC")) {
                     filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath().replace(".VEC", "");
                 }
+
                 // If there is no establish .VEC file set the file as is
                 else {
                     filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath();
                 }
 
-
                 File file = new File(filePathWithoutExt + ".VEC");
-                // If the save button is pressed save the file followed with the file name inputted the .VEC extension
 
+                // If the save button is pressed save the file followed with the file name inputted the .VEC extension
                 if (file.exists())
                 { // If the file already exist pop up a confirm Dialog panel.
                     value = JOptionPane.showConfirmDialog(this,
-                            "Replace existing file?");// Asks if the user wants to replace the file.
+                            "Replace existing file?"); // Asks if the user wants to replace the file.
                     if (value == JOptionPane.YES_OPTION) {
-                        try {// if yes then replace the file with the current vecFile string.
+                        try { // if yes then replace the file with the current vecFile string.
                             FileWriter filewrite = new FileWriter(file);
                             filewrite.flush();
                             filewrite.write(returnFile());
@@ -358,11 +358,11 @@ public class GUI extends JFrame implements ActionListener {
                         }
                     }
 
-                    if (value == JOptionPane.NO_OPTION)// if no then do nothing
+                    if (value == JOptionPane.NO_OPTION) // If no then do nothing
                         return;
                 }
                 if (!file.exists()) {
-                    try {// if the file doesn't already exist, create it and write the file with the current vecFile string.
+                    try { // if the file doesn't already exist, create it and write the file with the current vecFile string.
                         FileWriter filewrite = new FileWriter(file);
                         filewrite.flush();
                         filewrite.write(returnFile());
@@ -374,13 +374,13 @@ public class GUI extends JFrame implements ActionListener {
                     }
                 }
 
-            }// if cancel is selected on the JFileChooser do nothing and return to normal operations.
+            } // If cancel is selected on the JFileChooser do nothing and return to normal operations.
             else if (value == JFileChooser.CANCEL_OPTION) {
 
             }
         }
 
-        if(btnSrc == open) {
+        if (btnSrc == open) {
             BufferedReader reader;
             BufferedReader readerT;
             BufferedReader readerChoose;
@@ -393,7 +393,7 @@ public class GUI extends JFrame implements ActionListener {
             fc.addChoosableFileFilter(filter);
 
             int returnVal = fc.showOpenDialog(this);
-            if(returnVal==JFileChooser.APPROVE_OPTION) {
+            if (returnVal==JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 try {
                     reader = new BufferedReader((new FileReader(file)));
@@ -404,7 +404,7 @@ public class GUI extends JFrame implements ActionListener {
                     String VECfileTEST = readerT.readLine();
                     String data = reader.readLine();
 
-                    if(file.exists()) {
+                    if (file.exists()) {
                         double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
                         String getFile ="";
 
@@ -416,16 +416,16 @@ public class GUI extends JFrame implements ActionListener {
                         }
                         while(VECfile != null) {
                             getFile += VECfile;
-                            if(counterSTOP < counter-1) {//if the file isn't at the end add another line
+                            if (counterSTOP < counter-1) { // If the file isn't at the end add another line
                                 getFile += "\n";
                             }
                             counterSTOP++;
                             VECfile = readerChoose.readLine();
                         }
-                        System.out.println(getFile);// Parse file through contructor and open new JFrame.
+                        System.out.println(getFile); // Parse file through constructor and open new JFrame.
                         GUI cool = new GUI(getFile+"\n",fc.getSelectedFile().getAbsolutePath());
 
-                        if(file.length() == 0) {
+                        if (file.length() == 0) {
                             canvas.setVisible(false);
                         }
 
@@ -433,6 +433,7 @@ public class GUI extends JFrame implements ActionListener {
                             if (data.contains("LINE")) {
                                 // Replaces PLOT with nothing
                                 data = data.replace("LINE ", "");
+
                                 // Splits params into an array
                                 String param[] = data.split(" ");
                                 x1 = Double.parseDouble(param[0]);
@@ -445,6 +446,7 @@ public class GUI extends JFrame implements ActionListener {
                             if (data.contains("PLOT")) {
                                 // Replaces PLOT with nothing
                                 data = data.replace("PLOT ", "");
+
                                 // Splits params into an array
                                 String param[] = data.split(" ");
                                 x1 = Double.parseDouble(param[0]);
@@ -455,6 +457,7 @@ public class GUI extends JFrame implements ActionListener {
                             if (data.contains("RECTANGLE")) {
                                 // Replaces RECTANGLE with nothing
                                 data = data.replace("RECTANGLE ", "");
+
                                 // Splits params into an array
                                 String param[] = data.split(" ");
                                 x1 = Double.parseDouble(param[0]);
@@ -467,6 +470,7 @@ public class GUI extends JFrame implements ActionListener {
                             if (data.contains("ELLIPSE")) {
                                 // Replaces ELLIPSE with nothing
                                 data = data.replace("ELLIPSE ", "");
+
                                 // Splits params into an array
                                 String param[] = data.split(" ");
                                 x1 = Double.parseDouble(param[0]);
@@ -478,12 +482,15 @@ public class GUI extends JFrame implements ActionListener {
 
                             if (data.contains("POLYGON")) {
                                 int numbers;
+
                                 // Replaces POLYGON with nothing
                                 data = data.replace("POLYGON ", "");
+
                                 // Splits params into an array
                                 String param[] = data.split(" ");
                                 numbers = param.length;
-                                //Initializing xP and yP
+
+                                // Initializing xP and yP
                                 double xP[] = new double[numbers / 2];
                                 double yP[] = new double[numbers / 2];
                                 //Parsing numbers into array
@@ -494,30 +501,26 @@ public class GUI extends JFrame implements ActionListener {
                                 cool.parsePolygon(xP, yP);
                             }
 
-
-                            if (data.contains("PEN")) {// If the line contains pen
+                            if (data.contains("PEN")) { // If the line contains pen
                                 data = data.replace("PEN ", "");
-                                cool.parseColour(data);// Set the colour on the JPanel
-
-
+                                cool.parseColour(data); // Set the colour on the JPanel
                             }
 
-                            if (data.contains("FILL")) {// If the line contains Fill
+                            if (data.contains("FILL")) { // If the line contains Fill
                                 data = data.replace("FILL ", "");
-                                if(data.contains("OFF")) {
+                                if (data.contains("OFF")) {
                                     System.out.println("OFF");
-                                    cool.parseFillOff();// Set the colour on the JPanel
+                                    cool.parseFillOff(); // Set the colour on the JPanel
                                 }
                                 else{
                                     System.out.println(data);
-                                    cool.parseFill(data);// Set the colour on the JPanel
+                                    cool.parseFill(data); // Set the colour on the JPanel
                                 }
-
                             }
-
                             data = reader.readLine();
                         }
-                        //Redraw the canvas and display shapes/lines.
+
+                        // Redraw the canvas and display shapes/lines.
                         canvas.revalidate();
                         canvas.repaint();
                         canvas.setVisible(true);
@@ -525,7 +528,7 @@ public class GUI extends JFrame implements ActionListener {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-            } else if(returnVal==JFileChooser.CANCEL_OPTION) {
+            } else if (returnVal==JFileChooser.CANCEL_OPTION) {
 
             }
         }

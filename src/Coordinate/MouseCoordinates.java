@@ -4,10 +4,10 @@ public class MouseCoordinates {
 
     private double mousex1, mousey1, mousex2, mousey2;
 
-    public void setMouseXY(int x, int y, int width, int height) { // Set XY value for the mouse coordinates and also convert to double
+    // Set XY value for the mouse coordinates and also convert to double
+    public void setMouseXY(int x, int y, int width, int height) {
         mousex1 = (double) x/width;
         mousey1 = (double) y/height;
-
     }
 
     public void setMouseXY2(int x, int y, int width, int height) {
