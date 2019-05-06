@@ -52,6 +52,7 @@ public class GUI extends JFrame implements ActionListener {
         vecFile = File;
         canvas = new DrawCanvas(vecFile);
         canvas.setBackground(Color.WHITE);
+        canvas.setPreferredSize(new Dimension(600, 600));
 
         setupMenuBar();
         setupButtons();
@@ -65,9 +66,8 @@ public class GUI extends JFrame implements ActionListener {
         this.add(canvas, BorderLayout.CENTER);
 
         // Display window
-        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setPreferredSize(new Dimension(700, 600));
+        this.setPreferredSize(new Dimension(750, 600));
         this.setLocation(new Point(100, 100));
         this.pack();
         this.setVisible(true);
@@ -84,6 +84,7 @@ public class GUI extends JFrame implements ActionListener {
     public void setupPanels() {
         // Container board
         containerBoard = new JPanel(new GridBagLayout());
+        containerBoard.setPreferredSize(new Dimension(150,600));
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Shapes board
@@ -101,6 +102,7 @@ public class GUI extends JFrame implements ActionListener {
         fill = createButton("Fill");
 
         Font f = outline.getFont();
+
         // Set outline to Bold
         tools.add(outline);
         outline.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
