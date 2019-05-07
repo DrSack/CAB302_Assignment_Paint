@@ -9,9 +9,13 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class DrawCanvas extends JPanel implements MouseListener, MouseMotionListener {
-    boolean EnableOpen = false;
+    private boolean EnableOpen = false;
     private boolean drawingline = false;
     private  boolean FillTruth= false;
+    private boolean Filling = false;
+    private  boolean Pen = false;
+    private String colourtemp ="";
+    private String pentemp = "";
 
     boolean PlotTruth = false;
     boolean LineTruth = false;
@@ -21,10 +25,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     boolean ClearTruth = false;
 
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
-    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private Color c = Color.black;
     private Color f;
-    private String Title;
 
     private ArrayList<Double> arrayLine = new ArrayList<>();
     private ArrayList<String> Truth = new ArrayList<>();
@@ -55,17 +57,26 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     public void setFillClick(String hex) {
+        if(Filling){
+            Filltrack.remove(Filltrack.size()-1);
+            Fill.remove(Fill.size()-1);
+        }
             Filltrack.add(counter);
             Fill.add(Color.decode(hex));
-            vecFile+="FILL "+hex.toUpperCase()+"\n";
+            colourtemp ="FILL "+hex.toUpperCase()+"\n";
+
+            Filling = true;
     }
 
     public void setColourClick(String hex) {
+        if(Pen){
+            Colourtrack.remove(Colourtrack.size()-1);
+            Colour.remove(Colour.size()-1);
+        }
         Colourtrack.add(counter);
         Colour.add(Color.decode(hex));
-        vecFile+="FILL OFF"+"\n";
-        vecFile+="PEN "+hex+"\n";
-        c = Color.decode(hex);
+        pentemp = "PEN "+hex+"\n";
+        Pen = true;
     }
 
     // Pass coordinates within the ArrayList
@@ -86,30 +97,40 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         Truth.clear();
         Colour.clear();
         Colourtrack.clear();
+        offFill.clear();
+        Filltrack.clear();
+        Fill.clear();
         EnableOpen = false;
+        drawingline = false;
+        FillTruth= false;
+        Filling = false;
         PlotTruth = false;
         LineTruth = false;
         RecTruth = false;
         ElliTruth = false;
+        PolyTruth = false;
         ClearTruth = false;
         counter = 0;
         MouseIncrement = 0;
         vecFile ="";
+        colourtemp ="";
     }
 
     // Add the hex code pen value to an ArrayList and add the counter value.
     public void SetColour(String hex) {
-        Colourtrack.add(counter);
-        Colour.add(Color.decode(hex));
+        Colourtrack.add(counter);//Add the counter to the track arraylist to trigger the colour switch
+        Colour.add(Color.decode(hex));//Add the hex colour code to the arraylist
     }
 
     public void SetFill(String hex) {
-        Filltrack.add(counter);
-        Fill.add(Color.decode(hex));
+        Filltrack.add(counter);//Add the counter if which to trigger the fill
+        Fill.add(Color.decode(hex));//Add the Hex colour code to the Fill arraylist
     }
 
     public void offFill() {
-        offFill.add(counter);
+        if(counter > 0){//if the counter is still 0 don't add the off fill
+            offFill.add(counter);
+        }
     }
 
     // Set coordinates for Lines or Plotting
@@ -192,7 +213,102 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int x2 = (int)(Mousetrack.getX2()* this.getWidth());
         int y2 = (int)(Mousetrack.getY2()* this.getHeight());
 
-        if (drawingline) { // If currently drawing draw the shapes temporarily.
+        for(int o = 0; o < counter; o++) {
+
+            if(i < Colourtrack.size() && triggered == 0) { // Default is black if no colours are present
+            c = Color.black;
+            }
+
+            if(i < Colourtrack.size()) {
+                if (o == Colourtrack.get(i)) { // If colours are present switch the colour
+                    triggered = 1;
+                    c = Colour.get(i);
+                    i++;
+                }
+            }
+            if (p < Filltrack.size()) { // If fill is present set f to fill colour
+                if (o == Filltrack.get(p)) {
+                    FillTruth = true;
+                    f = Fill.get(p);
+                    p++;
+                }
+            }
+            if (z < offFill.size()) { // Set FillTruth to false
+                if(o == offFill.get(z)) {
+                    FillTruth = false;
+                    z++;
+                }
+            }
+
+            g.setColor(c);
+             if (Truth.get(o).equals("RecTruth")) { // If "RecTruth" is within the array lineup then draw a rectangle
+                x = parseArrayIndex(x);
+
+                 if (FillTruth) { // If true fill shape
+                     g.setColor(f);
+                     g.fillRect(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2() - XYtrack.getX1(), XYtrack.getY2() - XYtrack.getY1());
+                 }
+
+                 g.setColor(c);// Set colour of the outline after fill is set
+                 if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) {//both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                     g.drawRect(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
+                 }
+                 else if(XYtrack.getX2() <= XYtrack.getX1()) {//if X2 goes behind X1 then draw backwards
+                     g.drawRect(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
+                 }
+                 else if(XYtrack.getY2() <= XYtrack.getY1()) {//if Y2 goes behind Y1 then draw backwards
+                     g.drawRect(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
+                 }
+                 else{// If operations are normal then draw normally
+                     g.drawRect(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
+                 }
+
+            }
+
+            if (Truth.get(o).equals("LinePlotTruth")) { // If "LinePlotTruth" is within the array lineup then draw a Line or Plot
+                x = parseArrayIndex(x);
+                g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());//Draw a Line based on the XYtrack class coordinates
+            }
+
+            if (Truth.get(o).equals("ElliTruth")) { // If "ElliTruth" is within the array lineup then draw an Ellipse
+                x = parseArrayIndex(x);
+
+                if (FillTruth) { // If true fill shape
+                    g.setColor(f);
+                    if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) {//both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                        g.fillOval(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
+                    }
+                    else if(XYtrack.getX2() <= XYtrack.getX1()) {//if X2 goes behind X1 then draw backwards
+                        g.fillOval(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
+                    }
+                    else if(XYtrack.getY2() <= XYtrack.getY1()) {//if Y2 goes behind Y1 then draw backwards
+                        g.fillOval(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
+                    }
+                    else{// If operations are normal then draw normally
+                        g.fillOval(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
+                    }
+                }
+
+                g.setColor(c);// Set colour of the outline after fill is set
+                if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) {//both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                    g.drawOval(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
+                }
+                else if(XYtrack.getX2() <= XYtrack.getX1()) {//if X2 goes behind X1 then draw backwards
+                    g.drawOval(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
+                }
+                else if(XYtrack.getY2() <= XYtrack.getY1()) {//if Y2 goes behind Y1 then draw backwards
+                    g.drawOval(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
+                }
+                else{// If operations are normal then draw normally
+                    g.drawOval(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
+                }
+
+            }
+            if (Truth.get(o).equals("PolyTruth")) { // If "PolyTruth" is within the array lineup then draw a Polygon
+                g.drawPolygon(x1Cor, y1Cor, x1Cor.length);
+            }
+        }
+        if (drawingline) { // If the user is still dragging the shapes, draw the shapes temporarily.
             g.setColor(c);
             if (LineTruth) {
                 // 0.25 0.25 0.75 0.5
@@ -228,83 +344,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 }
             }
         }
-
-        for(int o = 0; o < counter; o++) {
-
-            if(i < Colourtrack.size() && triggered == 0) { // Default is black if no colours are present
-            c = Color.black;
-            }
-            
-            if(i < Colourtrack.size()) {
-                if (o == Colourtrack.get(i)) { // If colours are present switch the colour
-                    triggered = 1;
-                    c = Colour.get(i);
-                    i++;
-                }
-            }
-            if (p < Filltrack.size()) { // If fill is present set f to fill colour
-                if (o == Filltrack.get(p)) {
-                    FillTruth = true;
-                    f = Fill.get(p);
-                    p++;
-                }
-            }
-            if (z < offFill.size()) { // Set FillTruth to false
-                if(o == offFill.get(z)) {
-                    FillTruth = false;
-                    z++;
-                }
-            }
-
-            g.setColor(c);
-             if (Truth.get(o).equals("RecTruth")) { // If "RecTruth" is within the array lineup then draw a rectangle
-                x = parseArrayIndex(x);
-
-                 if (FillTruth) { // If true fill shape
-                     g.setColor(f);
-                     g.fillRect(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2() - XYtrack.getX1(), XYtrack.getY2() - XYtrack.getY1());
-                 }
-
-                 g.setColor(c);
-                 if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) {
-                     g.drawRect(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
-                 }
-                 else if(XYtrack.getX2() <= XYtrack.getX1()) {
-                     g.drawRect(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
-                 }
-                 else if(XYtrack.getY2() <= XYtrack.getY1()) {
-                     g.drawRect(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
-                 }
-                 else{
-                     g.drawRect(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
-                 }
-
-            }
-
-            if (Truth.get(o).equals("LinePlotTruth")) { // If "LinePlotTruth" is within the array lineup then draw a Line or Plot
-                x = parseArrayIndex(x);
-                g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());
-            }
-
-            if (Truth.get(o).equals("ElliTruth")) { // If "ElliTruth" is within the array lineup then draw an Ellipse
-                x = parseArrayIndex(x);
-                g.drawOval(XYtrack.getX1(),XYtrack.getY1(), XYtrack.getX2() - XYtrack.getX1(), XYtrack.getY2() - XYtrack.getY1());
-
-            }
-            if (Truth.get(o).equals("PolyTruth")) { // If "PolyTruth" is within the array lineup then draw a Polygon
-                g.drawPolygon(x1Cor, y1Cor, x1Cor.length);
-            }
-        }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(PlotTruth) {
-            Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-            SetCoordinateDrawingPlotting(Mousetrack.getX1(),Mousetrack.getY1(),Mousetrack.getX1(),Mousetrack.getY1());
-            vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) +"\n";
-            this.repaint();
-        }
+
     }
 
     @Override
@@ -316,6 +360,14 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             this.vecFile +="\n";
             EnableOpen = false;
         }
+
+        if(PlotTruth) {
+            Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+            SetCoordinateDrawingPlotting(Mousetrack.getX1(),Mousetrack.getY1(),Mousetrack.getX1(),Mousetrack.getY1());
+            vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) +"\n";
+            this.repaint();
+        }
+
     }
 
     @Override
@@ -349,6 +401,17 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         String y1 = df.format(my1);
         String x2 = df.format(mx2);
         String y2 = df.format(my2);
+
+        if(Pen){
+            vecFile += pentemp;
+            vecFile += "FILL OFF" +"\n";
+            Pen = false;
+        }
+
+        if(Filling){
+                vecFile += colourtemp;
+                Filling = false;
+        }
 
         if(LineTruth) {
             SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);

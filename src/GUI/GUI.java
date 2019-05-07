@@ -251,6 +251,7 @@ public class GUI extends JFrame implements ActionListener {
             outline.setFont(f.deriveFont(Font.BOLD));
             fill.setFont(f2.deriveFont(~Font.BOLD));
             ColourClick(penC);
+            parseFillOff();
         }
 
         if (btnSrc == fill) { // Fill in Shape and set font to BOLD
