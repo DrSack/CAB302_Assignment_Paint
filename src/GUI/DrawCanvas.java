@@ -46,9 +46,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private ArrayList<Color> Colour = new ArrayList<>();
 
     private int counter = 0;
+    private int MouseIncrement = 0;
 
     private int[] x1Cor;
     private int[] y1Cor;
+    private double currentX, currentY, oldX, oldY, startX, startY;
 
     private String vecFile = "";
 
@@ -372,6 +374,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     g.drawOval(x1,y1,x2-x1,y2-y1);
                 }
             }
+            if (PolyTruth){
+                g.drawLine(x1, y1, x2, y2);
+            }
+
         }
     }
 
@@ -383,15 +389,56 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mousePressed(MouseEvent e) { // If mouse is pressed do something.....
         Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        //Convert the double formats to String with 2decimal places.
         // Set the X1,Y1 coordinates to the Mousetrack class.
 
-        if(PlotTruth) {// If only plotting then get the position, add command to string, then repaint.
+        if (PlotTruth) {// If only plotting then get the position, add command to string, then repaint.
             Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-            SetCoordinateDrawingPlotting(Mousetrack.getX1(),Mousetrack.getY1(),Mousetrack.getX1(),Mousetrack.getY1());
-            vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) +"\n";
+            SetCoordinateDrawingPlotting(Mousetrack.getX1(), Mousetrack.getY1(), Mousetrack.getX1(), Mousetrack.getY1());
+            vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) + "\n";
             this.repaint();
         }
 
+        // If polygon button is selected, able to draw polygon
+        if (PolyTruth) {
+            //** First left click gets position, adds string into vecFile, placeholders for x1 and y1 coordinates **//
+            //**Increments the mouse clicked**//
+            if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
+                MouseIncrement++;
+                Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+                String x1 = df.format(Mousetrack.getX1());
+                String y1 = df.format(Mousetrack.getY1());
+                this.currentX = Mousetrack.getX1();
+                this.currentY = Mousetrack.getY1();
+                this.startX = Mousetrack.getX1();
+                this.startY = Mousetrack.getY1();
+                vecFile += "POLYGON " + "0" + x1 + " 0" + y1;
+            }
+            //** Second left click and every other click draws line **//
+            else if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement > 0) {
+                MouseIncrement++;
+                Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+                this.oldX = Mousetrack.getX2();
+                this.oldY = Mousetrack.getY2();
+                SetCoordinateDrawingPlotting(currentX, currentY, oldX, oldY);
+                currentX = oldX;
+                currentY = oldY;
+                String x2 = df.format(Mousetrack.getX2());
+                String y2 = df.format(Mousetrack.getY2());
+                vecFile += " 0" + x2 + " 0" + y2;
+                this.repaint();
+            }
+
+            //** Right click draws from x2 and y2 of the latest line to the start**//
+            if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 2) {
+                System.out.println("Does this thing work");
+                SetCoordinateDrawingPlotting(oldX, oldY, startX, startY);
+                vecFile += "\n";
+                MouseIncrement = 0;
+            }
+            this.repaint();
+
+        }
     }
 
     @Override
@@ -404,7 +451,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void mouseReleased(MouseEvent e) {//Where the mouse is released get the final X,Y2 coordinates and set the Mousetrack.
-        DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
         Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = false;
 
@@ -457,6 +503,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             // Add mouse coordinates to vecFile
             vecFile += "ELLIPSE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
         }
+//        if (PolyTruth){
+//            SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
+//            vecFile += "POLYGON " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + " ";
+//            vecFile = vecFile.replace(" POLYGON", "");
+//        }
         System.out.println(e.getX()+" "+e.getY());
         this.repaint();
     }
