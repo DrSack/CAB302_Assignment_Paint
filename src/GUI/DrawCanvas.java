@@ -8,8 +8,16 @@ import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+
+/**
+ * This is the DrawCanvas class that is called upon within the GUI class, this is class extends JPanel and is
+ * Responsible for creating the Shapes drawn on the screen, based on the XY values of the mouse.
+ *
+ * Down below is all the private variables for booleans, strings, arraylists, Color
+ * variables and declaring encapsualtion classes.
+ *
+ */
 public class DrawCanvas extends JPanel implements MouseListener, MouseMotionListener {
-    private boolean EnableOpen = false;
     private boolean drawingline = false;
     private  boolean FillTruth= false;
     private boolean Filling = false;
@@ -22,7 +30,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     boolean RecTruth = false;
     boolean ElliTruth = false;
     boolean PolyTruth = false;
-    boolean ClearTruth = false;
 
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
     private Color c = Color.black;
@@ -39,43 +46,56 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private ArrayList<Color> Colour = new ArrayList<>();
 
     private int counter = 0;
-    private int MouseIncrement = 0;
 
-    private int x1Cor[], y1Cor[];
+    private int[] x1Cor;
+    private int[] y1Cor;
 
     private String vecFile = "";
 
     private MouseCoordinates Mousetrack = new MouseCoordinates();
     private XY_Coordinates XYtrack = new XY_Coordinates();
 
+
+    /**
+     * This is the contructor which passes the string vec parameter to vecFile, where the class will add new lines
+     * based on the actions given from the GUI and users drawing motives.
+     */
     DrawCanvas(String vec) {
         vecFile = vec;
-
         this.setVisible(true);
         addMouseListener(this);
         addMouseMotionListener(this);
     }
 
+    /**
+     * This method is called from the GUI whether the button "fill" is enabled, and the colours picked also have
+     * fill button enabled.
+     */
     public void setFillClick(String hex) {
-        if(Filling){
+        if(Filling){// If the user hasn't drawn yet, remove the previous elements from the arrays.
             Filltrack.remove(Filltrack.size()-1);
             Fill.remove(Fill.size()-1);
         }
+            //add the counter to the track array
             Filltrack.add(counter);
-            Fill.add(Color.decode(hex));
-            colourtemp ="FILL "+hex.toUpperCase()+"\n";
-
+            Fill.add(Color.decode(hex));// add the colour to the Fill array
+            colourtemp ="FILL "+hex.toUpperCase()+"\n"; // temporarily store the VEC command
             Filling = true;
     }
 
+    /**
+     * This method is called from the GUI whether the button "outline" is enabled, and the colours picked also have
+     * outline button enabled.
+     */
     public void setColourClick(String hex) {
-        if(Pen){
+        if(Pen){// if the users hasn't draw, remove the previous element.
             Colourtrack.remove(Colourtrack.size()-1);
             Colour.remove(Colour.size()-1);
         }
+        //add the counter to the trackarray
         Colourtrack.add(counter);
-        Colour.add(Color.decode(hex));
-        pentemp = "PEN "+hex+"\n";
+        Colour.add(Color.decode(hex));//add colour to the Colour array
+        pentemp = "PEN "+hex+"\n";// temporarily store the VEC command.
         Pen = true;
     }
 
@@ -92,6 +112,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         return vecFile;
     }
 
+    // Clear the entire canvas and reset all values
     public void clearCanvas() {
         arrayLine.clear();
         Truth.clear();
@@ -100,7 +121,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         offFill.clear();
         Filltrack.clear();
         Fill.clear();
-        EnableOpen = false;
         drawingline = false;
         FillTruth= false;
         Filling = false;
@@ -109,9 +129,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         RecTruth = false;
         ElliTruth = false;
         PolyTruth = false;
-        ClearTruth = false;
         counter = 0;
-        MouseIncrement = 0;
         vecFile ="";
         colourtemp ="";
     }
@@ -196,13 +214,19 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         return index;
     }
 
+    /**
+     * Whether this.repaint the paint method will be run through.
+     *
+     *
+     */
     public void paint(Graphics g) {
         super.paint(g);
 
-        int x = 0;
-        int p = 0;
-        int i = 0;
-        int z = 0;
+        //Set counters to keep track of each part of the arrays listed
+        int x = 0;// Keeps count how many times parseArrayIndex is called
+        int p = 0;// Keeps track of the Fill array.
+        int i = 0;// Keeps track of the Colour array.
+        int z = 0;// Keeps track whether the Fill Off command is present.
 
         int triggered = 0; // Keeps track if no pen commands are present.
         FillTruth = false;
@@ -310,11 +334,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
         if (drawingline) { // If the user is still dragging the shapes, draw the shapes temporarily.
             g.setColor(c);
-            if (LineTruth) {
-                // 0.25 0.25 0.75 0.5
+            if (LineTruth) {// Temporarily draw a line
                 g.drawLine(x1, y1, x2, y2);
             }
-            if (RecTruth) {
+            if (RecTruth) {// Temporarily draw a rectangle
                 if (x2 <= x1 && y2 <= y1) {
                     g.drawRect(x2,y2,x1-x2,y1-y2);
                 }
@@ -329,7 +352,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 }
 
             }
-            if (ElliTruth){
+            if (ElliTruth){// Temporarily draw an Ellipse.
                 if (x2 <= x1 && y2 <= y1) {
                     g.drawOval(x2,y2,x1-x2,y1-y2);
                 }
@@ -352,16 +375,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     @Override
-    public void mousePressed(MouseEvent e) { // If mouse is clicked do something.....
-        System.out.println(e.getX()+" "+e.getY());
+    public void mousePressed(MouseEvent e) { // If mouse is pressed do something.....
         Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        // Set the X1,Y1 coordinates to the Mousetrack class.
 
-        if(EnableOpen) { // Inserts a new line into vecFile if the intention of the user is to draw something.
-            this.vecFile +="\n";
-            EnableOpen = false;
-        }
-
-        if(PlotTruth) {
+        if(PlotTruth) {// If only plotting then get the position, add command to string, then repaint.
             Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
             SetCoordinateDrawingPlotting(Mousetrack.getX1(),Mousetrack.getY1(),Mousetrack.getX1(),Mousetrack.getY1());
             vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) +"\n";
@@ -372,13 +390,14 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void mouseDragged(MouseEvent e) { // Whenever the mouse is dragged get the X,Y2 coordinates then repaint
+        //to temporarily see the shapes outline.
         Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = true;
         this.repaint();
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {//Where the mouse is released get the final X,Y2 coordinates and set the Mousetrack.
         DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
         Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = false;
@@ -397,35 +416,36 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             my2 = this.getHeight();
         }
 
+        //Convert the double formats to String with 2decimal places.
         String x1 = df.format(mx1);
         String y1 = df.format(my1);
         String x2 = df.format(mx2);
         String y2 = df.format(my2);
 
-        if(Pen){
-            vecFile += pentemp;
-            vecFile += "FILL OFF" +"\n";
-            Pen = false;
+        if(Pen){//if the user decides to draw with a colour outline present
+            vecFile += pentemp;//Add outline colour command
+            vecFile += "FILL OFF" +"\n";// Disable fill
+            Pen = false;//Deactivate to not add more string to vecFile.
         }
 
-        if(Filling){
-                vecFile += colourtemp;
-                Filling = false;
+        if(Filling){//if the user decides to draw with a fill colour present
+                vecFile += colourtemp;//add fill command to vecFile
+                Filling = false;//Deactivate to not add more string to vecFile.
         }
 
-        if(LineTruth) {
+        if(LineTruth) {//If Line tool is picked then draw a line
             SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
             vecFile += "LINE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
         }
 
-        if (RecTruth) {
+        if (RecTruth) {//If Rectangle tool is picked then draw a rectangle.
             SetCoordinateRectangle(mx1, my1, mx2, my2);
 
             // Add mouse coordinates to vecFile
             vecFile += "RECTANGLE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
         }
 
-        if (ElliTruth) {
+        if (ElliTruth) {//If Ellipse tool is picked then draw an ellipse.
             SetCoordinateEllipse(mx1, my1, mx2, my2);
 
             // Add mouse coordinates to vecFile

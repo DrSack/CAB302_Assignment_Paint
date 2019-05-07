@@ -9,6 +9,12 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.*;
 
+/**
+This is the GUI class which extends the JFrame, the point of this class is that it holds all
+ buttons and functions that the rest of the program will deliver. The DrawCanvas class is also called upon
+ within this class and that class extends a Jpanel which will be used to draw the shapes.
+ **/
+
 public class GUI extends JFrame implements ActionListener {
     private Color c = Color.black;
 
@@ -44,6 +50,11 @@ public class GUI extends JFrame implements ActionListener {
 
     private String vecFile = "";
 
+    /**
+     This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
+     The border itself is fixed, with a menubar on the top, the buttons listed on the side, and the DrawCanvas class
+     is for the rest of the Jframe.
+     **/
     public GUI(String File, String title) {
         this.setTitle(title);
         this.setLayout(new BorderLayout(5, 5));
@@ -74,6 +85,7 @@ public class GUI extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    //Add all tools to the shape Jpanel
     public void setupShapes() {
         shapes.add(toolPlot);
         shapes.add(toolLine);
@@ -82,6 +94,7 @@ public class GUI extends JFrame implements ActionListener {
         shapes.add(toolPolygon);
     }
 
+    //Setup all panels
     public void setupPanels() {
         // Container board
         containerBoard = new JPanel(new GridBagLayout());
@@ -208,7 +221,21 @@ public class GUI extends JFrame implements ActionListener {
         menuBar.add(edit);
     }
 
-    //Pass coordinates to the JPanel to Redraw the panel
+    /**
+     *
+     * @param x1 is the x1 coordinate of what the current VECfile line
+     * @param y1 is the y1 coordinate of what the current VECfile line
+     * @param x2 is the x2 coordinate of what the current VECfile line
+     * @param y2 is the y2 coordinate of what the current VECfile line
+     *
+     * All the parse methods below pass through the
+     * xy1 amd xy2 coordinates to the canvas class in which it will add it onto an array to keep track of the
+     * shapes drawn,
+     *
+     * Fill and Colour click methods also have an array that keeps track of whether they have been
+     * picked
+     */
+
     private void parseLine(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2);
     }
@@ -221,6 +248,7 @@ public class GUI extends JFrame implements ActionListener {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
     }
 
+    //This uses arrays where the vecFile x,y coordinates exceed past the typical 4.
     private void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
     }
@@ -237,7 +265,7 @@ public class GUI extends JFrame implements ActionListener {
 
     private void FillClick(String hex) {canvas.setFillClick(hex);}
 
-    public String returnFile() {
+    public String returnFile() {//return the vecFile string from the canvas class.
         return canvas.returnFile();
     }
 
@@ -263,36 +291,37 @@ public class GUI extends JFrame implements ActionListener {
             FillClick(fillC);
         }
 
-        for (JButton colorButton : colorButtons) {
-            if (btnSrc == colorButton) {
-                c = colorButton.getBackground();
+        for (JButton colorButton : colorButtons) {//For every button within the colorButtons array
+            if (btnSrc == colorButton) {//if a particular button within that array is cliked
+                c = colorButton.getBackground(); // get the colour of the background.
 
-                if (OutlineOrFill) {
+                if (OutlineOrFill) {//If the outline button is on.
                     penC = "#" + Integer.toHexString(c.getRGB()).substring(2);
-                    ColourClick(penC);
+                    ColourClick(penC);//set the colour of the canvas class
                 }
-                if (!OutlineOrFill) {
+
+                if (!OutlineOrFill) {//if the fill button is on.
                     fillC = "#" + Integer.toHexString(c.getRGB()).substring(2);
-                    FillClick(fillC);
+                    FillClick(fillC);//set the fill colour of the canvas class
                 }
             }
         }
 
-        if (btnSrc == create) {
-            file.isVisible();
-            file.repaint();
-            file.setVisible(true);
-        }
-
-        if (btnSrc == exit) {
+        if (btnSrc == exit) {// If exit is clicked dispose the current Jframe
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             this.dispose();
         }
 
-        if (btnSrc == clear) {
+        if (btnSrc == clear) {//if clear is clicked on clear the canvas and repaint.
             canvas.clearCanvas();
             canvas.repaint();
         }
+
+        /**
+         * With the following other if statements below, these basically set the boolean values of the each tool
+         * to either true or false, whether a specific button is clicked.
+         *
+         */
 
         if (btnSrc == toolPlot) {
             canvas.PlotTruth = true;
@@ -336,9 +365,17 @@ public class GUI extends JFrame implements ActionListener {
 
         }
 
-        if (btnSrc == create) {
-            GUI NewWindow = new GUI("","untitled");
+        if (btnSrc == create) {// create a new Jframe Window.
+            new GUI("","untitled");
         }
+
+        /**
+         * The saveAs button when pressed essentially opens up the JFileChooser, and based on where the location
+         * you pick, you can set the name of the VEC file and it will pass through the string vecFile through
+         * Filewriter and save it with the name you have given it + .VEC
+         *
+         *
+         */
 
         if (btnSrc == saveAs) { // If Save button is pressed
             final JFileChooser fcSave = new JFileChooser();
@@ -404,17 +441,23 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
 
+        /**
+         * The open button essentially reads the .VEC passed through and depeding on the text put forth,
+         * this will function differently, depending on the commands given by the VEC file opened.
+         *
+         */
+
         if (btnSrc == open) {
             BufferedReader reader;
             BufferedReader readerT;
             BufferedReader readerChoose;
 
             final JFileChooser fc = new JFileChooser();
-            fc.setCurrentDirectory( new File( "./") );
+            fc.setCurrentDirectory( new File( "./") );//Set Directory to its root directory
 
             fc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("VEC files", "VEC");
-            fc.addChoosableFileFilter(filter);
+            fc.addChoosableFileFilter(filter);//Filter out all extensions except for .VEC
 
             int returnVal = fc.showOpenDialog(this);
             if (returnVal==JFileChooser.APPROVE_OPTION) {
@@ -430,11 +473,11 @@ public class GUI extends JFrame implements ActionListener {
 
                     if (file.exists()) {
                         double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-                        String getFile ="";
+                        String getFile ="";//Declare empty string
 
-                        int counter = 0;
-                        int counterSTOP = 0;
-                        while(VECfileTEST != null) {
+                        int counter = 0;//Amount of lines count
+                        int counterSTOP = 0;//Stop to notify the loop when to stop adding "\n"
+                        while(VECfileTEST != null) {//This checks the amount of line the File has
                             VECfileTEST = readerT.readLine();
                             counter++;
                         }
@@ -552,12 +595,13 @@ public class GUI extends JFrame implements ActionListener {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-            } else if (returnVal==JFileChooser.CANCEL_OPTION) {
+            } else if (returnVal==JFileChooser.CANCEL_OPTION) {//Do nothing/ return to normal operations.
 
             }
         }
     }
 
+    //Main class, run GUI.
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         new GUI("", "untitled");
