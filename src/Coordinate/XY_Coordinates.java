@@ -10,7 +10,6 @@ public class XY_Coordinates {
 
     private int x1, y1, x2, y2;// Declare X,Y variables
 
-    //Get and Set methods.
     public void setX1(int real_x1) { this.x1 = real_x1; }
 
     public void setY1(int real_y1) { this.y1 = real_y1; }

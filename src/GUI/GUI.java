@@ -14,7 +14,6 @@ This is the GUI class which extends the JFrame, the point of this class is that 
  buttons and functions that the rest of the program will deliver. The DrawCanvas class is also called upon
  within this class and that class extends a Jpanel which will be used to draw the shapes.
  **/
-
 public class GUI extends JFrame implements ActionListener {
     private Color c = Color.black;
 
@@ -54,7 +53,9 @@ public class GUI extends JFrame implements ActionListener {
      This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
      The border itself is fixed, with a menubar on the top, the buttons listed on the side, and the DrawCanvas class
      is for the rest of the Jframe.
-     **/
+     * @param File is a string parameter that sets the vecFile string.
+     * @param title a Parameter that sets the Title of the Jframe based on the Jfilechooser file source.
+     */
     public GUI(String File, String title) {
         this.setTitle(title);
         this.setLayout(new BorderLayout(5, 5));
@@ -85,7 +86,9 @@ public class GUI extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    //Add all tools to the shape Jpanel
+    /**
+     * Add all tools to the shape Jpanel
+     */
     public void setupShapes() {
         shapes.add(toolPlot);
         shapes.add(toolLine);
@@ -94,7 +97,9 @@ public class GUI extends JFrame implements ActionListener {
         shapes.add(toolPolygon);
     }
 
-    //Setup all panels
+    /**
+     * Setup all panels
+     */
     public void setupPanels() {
         // Container board
         containerBoard = new JPanel(new GridBagLayout());
@@ -134,6 +139,10 @@ public class GUI extends JFrame implements ActionListener {
         containerBoard.add(colors, gbc);
     }
 
+    /**
+     * Setup all colours
+     *
+     */
     private void setupColors() {
         black.setBackground(Color.BLACK);
         gray.setBackground(Color.GRAY);
@@ -159,7 +168,11 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    // Create Menu Item and return the object with action listener
+    /**
+     * Create JMenuItem and return the object with action listener
+     * @param title is a string that the user can the name of the JMenuItem
+     * @return the JMenuItem
+     */
     private JMenuItem createMenuItem(String title) {
         JMenuItem btn = new JMenuItem();
         btn.setText(title);
@@ -167,7 +180,11 @@ public class GUI extends JFrame implements ActionListener {
         return btn;
     }
 
-    // Create Button and return the object with action listener
+    /**
+     * Create JButton and return the object with action listener
+     * @param title is a string that the user can the name of the JButton
+     * @return the JButton
+     */
     private JButton createButton(String title) {
         JButton btn = new JButton();
         btn.setText(title);
@@ -175,6 +192,9 @@ public class GUI extends JFrame implements ActionListener {
         return btn;
     }
 
+    /**
+     * Setup the buttons and associate the buttons created to the private variable Jbuttons.
+     */
     private void setupButtons() {
         toolPlot = createButton("Plot");
         toolLine = createButton("Line");
@@ -183,6 +203,9 @@ public class GUI extends JFrame implements ActionListener {
         toolPolygon = createButton("Polygon");
     }
 
+    /**
+     * Setup the buttons and associate the buttons created to the private variable JMenuItems.
+     */
     private void setupMenuItemsFile() {
         create = createMenuItem("New");
         open = createMenuItem("Open...");
@@ -190,11 +213,17 @@ public class GUI extends JFrame implements ActionListener {
         exit = createMenuItem("Exit");
     }
 
+    /**
+     * Setup the buttons and associate the buttons created to the private variable JMenuItems.
+     */
     private void setupMenuItemsEdit() {
         undo = createMenuItem("Undo");
         clear = createMenuItem("Clear");
     }
 
+    /**
+     * Setup the MenuBar
+     */
     private void setupMenuBar() {
         // Menu bar
         menuBar = new JMenuBar();

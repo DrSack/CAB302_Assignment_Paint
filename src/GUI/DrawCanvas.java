@@ -59,6 +59,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     /**
      * This is the contructor which passes the string vec parameter to vecFile, where the class will add new lines
      * based on the actions given from the GUI and users drawing motives.
+     *
+     * @param vec pass the parameter and set it as the current vecFile string.
      */
     DrawCanvas(String vec) {
         vecFile = vec;
@@ -70,6 +72,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     /**
      * This method is called from the GUI whether the button "fill" is enabled, and the colours picked also have
      * fill button enabled.
+     *
+     * @param hex passes the hex string and puts it into the Fill array
      */
     public void setFillClick(String hex) {
         if(Filling){// If the user hasn't drawn yet, remove the previous elements from the arrays.
@@ -86,6 +90,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     /**
      * This method is called from the GUI whether the button "outline" is enabled, and the colours picked also have
      * outline button enabled.
+     *
+     * @param hex passes the hex string and puts it into the colour array
      */
     public void setColourClick(String hex) {
         if(Pen){// if the users hasn't draw, remove the previous element.
