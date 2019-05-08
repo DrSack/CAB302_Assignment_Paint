@@ -3,12 +3,13 @@ package Coordinate;
 /**
  *
  * This it the MouseCoordinates encapsulation class that sets MouseXY coordinates from integers to double based on the
- * screen Jpanel height of the program.
+ * screen JPanel height of the program.
  */
 
 public class MouseCoordinates {
 
-    private double mousex1, mousey1, mousex2, mousey2;// Declare private double variables.
+    // Declare private double variables.
+    private double mousex1, mousey1, mousex2, mousey2;
 
     // Set XY value for the mouse coordinates and also convert to double
     public void setMouseXY(int x, int y, int width, int height) {

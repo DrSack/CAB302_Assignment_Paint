@@ -78,13 +78,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * @param hex passes the hex string and puts it into the Fill array
      */
     public void setFillClick(String hex) {
-        if(Filling){// If the user hasn't drawn yet, remove the previous elements from the arrays.
+        if(Filling){ //  If the user hasn't drawn yet, remove the previous elements from the arrays.
             Filltrack.remove(Filltrack.size()-1);
             Fill.remove(Fill.size()-1);
         }
             //add the counter to the track array
             Filltrack.add(counter);
-            Fill.add(Color.decode(hex));// add the colour to the Fill array
+            Fill.add(Color.decode(hex)); // add the colour to the Fill array
             colourtemp ="FILL "+hex.toUpperCase()+"\n"; // temporarily store the VEC command
             Filling = true;
     }
@@ -96,14 +96,14 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * @param hex passes the hex string and puts it into the colour array
      */
     public void setColourClick(String hex) {
-        if(Pen){// if the users hasn't draw, remove the previous element.
+        if(Pen){ //  if the users hasn't draw, remove the previous element.
             Colourtrack.remove(Colourtrack.size()-1);
             Colour.remove(Colour.size()-1);
         }
         //add the counter to the trackarray
         Colourtrack.add(counter);
-        Colour.add(Color.decode(hex));//add colour to the Colour array
-        pentemp = "PEN "+hex+"\n";// temporarily store the VEC command.
+        Colour.add(Color.decode(hex)); //add colour to the Colour array
+        pentemp = "PEN "+hex+"\n"; // temporarily store the VEC command.
         Pen = true;
     }
 
@@ -144,17 +144,17 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     // Add the hex code pen value to an ArrayList and add the counter value.
     public void SetColour(String hex) {
-        Colourtrack.add(counter);//Add the counter to the track arraylist to trigger the colour switch
-        Colour.add(Color.decode(hex));//Add the hex colour code to the arraylist
+        Colourtrack.add(counter); //Add the counter to the track arraylist to trigger the colour switch
+        Colour.add(Color.decode(hex)); //Add the hex colour code to the arraylist
     }
 
     public void SetFill(String hex) {
-        Filltrack.add(counter);//Add the counter if which to trigger the fill
-        Fill.add(Color.decode(hex));//Add the Hex colour code to the Fill arraylist
+        Filltrack.add(counter); //Add the counter if which to trigger the fill
+        Fill.add(Color.decode(hex)); //Add the Hex colour code to the Fill arraylist
     }
 
     public void offFill() {
-        if(counter > 0){//if the counter is still 0 don't add the off fill
+        if(counter > 0){ // if the counter is still 0 don't add the off fill
             offFill.add(counter);
         }
     }
@@ -231,10 +231,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         super.paint(g);
 
         //Set counters to keep track of each part of the arrays listed
-        int x = 0;// Keeps count how many times parseArrayIndex is called
-        int p = 0;// Keeps track of the Fill array.
-        int i = 0;// Keeps track of the Colour array.
-        int z = 0;// Keeps track whether the Fill Off command is present.
+        int x = 0; // Keeps count how many times parseArrayIndex is called
+        int p = 0; // Keeps track of the Fill array.
+        int i = 0; // Keeps track of the Colour array.
+        int z = 0; // Keeps track whether the Fill Off command is present.
 
         int triggered = 0; // Keeps track if no pen commands are present.
         FillTruth = false;
@@ -278,20 +278,31 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
                  if (FillTruth) { // If true fill shape
                      g.setColor(f);
-                     g.fillRect(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2() - XYtrack.getX1(), XYtrack.getY2() - XYtrack.getY1());
+                     if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                         g.fillRect(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
+                     }
+                     else if(XYtrack.getX2() <= XYtrack.getX1()) { // If X2 goes behind X1 then draw backwards
+                         g.fillRect(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
+                     }
+                     else if(XYtrack.getY2() <= XYtrack.getY1()) { // If Y2 goes behind Y1 then draw backwards
+                         g.fillRect(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
+                     }
+                     else{ // If operations are normal then draw normally
+                         g.fillRect(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
+                     }
                  }
 
-                 g.setColor(c);// Set colour of the outline after fill is set
-                 if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) {//both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                 g.setColor(c); // Set colour of the outline after fill is set
+                 if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) { //  Both X2 and Y2 and behind X1 and Y1 then draw backwards.
                      g.drawRect(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
                  }
-                 else if(XYtrack.getX2() <= XYtrack.getX1()) {//if X2 goes behind X1 then draw backwards
+                 else if(XYtrack.getX2() <= XYtrack.getX1()) { // If X2 goes behind X1 then draw backwards
                      g.drawRect(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
                  }
-                 else if(XYtrack.getY2() <= XYtrack.getY1()) {//if Y2 goes behind Y1 then draw backwards
+                 else if(XYtrack.getY2() <= XYtrack.getY1()) { // If Y2 goes behind Y1 then draw backwards
                      g.drawRect(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
                  }
-                 else{// If operations are normal then draw normally
+                 else{ // If operations are normal then draw normally
                      g.drawRect(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
                  }
 
@@ -299,7 +310,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
             if (Truth.get(o).equals("LinePlotTruth")) { // If "LinePlotTruth" is within the array lineup then draw a Line or Plot
                 x = parseArrayIndex(x);
-                g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());//Draw a Line based on the XYtrack class coordinates
+                g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2()); //Draw a Line based on the XYtrack class coordinates
             }
 
             if (Truth.get(o).equals("ElliTruth")) { // If "ElliTruth" is within the array lineup then draw an Ellipse
@@ -307,31 +318,31 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
                 if (FillTruth) { // If true fill shape
                     g.setColor(f);
-                    if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) {//both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                    if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
                         g.fillOval(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
                     }
-                    else if(XYtrack.getX2() <= XYtrack.getX1()) {//if X2 goes behind X1 then draw backwards
+                    else if(XYtrack.getX2() <= XYtrack.getX1()) { // If X2 goes behind X1 then draw backwards
                         g.fillOval(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
                     }
-                    else if(XYtrack.getY2() <= XYtrack.getY1()) {//if Y2 goes behind Y1 then draw backwards
+                    else if(XYtrack.getY2() <= XYtrack.getY1()) { // If Y2 goes behind Y1 then draw backwards
                         g.fillOval(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
                     }
-                    else{// If operations are normal then draw normally
+                    else{ //  If operations are normal then draw normally
                         g.fillOval(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
                     }
                 }
 
-                g.setColor(c);// Set colour of the outline after fill is set
-                if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) {//both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                g.setColor(c); // Set colour of the outline after fill is set
+                if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
                     g.drawOval(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
                 }
-                else if(XYtrack.getX2() <= XYtrack.getX1()) {//if X2 goes behind X1 then draw backwards
+                else if(XYtrack.getX2() <= XYtrack.getX1()) { // If X2 goes behind X1 then draw backwards
                     g.drawOval(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
                 }
-                else if(XYtrack.getY2() <= XYtrack.getY1()) {//if Y2 goes behind Y1 then draw backwards
+                else if(XYtrack.getY2() <= XYtrack.getY1()) { // If Y2 goes behind Y1 then draw backwards
                     g.drawOval(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
                 }
-                else{// If operations are normal then draw normally
+                else{ //  If operations are normal then draw normally
                     g.drawOval(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
                 }
 
@@ -342,10 +353,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
         if (drawingline) { // If the user is still dragging the shapes, draw the shapes temporarily.
             g.setColor(c);
-            if (LineTruth) {// Temporarily draw a line
+            if (LineTruth) { // Temporarily draw a line
                 g.drawLine(x1, y1, x2, y2);
             }
-            if (RecTruth) {// Temporarily draw a rectangle
+            if (RecTruth) { // Temporarily draw a rectangle
                 if (x2 <= x1 && y2 <= y1) {
                     g.drawRect(x2,y2,x1-x2,y1-y2);
                 }
@@ -360,7 +371,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 }
 
             }
-            if (ElliTruth){// Temporarily draw an Ellipse.
+            if (ElliTruth){ // Temporarily draw an Ellipse.
                 if (x2 <= x1 && y2 <= y1) {
                     g.drawOval(x2,y2,x1-x2,y1-y2);
                 }
@@ -377,7 +388,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             if (PolyTruth){
                 g.drawLine(x1, y1, x2, y2);
             }
-
         }
     }
 
@@ -392,7 +402,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         //Convert the double formats to String with 2decimal places.
         // Set the X1,Y1 coordinates to the Mousetrack class.
 
-        if (PlotTruth) {// If only plotting then get the position, add command to string, then repaint.
+        if (PlotTruth) { // If only plotting then get the position, add command to string, then repaint.
             Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
             SetCoordinateDrawingPlotting(Mousetrack.getX1(), Mousetrack.getY1(), Mousetrack.getX1(), Mousetrack.getY1());
             vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) + "\n";
@@ -441,16 +451,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
+    // Whenever the mouse is dragged get the X,Y2 coordinates then repaint to temporarily see the shapes outline.
     @Override
-    public void mouseDragged(MouseEvent e) { // Whenever the mouse is dragged get the X,Y2 coordinates then repaint
-        //to temporarily see the shapes outline.
+    public void mouseDragged(MouseEvent e) {
         Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = true;
         this.repaint();
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {//Where the mouse is released get the final X,Y2 coordinates and set the Mousetrack.
+    public void mouseReleased(MouseEvent e) { // Where the mouse is released get the final X,Y2 coordinates and set the Mousetrack.
         Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = false;
 
@@ -474,30 +484,30 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         String x2 = df.format(mx2);
         String y2 = df.format(my2);
 
-        if(Pen){//if the user decides to draw with a colour outline present
-            vecFile += pentemp;//Add outline colour command
-            vecFile += "FILL OFF" +"\n";// Disable fill
-            Pen = false;//Deactivate to not add more string to vecFile.
+        if(Pen){ // If the user decides to draw with a colour outline present
+            vecFile += pentemp; //Add outline colour command
+            vecFile += "FILL OFF" +"\n"; // Disable fill
+            Pen = false; //Deactivate to not add more string to vecFile.
         }
 
-        if(Filling){//if the user decides to draw with a fill colour present
-                vecFile += colourtemp;//add fill command to vecFile
-                Filling = false;//Deactivate to not add more string to vecFile.
+        if(Filling){ // If the user decides to draw with a fill colour present
+                vecFile += colourtemp; //add fill command to vecFile
+                Filling = false; //Deactivate to not add more string to vecFile.
         }
 
-        if(LineTruth) {//If Line tool is picked then draw a line
+        if(LineTruth) { // If Line tool is picked then draw a line
             SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
             vecFile += "LINE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
         }
 
-        if (RecTruth) {//If Rectangle tool is picked then draw a rectangle.
+        if (RecTruth) { // If Rectangle tool is picked then draw a rectangle.
             SetCoordinateRectangle(mx1, my1, mx2, my2);
 
             // Add mouse coordinates to vecFile
             vecFile += "RECTANGLE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
         }
 
-        if (ElliTruth) {//If Ellipse tool is picked then draw an ellipse.
+        if (ElliTruth) { // If Ellipse tool is picked then draw an ellipse.
             SetCoordinateEllipse(mx1, my1, mx2, my2);
 
             // Add mouse coordinates to vecFile
