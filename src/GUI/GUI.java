@@ -16,7 +16,7 @@ This is the GUI class which extends the JFrame, the point of this class is that 
  *
  */
 public class GUI extends JFrame implements ActionListener {
-    private Color c = Color.black;
+    private Color c = Color.BLACK;
 
     private String penC = "#000000";
     private String fillC = "#FFFFFF";
@@ -48,6 +48,7 @@ public class GUI extends JFrame implements ActionListener {
     private JButton pink = new JButton();
     private JButton magenta = new JButton();
     private JButton red = new JButton();
+    private JButton extraColors;
 
     private String vecFile = "";
 
@@ -72,8 +73,8 @@ public class GUI extends JFrame implements ActionListener {
         setupButtons();
         setupShapes();
         setupTools();
-        setupPanels();
         setupColors();
+        setupPanels();
 
         // Add the components to the frame
         this.setJMenuBar(menuBar);
@@ -168,10 +169,16 @@ public class GUI extends JFrame implements ActionListener {
         containerBoard.add(tools, gbc);
 
         // Colors board
-        gbc.weighty = 1;
+        gbc.weighty = 0.2;
         gbc.gridx = 0;
         gbc.gridy = 2;
         containerBoard.add(colors, gbc);
+
+        // Extra colors
+        gbc.weighty = 0.6;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        containerBoard.add(extraColors, gbc);
     }
 
     /**
@@ -200,6 +207,8 @@ public class GUI extends JFrame implements ActionListener {
             colorButton.addActionListener(this);
             colors.add(colorButton);
         }
+
+        extraColors = createButton("More Colors...");
     }
 
     /**
@@ -371,6 +380,29 @@ public class GUI extends JFrame implements ActionListener {
                     FillClick(fillC);
                     fillColor.setBackground(c);
                 }
+            }
+        }
+
+        if (btnSrc == extraColors) {
+            c = JColorChooser.showDialog(null, "Pick a color", c);
+
+            // Change the pen color back to white if the user doesn't pick anything or clicks cancel
+            if (c == null) {
+                c = Color.WHITE;
+            }
+
+            // If the outline button is clicked, set the color of the pen and the color preview
+            if (OutlineOrFill) {
+                penC = "#" + Integer.toHexString(c.getRGB()).substring(2);
+                ColourClick(penC);
+                outlineColor.setBackground(c);
+            }
+
+            // If the fill button is on, set the color of the pen and the color preview
+            if (!OutlineOrFill) {
+                fillC = "#" + Integer.toHexString(c.getRGB()).substring(2);
+                FillClick(fillC);
+                fillColor.setBackground(c);
             }
         }
 
