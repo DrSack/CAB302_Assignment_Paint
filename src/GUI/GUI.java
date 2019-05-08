@@ -12,8 +12,9 @@ import java.util.*;
 /**
 This is the GUI class which extends the JFrame, the point of this class is that it holds all
  buttons and functions that the rest of the program will deliver. The DrawCanvas class is also called upon
- within this class and that class extends a Jpanel which will be used to draw the shapes.
- **/
+ within this class and that class extends a JPanel which will be used to draw the shapes.
+ *
+ */
 public class GUI extends JFrame implements ActionListener {
     private Color c = Color.black;
 
@@ -30,6 +31,7 @@ public class GUI extends JFrame implements ActionListener {
 
     private JButton toolPlot, toolLine, toolRect, toolEllipse, toolPolygon;
     private JButton outline, fill;
+    private JButton outlineColor, fillColor;
 
     // Colors
     private JPanel colors = new JPanel();
@@ -51,10 +53,10 @@ public class GUI extends JFrame implements ActionListener {
 
     /**
      This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
-     The border itself is fixed, with a menubar on the top, the buttons listed on the side, and the DrawCanvas class
-     is for the rest of the Jframe.
+     The border itself is fixed, with a menu bar on the top, the buttons listed on the side, and the DrawCanvas class
+     is for the rest of the JFrame.
      * @param File is a string parameter that sets the vecFile string.
-     * @param title a Parameter that sets the Title of the Jframe based on the Jfilechooser file source.
+     * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
     public GUI(String File, String title) {
         this.setTitle(title);
@@ -68,9 +70,10 @@ public class GUI extends JFrame implements ActionListener {
 
         setupMenuBar();
         setupButtons();
+        setupShapes();
+        setupTools();
         setupPanels();
         setupColors();
-        setupShapes();
 
         // Add the components to the frame
         this.setJMenuBar(menuBar);
@@ -87,14 +90,60 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     /**
-     * Add all tools to the shape Jpanel
+     * Add all tools to the shape JPanel
      */
     public void setupShapes() {
+        shapes = new JPanel(new GridLayout(5,1));
         shapes.add(toolPlot);
         shapes.add(toolLine);
         shapes.add(toolRect);
         shapes.add(toolEllipse);
         shapes.add(toolPolygon);
+    }
+
+    /**
+     * Setup the tool panel that contains the Fill and Outline tool buttons as well
+     * as 2 color preview fields for those 2 buttons
+     */
+    public void setupTools() {
+        tools = new JPanel(new GridBagLayout());
+        GridBagConstraints tc = new GridBagConstraints();
+
+        // Set font variable
+        outline = createButton("Outline");
+        fill = createButton("Fill");
+        outline.setPreferredSize(new Dimension(80, 25));
+        fill.setPreferredSize(new Dimension(80, 25));
+
+        // Color preview
+        outlineColor = new JButton();
+        fillColor = new JButton();
+        outlineColor.setEnabled(false);
+        fillColor.setEnabled(false);
+        outlineColor.setBackground(Color.BLACK);
+        fillColor.setBackground(Color.WHITE);
+        outlineColor.setPreferredSize(new Dimension(25, 25));
+        fillColor.setPreferredSize(new Dimension(25, 25));
+
+        Font f = outline.getFont();
+
+        // Add buttons to the tools panel
+        tc.gridy = 0;
+        tc.gridx = 0;
+        tools.add(outline, tc);
+
+        tc.gridy = 0;
+        tc.gridx = 1;
+        tools.add(outlineColor, tc);
+        outline.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+
+        tc.gridy = 1;
+        tc.gridx = 0;
+        tools.add(fill, tc);
+
+        tc.gridy = 1;
+        tc.gridx = 1;
+        tools.add(fillColor, tc);
     }
 
     /**
@@ -107,26 +156,12 @@ public class GUI extends JFrame implements ActionListener {
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Shapes board
-        shapes = new JPanel(new GridLayout(5,1));
         gbc.weighty = 1;
         gbc.gridx = 0;
         gbc.gridy = 0;
         containerBoard.add(shapes, gbc);
 
         // Tools board
-        tools = new JPanel(new FlowLayout());
-
-         //Set font variable.
-        outline = createButton("Outline");
-        fill = createButton("Fill");
-
-        Font f = outline.getFont();
-
-        // Set outline to Bold
-        tools.add(outline);
-        outline.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
-        tools.add(fill);
-
         gbc.weighty = 1;
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -141,7 +176,6 @@ public class GUI extends JFrame implements ActionListener {
 
     /**
      * Setup all colours
-     *
      */
     private void setupColors() {
         black.setBackground(Color.BLACK);
@@ -294,7 +328,7 @@ public class GUI extends JFrame implements ActionListener {
 
     private void FillClick(String hex) {canvas.setFillClick(hex);}
 
-    public String returnFile() {//return the vecFile string from the canvas class.
+    public String returnFile() { // Return the vecFile string from the canvas class.
         return canvas.returnFile();
     }
 
@@ -320,36 +354,39 @@ public class GUI extends JFrame implements ActionListener {
             FillClick(fillC);
         }
 
-        for (JButton colorButton : colorButtons) {//For every button within the colorButtons array
-            if (btnSrc == colorButton) {//if a particular button within that array is cliked
+        for (JButton colorButton : colorButtons) { // For every button within the colorButtons array
+            if (btnSrc == colorButton) { // If a particular button within that array is clicked
                 c = colorButton.getBackground(); // get the colour of the background.
 
-                if (OutlineOrFill) {//If the outline button is on.
+                // If the outline button is clicked, set the color of the pen and the color preview
+                if (OutlineOrFill) {
                     penC = "#" + Integer.toHexString(c.getRGB()).substring(2);
-                    ColourClick(penC);//set the colour of the canvas class
+                    ColourClick(penC);
+                    outlineColor.setBackground(c);
                 }
 
-                if (!OutlineOrFill) {//if the fill button is on.
+                // If the fill button is on, set the color of the pen and the color preview
+                if (!OutlineOrFill) {
                     fillC = "#" + Integer.toHexString(c.getRGB()).substring(2);
-                    FillClick(fillC);//set the fill colour of the canvas class
+                    FillClick(fillC);
+                    fillColor.setBackground(c);
                 }
             }
         }
 
-        if (btnSrc == exit) {// If exit is clicked dispose the current Jframe
+        if (btnSrc == exit) { // If exit is clicked dispose the current JFrame
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             this.dispose();
         }
 
-        if (btnSrc == clear) {//if clear is clicked on clear the canvas and repaint.
+        if (btnSrc == clear) { // If clear is clicked on clear the canvas and repaint.
             canvas.clearCanvas();
             canvas.repaint();
         }
 
         /**
-         * With the following other if statements below, these basically set the boolean values of the each tool
+         * With the following other if statements below, these set the boolean values of the each tool
          * to either true or false, whether a specific button is clicked.
-         *
          */
 
         if (btnSrc == toolPlot) {
@@ -391,18 +428,16 @@ public class GUI extends JFrame implements ActionListener {
             canvas.RecTruth = false;
             canvas.ElliTruth = false;
             canvas.PolyTruth = true;
-
         }
 
-        if (btnSrc == create) {// create a new Jframe Window.
+        if (btnSrc == create) { // Create a new JFrame Window.
             new GUI("","untitled");
         }
 
         /**
          * The saveAs button when pressed essentially opens up the JFileChooser, and based on where the location
          * you pick, you can set the name of the VEC file and it will pass through the string vecFile through
-         * Filewriter and save it with the name you have given it + .VEC
-         *
+         * FileWriter and save it with the name you have given it + .VEC
          *
          */
 
@@ -452,7 +487,7 @@ public class GUI extends JFrame implements ActionListener {
                         return;
                 }
                 if (!file.exists()) {
-                    try { // if the file doesn't already exist, create it and write the file with the current vecFile string.
+                    try { // If the file doesn't already exist, create it and write the file with the current vecFile string.
                         FileWriter filewrite = new FileWriter(file);
                         filewrite.flush();
                         filewrite.write(returnFile());
@@ -482,11 +517,11 @@ public class GUI extends JFrame implements ActionListener {
             BufferedReader readerChoose;
 
             final JFileChooser fc = new JFileChooser();
-            fc.setCurrentDirectory( new File( "./") );//Set Directory to its root directory
+            fc.setCurrentDirectory( new File( "./") ); // Set Directory to its root directory
 
             fc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("VEC files", "VEC");
-            fc.addChoosableFileFilter(filter);//Filter out all extensions except for .VEC
+            fc.addChoosableFileFilter(filter); // Filter out all extensions except for .VEC
 
             int returnVal = fc.showOpenDialog(this);
             if (returnVal==JFileChooser.APPROVE_OPTION) {
@@ -502,11 +537,11 @@ public class GUI extends JFrame implements ActionListener {
 
                     if (file.exists()) {
                         double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-                        String getFile ="";//Declare empty string
+                        String getFile =""; // Declare empty string
 
-                        int counter = 0;//Amount of lines count
-                        int counterSTOP = 0;//Stop to notify the loop when to stop adding "\n"
-                        while(VECfileTEST != null) {//This checks the amount of line the File has
+                        int counter = 0; // Amount of lines count
+                        int counterSTOP = 0; // Stop to notify the loop when to stop adding "\n"
+                        while(VECfileTEST != null) { // This checks the amount of line the File has
                             VECfileTEST = readerT.readLine();
                             counter++;
                         }
@@ -589,7 +624,7 @@ public class GUI extends JFrame implements ActionListener {
                                 // Initializing xP and yP
                                 double xP[] = new double[numbers / 2];
                                 double yP[] = new double[numbers / 2];
-                                //Parsing numbers into array
+                                // Parsing numbers into array
                                 for (int i = 0; i < numbers / 2; i++) {
                                     xP[i] = Double.parseDouble(param[2 * i]);
                                     yP[i] = Double.parseDouble(param[2 * i + 1]);
@@ -624,15 +659,14 @@ public class GUI extends JFrame implements ActionListener {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-            } else if (returnVal==JFileChooser.CANCEL_OPTION) {//Do nothing/ return to normal operations.
+            } else if (returnVal==JFileChooser.CANCEL_OPTION) { // Do nothing/return to normal operations.
 
             }
         }
     }
 
-    //Main class, run GUI.
+    // Main class, run GUI.
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         new GUI("", "untitled");
     }
 }

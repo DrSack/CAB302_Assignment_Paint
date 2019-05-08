@@ -1,7 +1,6 @@
 package Coordinate;
 
 /**
- *
  * This it the XY_Coordinates encapsulation class that gets and sets each X and Y coordinate that
  * is set from the DrawCanvas class.
  */

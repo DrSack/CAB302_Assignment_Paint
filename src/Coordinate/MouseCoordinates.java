@@ -1,7 +1,6 @@
 package Coordinate;
 
 /**
- *
  * This it the MouseCoordinates encapsulation class that sets MouseXY coordinates from integers to double based on the
  * screen JPanel height of the program.
  */
