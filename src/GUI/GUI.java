@@ -1,9 +1,7 @@
 package GUI;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -27,6 +25,7 @@ public class GUI extends JFrame implements ActionListener {
     private JMenuItem create, open, saveAs, exit, undo, clear;
 
     private JPanel containerBoard, shapes, tools;
+    private JPanel canvasContainer;
     private DrawCanvas canvas;
 
     private JButton toolPlot, toolLine, toolRect, toolEllipse, toolPolygon;
@@ -65,9 +64,22 @@ public class GUI extends JFrame implements ActionListener {
 
         // Canvas
         vecFile = File;
+
+        canvasContainer = new JPanel(new BorderLayout());
+        canvasContainer.setBackground(Color.LIGHT_GRAY);
+
         canvas = new DrawCanvas(vecFile);
         canvas.setBackground(Color.WHITE);
         canvas.setPreferredSize(new Dimension(600, 600));
+
+        // Change the size of the canvas based on the size of the window
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                Component c = e.getComponent();
+                canvas.setSize(new Dimension(c.getSize().height, c.getSize().height));
+                System.out.println(canvas.getWidth() + "x" + canvas.getHeight());
+            }
+        });
 
         setupMenuBar();
         setupButtons();
@@ -79,10 +91,11 @@ public class GUI extends JFrame implements ActionListener {
         // Add the components to the frame
         this.setJMenuBar(menuBar);
         this.add(containerBoard, BorderLayout.WEST);
-        this.add(canvas, BorderLayout.CENTER);
+        this.add(canvasContainer, BorderLayout.CENTER);
+        canvasContainer.add(canvas, BorderLayout.CENTER);
 
         // Display window
-        this.setResizable(false);
+        setMinimumSize(new Dimension(670,435));
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(750, 600));
         this.setLocation(new Point(100, 100));
