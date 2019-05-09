@@ -45,6 +45,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private ArrayList<Integer> Colourtrack = new ArrayList<>();
     private ArrayList<Color> Colour = new ArrayList<>();
 
+    private ArrayList<String> polylines = new ArrayList<>();
+
     private int counter = 0;
     private int MouseIncrement = 0;
 
@@ -183,24 +185,27 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void SetCoordinatePolygon(double xP[], double yP[]) {
         Truth.add("PolyTruth");
         int num = xP.length;
+
         double holderX;
         double holderY;
 
         // Initialize x1Cor and y1Cor
         x1Cor = new int[num];
         y1Cor = new int[num];
+        String str = "";
 
         // For loop to add coordinates into arrayLine
-        for(int i = 0; i < num; i++)
-        {
+        for (int i = 0; i < num; i++) {
             holderX = xP[i] * this.getWidth();
-            x1Cor[i] = (int)holderX;
-            for(int a = 0; a < 1; a++)
-            {
+            x1Cor[i] = (int) holderX;
+            str += x1Cor[i] + " ";
+            for (int a = 0; a < 1; a++) {
                 holderY = yP[i] * this.getHeight();
-                y1Cor[i] = (int)holderY;
+                y1Cor[i] = (int) holderY;
+                str += y1Cor[i] + " ";
             }
         }
+        polylines.add(str);
         counter++;
     }
 
@@ -348,7 +353,21 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
             }
             if (Truth.get(o).equals("PolyTruth")) { // If "PolyTruth" is within the array lineup then draw a Polygon
-                g.drawPolygon(x1Cor, y1Cor, x1Cor.length);
+                int holderX;
+                int holderY;
+                for (int b = 0; b < polylines.size(); b++) {
+                    String zz = polylines.get(b);
+                    String param[] = zz.split(" ");
+                    x1Cor = new int[param.length / 2];
+                    y1Cor = new int[param.length / 2];
+                    for (int c = 0; c < param.length / 2; c++) {
+                        holderX = Integer.parseInt(param[2 * c]);
+                        x1Cor[c] = holderX;
+                        holderY = Integer.parseInt(param[2 * c + 1]);
+                        y1Cor[c] = holderY;
+                    }
+                    g.drawPolygon(x1Cor, y1Cor, x1Cor.length);
+                }
             }
         }
         if (drawingline) { // If the user is still dragging the shapes, draw the shapes temporarily.
@@ -398,9 +417,19 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void mousePressed(MouseEvent e) { // If mouse is pressed do something.....
-        Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-        //Convert the double formats to String with 2decimal places.
         // Set the X1,Y1 coordinates to the Mousetrack class.
+        Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+
+        if(Pen){ // If the user decides to draw with a colour outline present
+            vecFile += pentemp; //Add outline colour command
+            vecFile += "FILL OFF" +"\n"; // Disable fill
+            Pen = false; //Deactivate to not add more string to vecFile.
+        }
+
+        if(Filling){ // If the user decides to draw with a fill colour present
+            vecFile += colourtemp; //add fill command to vecFile
+            Filling = false; //Deactivate to not add more string to vecFile.
+        }
 
         if (PlotTruth) { // If only plotting then get the position, add command to string, then repaint.
             Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
@@ -441,13 +470,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
             //** Right click draws from x2 and y2 of the latest line to the start**//
             if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 2) {
-                System.out.println("Does this thing work");
                 SetCoordinateDrawingPlotting(oldX, oldY, startX, startY);
                 vecFile += "\n";
                 MouseIncrement = 0;
             }
             this.repaint();
-
         }
     }
 
@@ -484,16 +511,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         String x2 = df.format(mx2);
         String y2 = df.format(my2);
 
-        if(Pen){ // If the user decides to draw with a colour outline present
-            vecFile += pentemp; //Add outline colour command
-            vecFile += "FILL OFF" +"\n"; // Disable fill
-            Pen = false; //Deactivate to not add more string to vecFile.
-        }
-
-        if(Filling){ // If the user decides to draw with a fill colour present
-                vecFile += colourtemp; //add fill command to vecFile
-                Filling = false; //Deactivate to not add more string to vecFile.
-        }
+//        if(Pen){ // If the user decides to draw with a colour outline present
+//            vecFile += "\n" + pentemp; //Add outline colour command
+//            vecFile += "FILL OFF" +"\n"; // Disable fill
+//            Pen = false; //Deactivate to not add more string to vecFile.
+//        }
+//
+//        if(Filling){ // If the user decides to draw with a fill colour present
+//                vecFile += colourtemp; //add fill command to vecFile
+//                Filling = false; //Deactivate to not add more string to vecFile.
+//        }
 
         if(LineTruth) { // If Line tool is picked then draw a line
             SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
@@ -513,11 +540,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             // Add mouse coordinates to vecFile
             vecFile += "ELLIPSE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
         }
-//        if (PolyTruth){
-//            SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
-//            vecFile += "POLYGON " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + " ";
-//            vecFile = vecFile.replace(" POLYGON", "");
-//        }
+
         System.out.println(e.getX()+" "+e.getY());
         this.repaint();
     }
