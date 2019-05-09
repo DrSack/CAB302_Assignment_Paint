@@ -490,6 +490,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        if(MouseIncrement >=1) {
+            Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+            drawingline = true;
+        }
+        else drawingline = false;
         this.repaint();
     }
 
