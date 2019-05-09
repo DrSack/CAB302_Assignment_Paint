@@ -1,6 +1,10 @@
 package GUI;
 
 import Coordinate.*;
+import Tools.Ellipse;
+import Tools.LineOrPlot;
+import Tools.Rectangle;
+import Tools.ShapesDrawn;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,7 +60,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     private String vecFile = "";
 
-    private MouseCoordinates Mousetrack = new MouseCoordinates();
+    private MouseCoordinates Mxy = new XY1();
+    private MouseCoordinates Mxy2 = new XY2();
+
     private XY_Coordinates XYtrack = new XY_Coordinates();
 
 
@@ -245,10 +251,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         FillTruth = false;
 
         // Set current mouse X,Y coordinates
-        int x1 = (int)(Mousetrack.getX1()* this.getWidth());
-        int y1 = (int) (Mousetrack.getY1()* this.getHeight());
-        int x2 = (int)(Mousetrack.getX2()* this.getWidth());
-        int y2 = (int)(Mousetrack.getY2()* this.getHeight());
+        int x1 = (int)(Mxy.getX()* this.getWidth());
+        int y1 = (int)(Mxy.getY()* this.getHeight());
+        int x2 = (int)(Mxy2.getX()* this.getWidth());
+        int y2 = (int)(Mxy2.getY()* this.getHeight());
 
         for(int o = 0; o < counter; o++) {
 
@@ -280,76 +286,33 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             g.setColor(c);
              if (Truth.get(o).equals("RecTruth")) { // If "RecTruth" is within the array lineup then draw a rectangle
                 x = parseArrayIndex(x);
-
+                ShapesDrawn drawn = new Rectangle();
                  if (FillTruth) { // If true fill shape
                      g.setColor(f);
-                     if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
-                         g.fillRect(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
-                     }
-                     else if(XYtrack.getX2() <= XYtrack.getX1()) { // If X2 goes behind X1 then draw backwards
-                         g.fillRect(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
-                     }
-                     else if(XYtrack.getY2() <= XYtrack.getY1()) { // If Y2 goes behind Y1 then draw backwards
-                         g.fillRect(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
-                     }
-                     else{ // If operations are normal then draw normally
-                         g.fillRect(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
-                     }
+                     drawn.Fill(g,XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2(),XYtrack.getY2());
                  }
-
                  g.setColor(c); // Set colour of the outline after fill is set
-                 if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) { //  Both X2 and Y2 and behind X1 and Y1 then draw backwards.
-                     g.drawRect(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
-                 }
-                 else if(XYtrack.getX2() <= XYtrack.getX1()) { // If X2 goes behind X1 then draw backwards
-                     g.drawRect(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
-                 }
-                 else if(XYtrack.getY2() <= XYtrack.getY1()) { // If Y2 goes behind Y1 then draw backwards
-                     g.drawRect(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
-                 }
-                 else{ // If operations are normal then draw normally
-                     g.drawRect(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
-                 }
+                 drawn.Drawn(g,XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2(),XYtrack.getY2());
 
             }
 
             if (Truth.get(o).equals("LinePlotTruth")) { // If "LinePlotTruth" is within the array lineup then draw a Line or Plot
                 x = parseArrayIndex(x);
-                g.drawLine(XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2()); //Draw a Line based on the XYtrack class coordinates
+                ShapesDrawn drawn = new LineOrPlot();
+                drawn.Drawn(g,XYtrack.getX1(), XYtrack.getY1(), XYtrack.getX2(), XYtrack.getY2());//Draw a Line based on the XYtrack class coordinates
             }
 
             if (Truth.get(o).equals("ElliTruth")) { // If "ElliTruth" is within the array lineup then draw an Ellipse
                 x = parseArrayIndex(x);
-
+                ShapesDrawn drawn = new Ellipse();
                 if (FillTruth) { // If true fill shape
                     g.setColor(f);
-                    if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
-                        g.fillOval(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
-                    }
-                    else if(XYtrack.getX2() <= XYtrack.getX1()) { // If X2 goes behind X1 then draw backwards
-                        g.fillOval(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
-                    }
-                    else if(XYtrack.getY2() <= XYtrack.getY1()) { // If Y2 goes behind Y1 then draw backwards
-                        g.fillOval(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
-                    }
-                    else{ //  If operations are normal then draw normally
-                        g.fillOval(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
-                    }
+
+                    drawn.Fill(g,XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2(),XYtrack.getY2());
                 }
 
                 g.setColor(c); // Set colour of the outline after fill is set
-                if(XYtrack.getX2() <= XYtrack.getX1() && XYtrack.getY2() <= XYtrack.getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
-                    g.drawOval(XYtrack.getX2(),XYtrack.getY2(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY1()-XYtrack.getY2());
-                }
-                else if(XYtrack.getX2() <= XYtrack.getX1()) { // If X2 goes behind X1 then draw backwards
-                    g.drawOval(XYtrack.getX2(),XYtrack.getY1(),XYtrack.getX1()-XYtrack.getX2(),XYtrack.getY2()-XYtrack.getY1());
-                }
-                else if(XYtrack.getY2() <= XYtrack.getY1()) { // If Y2 goes behind Y1 then draw backwards
-                    g.drawOval(XYtrack.getX1(),XYtrack.getY2(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY1()-XYtrack.getY2());
-                }
-                else{ //  If operations are normal then draw normally
-                    g.drawOval(XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2()-XYtrack.getX1(),XYtrack.getY2()-XYtrack.getY1());
-                }
+                drawn.Drawn(g,XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2(),XYtrack.getY2());
 
             }
             if (Truth.get(o).equals("PolyTruth")) { // If "PolyTruth" is within the array lineup then draw a Polygon
@@ -372,37 +335,18 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
         if (drawingline) { // If the user is still dragging the shapes, draw the shapes temporarily.
             g.setColor(c);
+            ShapesDrawn Line = new LineOrPlot();
+            ShapesDrawn Rectangle = new Rectangle();
+            ShapesDrawn Ellipse = new Ellipse();
+
             if (LineTruth) { // Temporarily draw a line
-                g.drawLine(x1, y1, x2, y2);
+                Line.Drawn(g, x1, y1, x2, y2);
             }
             if (RecTruth) { // Temporarily draw a rectangle
-                if (x2 <= x1 && y2 <= y1) {
-                    g.drawRect(x2,y2,x1-x2,y1-y2);
-                }
-                else if (x2 <= x1) {
-                    g.drawRect(x2,y1,x1-x2,y2-y1);
-                }
-                else if (y2 <= y1) {
-                    g.drawRect(x1,y2,x2-x1,y1-y2);
-                }
-                else {
-                    g.drawRect(x1,y1,x2-x1,y2-y1);
-                }
-
+                Rectangle.Drawn(g, x1, y1, x2, y2);
             }
             if (ElliTruth){ // Temporarily draw an Ellipse.
-                if (x2 <= x1 && y2 <= y1) {
-                    g.drawOval(x2,y2,x1-x2,y1-y2);
-                }
-                else if (x2 <= x1) {
-                    g.drawOval(x2,y1,x1-x2,y2-y1);
-                }
-                else if (y2 <= y1) {
-                    g.drawOval(x1,y2,x2-x1,y1-y2);
-                }
-                else {
-                    g.drawOval(x1,y1,x2-x1,y2-y1);
-                }
+                Ellipse.Drawn(g, x1, y1, x2, y2);
             }
             if (PolyTruth){
                 g.drawLine(x1, y1, x2, y2);
@@ -418,8 +362,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mousePressed(MouseEvent e) { // If mouse is pressed do something.....
         // Set the X1,Y1 coordinates to the Mousetrack class.
-        Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-
+        Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         if(Pen){ // If the user decides to draw with a colour outline present
             vecFile += pentemp; //Add outline colour command
             vecFile += "FILL OFF" +"\n"; // Disable fill
@@ -432,9 +375,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
 
         if (PlotTruth) { // If only plotting then get the position, add command to string, then repaint.
-            Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-            SetCoordinateDrawingPlotting(Mousetrack.getX1(), Mousetrack.getY1(), Mousetrack.getX1(), Mousetrack.getY1());
-            vecFile += "PLOT " + "0" + df.format(Mousetrack.getX1()) + " 0" + df.format(Mousetrack.getY1()) + "\n";
+            Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+            SetCoordinateDrawingPlotting(Mxy.getX(), Mxy.getY(), Mxy.getX(), Mxy.getY());
+            vecFile += "PLOT " + "0" + df.format(Mxy.getX()) + " 0" + df.format(Mxy.getY()) + "\n";
             this.repaint();
         }
 
@@ -444,26 +387,26 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             //**Increments the mouse clicked**//
             if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
                 MouseIncrement++;
-                Mousetrack.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-                String x1 = df.format(Mousetrack.getX1());
-                String y1 = df.format(Mousetrack.getY1());
-                this.currentX = Mousetrack.getX1();
-                this.currentY = Mousetrack.getY1();
-                this.startX = Mousetrack.getX1();
-                this.startY = Mousetrack.getY1();
+                Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+                String x1 = df.format(Mxy.getX());
+                String y1 = df.format(Mxy.getY());
+                this.currentX = Mxy.getX();
+                this.currentY = Mxy.getY();
+                this.startX = Mxy.getX();
+                this.startY = Mxy.getY();
                 vecFile += "POLYGON " + "0" + x1 + " 0" + y1;
             }
             //** Second left click and every other click draws line **//
             else if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement > 0) {
                 MouseIncrement++;
-                Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-                this.oldX = Mousetrack.getX2();
-                this.oldY = Mousetrack.getY2();
+                Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+                this.oldX = Mxy2.getX();
+                this.oldY = Mxy2.getY();
                 SetCoordinateDrawingPlotting(currentX, currentY, oldX, oldY);
                 currentX = oldX;
                 currentY = oldY;
-                String x2 = df.format(Mousetrack.getX2());
-                String y2 = df.format(Mousetrack.getY2());
+                String x2 = df.format(Mxy2.getX());
+                String y2 = df.format(Mxy2.getY());
                 vecFile += " 0" + x2 + " 0" + y2;
                 this.repaint();
             }
@@ -481,21 +424,21 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     // Whenever the mouse is dragged get the X,Y2 coordinates then repaint to temporarily see the shapes outline.
     @Override
     public void mouseDragged(MouseEvent e) {
-        Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = true;
         this.repaint();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) { // Where the mouse is released get the final X,Y2 coordinates and set the Mousetrack.
-        Mousetrack.setMouseXY2(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingline = false;
 
         // Assign x,y to variables.
-        double mx1 = Mousetrack.getX1();
-        double my1 = Mousetrack.getY1();
-        double mx2 = Mousetrack.getX2();
-        double my2 = Mousetrack.getY2();
+        double mx1 = Mxy.getX();
+        double my1 = Mxy.getY();
+        double mx2 = Mxy2.getX();
+        double my2 = Mxy2.getY();
 
         if (mx2 > this.getWidth()) {
             mx2 = this.getWidth();

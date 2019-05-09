@@ -585,7 +585,6 @@ public class GUI extends JFrame implements ActionListener {
                             counterSTOP++;
                             VECfile = readerChoose.readLine();
                         }
-                        System.out.println(getFile); // Parse file through constructor and open new JFrame.
                         GUI cool = new GUI(getFile+"\n",fc.getSelectedFile().getAbsolutePath());
 
                         if (file.length() == 0) {
@@ -672,11 +671,9 @@ public class GUI extends JFrame implements ActionListener {
                             if (data.contains("FILL")) { // If the line contains Fill
                                 data = data.replace("FILL ", "");
                                 if (data.contains("OFF")) {
-                                    System.out.println("OFF");
                                     cool.parseFillOff(); // Set the colour on the JPanel
                                 }
                                 else{
-                                    System.out.println(data);
                                     cool.parseFill(data); // Set the colour on the JPanel
                                 }
                             }
