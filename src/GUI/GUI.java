@@ -123,7 +123,7 @@ public class GUI extends JFrame implements ActionListener {
         tools = new JPanel(new GridBagLayout());
         GridBagConstraints tc = new GridBagConstraints();
 
-        // Set font variable
+        // Tools buttons
         outline = createButton("Outline");
         fill = createButton("Fill");
         outline.setPreferredSize(new Dimension(80, 25));
@@ -139,8 +139,6 @@ public class GUI extends JFrame implements ActionListener {
         outlineColor.setPreferredSize(new Dimension(25, 25));
         fillColor.setPreferredSize(new Dimension(25, 25));
 
-        Font f = outline.getFont();
-
         // Add buttons to the tools panel
         tc.gridy = 0;
         tc.gridx = 0;
@@ -149,7 +147,6 @@ public class GUI extends JFrame implements ActionListener {
         tc.gridy = 0;
         tc.gridx = 1;
         tools.add(outlineColor, tc);
-        outline.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
 
         tc.gridy = 1;
         tc.gridx = 0;
@@ -220,7 +217,6 @@ public class GUI extends JFrame implements ActionListener {
             colorButton.addActionListener(this);
             colors.add(colorButton);
         }
-
         extraColors = createButton("More Colors...");
     }
 
@@ -357,22 +353,14 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object btnSrc = e.getSource();
 
-        if (btnSrc == outline) { // Change outline colour of Shape and set font to BOLD
-            Font f = outline.getFont();
-            Font f2 = fill.getFont();
+        if (btnSrc == outline) { // Change outline colour of Shape
             OutlineOrFill= true;
-            outline.setFont(f.deriveFont(Font.BOLD));
-            fill.setFont(f2.deriveFont(~Font.BOLD));
             ColourClick(penC);
             parseFillOff();
         }
 
-        if (btnSrc == fill) { // Fill in Shape and set font to BOLD
-            Font f = outline.getFont();
-            Font f2 = fill.getFont();
+        if (btnSrc == fill) { // Fill in Shape
             OutlineOrFill= false;
-            fill.setFont(f.deriveFont(Font.BOLD));
-            outline.setFont(f2.deriveFont(~Font.BOLD));
             FillClick(fillC);
         }
 
