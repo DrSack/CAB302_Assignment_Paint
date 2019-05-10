@@ -77,10 +77,17 @@ public class GUI extends JFrame implements ActionListener {
             public void componentResized(ComponentEvent e) {
                 Component c = e.getComponent();
                 canvas.setSize(new Dimension(c.getSize().height, c.getSize().height));
-                System.out.println(canvas.getWidth() + "x" + canvas.getHeight());
+
+                if (c.getWidth() <= (c.getHeight() + 150)) {
+                    canvas.setSize(new Dimension(c.getWidth() - 150, c.getWidth() - 150));
+                }
+
+                System.out.println("Canvas: " + canvas.getWidth() + "x" + canvas.getHeight());
+                System.out.println("Window: " + c.getWidth() + "x" + c.getHeight());
             }
         });
 
+        // Setup components
         setupMenuBar();
         setupButtons();
         setupShapes();
@@ -357,10 +364,14 @@ public class GUI extends JFrame implements ActionListener {
             OutlineOrFill= true;
             ColourClick(penC);
             parseFillOff();
+            fill.setForeground(null);
+            outline.setForeground(Color.BLUE);
         }
 
         if (btnSrc == fill) { // Fill in Shape
             OutlineOrFill= false;
+            outline.setForeground(null);
+            fill.setForeground(Color.BLUE);
             FillClick(fillC);
         }
 
