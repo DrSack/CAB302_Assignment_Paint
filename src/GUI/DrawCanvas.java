@@ -35,6 +35,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     boolean ElliTruth = false;
     boolean PolyTruth = false;
 
+    private boolean opened = false;
+
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
     private Color c = Color.black;
     private Color f;
@@ -52,6 +54,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private ArrayList<String> polylines = new ArrayList<>();
 
     private int counter = 0;
+    private int realcounter = 0;
     private int MouseIncrement = 0;
 
     private int[] x1Cor;
@@ -59,6 +62,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private double currentX, currentY, oldX, oldY, startX, startY;
 
     private String vecFile = "";
+    private ArrayList<String> commands = new ArrayList<>();
 
     private MouseCoordinates Mxy = new XY1();
     private MouseCoordinates Mxy2 = new XY2();
@@ -79,6 +83,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         addMouseMotionListener(this);
     }
 
+    
     /**
      * This method is called from the GUI whether the button "fill" is enabled, and the colours picked also have
      * fill button enabled.
@@ -123,8 +128,26 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         arrayLine.add(Y2);
     }
 
+    public void open(){
+        if(Pen){ //  if the users hasn't draw, remove the previous element.
+            Colourtrack.remove(Colourtrack.size()-1);
+            Colour.remove(Colour.size()-1);
+        }
+        //add the counter to the trackarray
+        Colourtrack.add(counter);
+        Colour.add(Color.BLACK); //add colour to the Colour array
+        pentemp = "PEN #000000"+"\n"; // temporarily store the VEC command.
+        Pen = true;
+        offFill.add(counter);
+    }
+
     // Return the vecFile String
     public String returnFile() {
+        System.out.println(commands.size());
+        for(int i = 0 ;i < commands.size(); i++){
+            System.out.println("try this");
+            vecFile += commands.get(i);
+        }
         return vecFile;
     }
 
@@ -188,6 +211,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         counter++;
     }
 
+    public void removelines(){
+        arrayLine.remove(arrayLine.size()-1);
+        arrayLine.remove(arrayLine.size()-1);
+        arrayLine.remove(arrayLine.size()-1);
+        arrayLine.remove(arrayLine.size()-1);
+    }
+
     public void SetCoordinatePolygon(double xP[], double yP[]) {
         Truth.add("PolyTruth");
         int num = xP.length;
@@ -202,11 +232,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         // For loop to add coordinates into arrayLine
         for (int i = 0; i < num; i++) {
-            holderX = xP[i] * this.getWidth();
+            holderX = (xP[i] * this.getWidth());
             x1Cor[i] = (int) holderX;
             str += x1Cor[i] + " ";
             for (int a = 0; a < 1; a++) {
-                holderY = yP[i] * this.getHeight();
+                holderY = (yP[i] * this.getHeight());
                 y1Cor[i] = (int) holderY;
                 str += y1Cor[i] + " ";
             }
@@ -293,7 +323,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                  }
                  g.setColor(c); // Set colour of the outline after fill is set
                  drawn.Drawn(g,XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2(),XYtrack.getY2());
-
             }
 
             if (Truth.get(o).equals("LinePlotTruth")) { // If "LinePlotTruth" is within the array lineup then draw a Line or Plot
@@ -310,7 +339,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
                     drawn.Fill(g,XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2(),XYtrack.getY2());
                 }
-
                 g.setColor(c); // Set colour of the outline after fill is set
                 drawn.Drawn(g,XYtrack.getX1(),XYtrack.getY1(),XYtrack.getX2(),XYtrack.getY2());
 
@@ -364,20 +392,21 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         // Set the X1,Y1 coordinates to the Mousetrack class.
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         if(Pen){ // If the user decides to draw with a colour outline present
-            vecFile += pentemp; //Add outline colour command
-            vecFile += "FILL OFF" +"\n"; // Disable fill
+            commands.add(pentemp); //Add outline colour command
+            commands.add("FILL OFF" +"\n"); // Disable fill
             Pen = false; //Deactivate to not add more string to vecFile.
         }
 
         if(Filling){ // If the user decides to draw with a fill colour present
-            vecFile += colourtemp; //add fill command to vecFile
+            commands.add(colourtemp); //add fill command to vecFile
             Filling = false; //Deactivate to not add more string to vecFile.
         }
 
         if (PlotTruth) { // If only plotting then get the position, add command to string, then repaint.
             Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
             SetCoordinateDrawingPlotting(Mxy.getX(), Mxy.getY(), Mxy.getX(), Mxy.getY());
-            vecFile += "PLOT " + "0" + df.format(Mxy.getX()) + " 0" + df.format(Mxy.getY()) + "\n";
+            realcounter++;
+            commands.add("PLOT " + "0" + df.format(Mxy.getX()) + " 0" + df.format(Mxy.getY()) + "\n");
             this.repaint();
         }
 
@@ -394,7 +423,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 this.currentY = Mxy.getY();
                 this.startX = Mxy.getX();
                 this.startY = Mxy.getY();
-                vecFile += "POLYGON " + "0" + x1 + " 0" + y1;
+                commands.add("POLYGON " + "0" + x1 + " 0" + y1);
             }
             //** Second left click and every other click draws line **//
             else if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement > 0) {
@@ -407,14 +436,14 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 currentY = oldY;
                 String x2 = df.format(Mxy2.getX());
                 String y2 = df.format(Mxy2.getY());
-                vecFile += " 0" + x2 + " 0" + y2;
+               commands.add(" 0" + x2 + " 0" + y2);
                 this.repaint();
             }
 
             //** Right click draws from x2 and y2 of the latest line to the start**//
             if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 2) {
                 SetCoordinateDrawingPlotting(oldX, oldY, startX, startY);
-                vecFile += "\n";
+                commands.add("\n");
                 MouseIncrement = 0;
             }
             this.repaint();
@@ -467,21 +496,22 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         if(LineTruth) { // If Line tool is picked then draw a line
             SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
-            vecFile += "LINE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
+            realcounter++;
+            commands.add("LINE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
         }
 
         if (RecTruth) { // If Rectangle tool is picked then draw a rectangle.
             SetCoordinateRectangle(mx1, my1, mx2, my2);
-
+            realcounter++;
             // Add mouse coordinates to vecFile
-            vecFile += "RECTANGLE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
+            commands.add("RECTANGLE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
         }
 
         if (ElliTruth) { // If Ellipse tool is picked then draw an ellipse.
             SetCoordinateEllipse(mx1, my1, mx2, my2);
-
+            realcounter++;
             // Add mouse coordinates to vecFile
-            vecFile += "ELLIPSE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n";
+            commands.add("ELLIPSE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
         }
 
         System.out.println(e.getX()+" "+e.getY());

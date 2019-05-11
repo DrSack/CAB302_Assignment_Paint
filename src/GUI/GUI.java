@@ -59,26 +59,19 @@ public class GUI extends JFrame implements ActionListener {
      * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
     public GUI(String File, String title) {
-
-        // Setup the JFrame
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setPreferredSize(new Dimension(720, 610));
-        this.setMinimumSize(new Dimension(600,435));
-        this.setLocation(new Point(100, 100));
-
         this.setTitle(title);
-        this.setLayout(new BorderLayout(6, 0));
+        this.setLayout(new BorderLayout(5, 5));
 
         // Canvas
         vecFile = File;
 
         canvasContainer = new JPanel(new BorderLayout());
         canvasContainer.setBackground(Color.LIGHT_GRAY);
-        canvasContainer.setSize(new Dimension(550, 550));
 
         canvas = new DrawCanvas(vecFile);
         canvas.setBackground(Color.WHITE);
-        canvas.setSize(new Dimension(550, 550));
+        canvas.setPreferredSize(new Dimension(600, 600));
+
 
         // Setup components
         setupMenuBar();
@@ -94,29 +87,13 @@ public class GUI extends JFrame implements ActionListener {
         this.add(canvasContainer, BorderLayout.CENTER);
         canvasContainer.add(canvas, BorderLayout.CENTER);
 
-        // Display
+        // Display window
+        setMinimumSize(new Dimension(670,435));
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setPreferredSize(new Dimension(750, 600));
+        this.setLocation(new Point(100, 100));
         this.pack();
         this.setVisible(true);
-        detectResize();
-    }
-
-    /**
-     * Change the size of the canvas based on the size of the window
-     */
-    public void detectResize() {
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                Component c = e.getComponent();
-
-                // Set the size of the canvas based on the height of the window if the height of the window is changed
-                canvas.setSize(new Dimension(c.getSize().height - 60, c.getSize().height - 60));
-
-                // Set the size of the canvas based on the width of the window if the window's width + the toolbar's width is smaller than the window's height
-                if (c.getWidth() - 100 <= (c.getHeight())) {
-                    canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
-                }
-            }
-        });
     }
 
     /**
@@ -141,6 +118,7 @@ public class GUI extends JFrame implements ActionListener {
 
         // Tools buttons
         outline = createButton("Outline");
+        outline.setForeground(Color.blue);
         fill = createButton("Fill");
         outline.setPreferredSize(new Dimension(80, 25));
         fill.setPreferredSize(new Dimension(80, 25));
@@ -360,6 +338,10 @@ public class GUI extends JFrame implements ActionListener {
 
     private void ColourClick(String hex) { canvas.setColourClick(hex);}
 
+    private void open(){canvas.open();}
+
+    private void undo(){canvas.undo();}
+
     private void FillClick(String hex) {canvas.setFillClick(hex);}
 
     public String returnFile() { // Return the vecFile string from the canvas class.
@@ -368,6 +350,10 @@ public class GUI extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         Object btnSrc = e.getSource();
+
+        if(btnSrc == undo){
+        undo();
+        }
 
         if (btnSrc == outline) { // Change outline colour of Shape
             OutlineOrFill= true;
@@ -433,6 +419,8 @@ public class GUI extends JFrame implements ActionListener {
         }
 
         if (btnSrc == clear) { // If clear is clicked on clear the canvas and repaint.
+            fill.setForeground(null);
+            outline.setForeground(null);
             canvas.clearCanvas();
             canvas.repaint();
         }
@@ -577,141 +565,142 @@ public class GUI extends JFrame implements ActionListener {
             fc.addChoosableFileFilter(filter); // Filter out all extensions except for .VEC
 
             int returnVal = fc.showOpenDialog(this);
-            if (returnVal==JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                try {
-                    reader = new BufferedReader((new FileReader(file)));
-                    readerT = new BufferedReader((new FileReader(file)));
-                    readerChoose = new BufferedReader((new FileReader(file)));
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    try {
+                        reader = new BufferedReader((new FileReader(file)));
+                        readerT = new BufferedReader((new FileReader(file)));
+                        readerChoose = new BufferedReader((new FileReader(file)));
 
-                    String VECfile = readerChoose.readLine();
-                    String VECfileTEST = readerT.readLine();
-                    String data = reader.readLine();
+                        String VECfile = readerChoose.readLine();
+                        String VECfileTEST = readerT.readLine();
+                        String data = reader.readLine();
 
-                    if (file.exists()) {
-                        double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-                        String getFile =""; // Declare empty string
+                        if (file.exists()) {
+                            double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+                            String getFile = ""; // Declare empty string
 
-                        int counter = 0; // Amount of lines count
-                        int counterSTOP = 0; // Stop to notify the loop when to stop adding "\n"
-                        while(VECfileTEST != null) { // This checks the amount of line the File has
-                            VECfileTEST = readerT.readLine();
-                            counter++;
-                        }
-                        while(VECfile != null) {
-                            getFile += VECfile;
-                            if (counterSTOP < counter-1) { // If the file isn't at the end add another line
-                                getFile += "\n";
+                            int counter = 0; // Amount of lines count
+                            int counterSTOP = 0; // Stop to notify the loop when to stop adding "\n"
+                            while (VECfileTEST != null) { // This checks the amount of line the File has
+                                VECfileTEST = readerT.readLine();
+                                counter++;
                             }
-                            counterSTOP++;
-                            VECfile = readerChoose.readLine();
-                        }
-                        GUI cool = new GUI(getFile+"\n",fc.getSelectedFile().getAbsolutePath());
-
-                        if (file.length() == 0) {
-                            canvas.setVisible(false);
-                        }
-
-                        while(data != null) {
-                            if (data.contains("LINE")) {
-                                // Replaces PLOT with nothing
-                                data = data.replace("LINE ", "");
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                x1 = Double.parseDouble(param[0]);
-                                y1 = Double.parseDouble(param[1]);
-                                x2 = Double.parseDouble(param[2]);
-                                y2 = Double.parseDouble(param[3]);
-                                cool.parseLine(x1,y1,x2,y2);
-                            }
-
-                            if (data.contains("PLOT")) {
-                                // Replaces PLOT with nothing
-                                data = data.replace("PLOT ", "");
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                x1 = Double.parseDouble(param[0]);
-                                y1 = Double.parseDouble(param[1]);
-                                cool.parseLine(x1,y1,x1,y1);
-                            }
-
-                            if (data.contains("RECTANGLE")) {
-                                // Replaces RECTANGLE with nothing
-                                data = data.replace("RECTANGLE ", "");
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                x1 = Double.parseDouble(param[0]);
-                                y1 = Double.parseDouble(param[1]);
-                                x2 = Double.parseDouble(param[2]);
-                                y2 = Double.parseDouble(param[3]);
-                                cool.parseRect(x1,y1,x2,y2);
-                            }
-
-                            if (data.contains("ELLIPSE")) {
-                                // Replaces ELLIPSE with nothing
-                                data = data.replace("ELLIPSE ", "");
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                x1 = Double.parseDouble(param[0]);
-                                y1 = Double.parseDouble(param[1]);
-                                x2 = Double.parseDouble(param[2]);
-                                y2 = Double.parseDouble(param[3]);
-                                cool.parseEllipse(x1,y1,x2,y2);
-                            }
-
-                            if (data.contains("POLYGON")) {
-                                int numbers;
-
-                                // Replaces POLYGON with nothing
-                                data = data.replace("POLYGON ", "");
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                numbers = param.length;
-
-                                // Initializing xP and yP
-                                double xP[] = new double[numbers / 2];
-                                double yP[] = new double[numbers / 2];
-                                // Parsing numbers into array
-                                for (int i = 0; i < numbers / 2; i++) {
-                                    xP[i] = Double.parseDouble(param[2 * i]);
-                                    yP[i] = Double.parseDouble(param[2 * i + 1]);
+                            while (VECfile != null) {
+                                getFile += VECfile;
+                                if (counterSTOP < counter - 1) { // If the file isn't at the end add another line
+                                    getFile += "\n";
                                 }
-                                cool.parsePolygon(xP, yP);
+                                counterSTOP++;
+                                VECfile = readerChoose.readLine();
+                            }
+                            GUI cool = new GUI(getFile + "\n", fc.getSelectedFile().getAbsolutePath());
+                            if (file.length() == 0) {
+                                canvas.setVisible(false);
                             }
 
-                            if (data.contains("PEN")) { // If the line contains pen
-                                data = data.replace("PEN ", "");
-                                cool.parseColour(data); // Set the colour on the JPanel
+                            while (data != null) {
+                                if (data.contains("LINE")) {
+                                    // Replaces PLOT with nothing
+                                    data = data.replace("LINE ", "");
+
+                                    // Splits params into an array
+                                    String param[] = data.split(" ");
+                                    x1 = Double.parseDouble(param[0]);
+                                    y1 = Double.parseDouble(param[1]);
+                                    x2 = Double.parseDouble(param[2]);
+                                    y2 = Double.parseDouble(param[3]);
+                                    cool.parseLine(x1, y1, x2, y2);
+                                }
+
+                                if (data.contains("PLOT")) {
+                                    // Replaces PLOT with nothing
+                                    data = data.replace("PLOT ", "");
+
+                                    // Splits params into an array
+                                    String param[] = data.split(" ");
+                                    x1 = Double.parseDouble(param[0]);
+                                    y1 = Double.parseDouble(param[1]);
+                                    cool.parseLine(x1, y1, x1, y1);
+                                }
+
+                                if (data.contains("RECTANGLE")) {
+                                    // Replaces RECTANGLE with nothing
+                                    data = data.replace("RECTANGLE ", "");
+
+                                    // Splits params into an array
+                                    String param[] = data.split(" ");
+                                    x1 = Double.parseDouble(param[0]);
+                                    y1 = Double.parseDouble(param[1]);
+                                    x2 = Double.parseDouble(param[2]);
+                                    y2 = Double.parseDouble(param[3]);
+                                    cool.parseRect(x1, y1, x2, y2);
+                                }
+
+                                if (data.contains("ELLIPSE")) {
+                                    // Replaces ELLIPSE with nothing
+                                    data = data.replace("ELLIPSE ", "");
+
+                                    // Splits params into an array
+                                    String param[] = data.split(" ");
+                                    x1 = Double.parseDouble(param[0]);
+                                    y1 = Double.parseDouble(param[1]);
+                                    x2 = Double.parseDouble(param[2]);
+                                    y2 = Double.parseDouble(param[3]);
+                                    cool.parseEllipse(x1, y1, x2, y2);
+                                }
+
+                                if (data.contains("POLYGON")) {
+                                    int numbers;
+
+                                    // Replaces POLYGON with nothing
+                                    data = data.replace("POLYGON ", "");
+
+                                    // Splits params into an array
+                                    String param[] = data.split(" ");
+                                    numbers = param.length;
+
+                                    // Initializing xP and yP
+                                    double xP[] = new double[numbers / 2];
+                                    double yP[] = new double[numbers / 2];
+                                    // Parsing numbers into array
+                                    for (int i = 0; i < numbers / 2; i++) {
+                                        xP[i] = Double.parseDouble(param[2 * i]);
+                                        yP[i] = Double.parseDouble(param[2 * i + 1]);
+                                    }
+                                    cool.parsePolygon(xP, yP);
+                                }
+
+                                if (data.contains("PEN") || data.contains("pen")) { // If the line contains pen
+                                    data = data.replace("PEN ", "");
+                                    data = data.replace("pen ", "");
+                                    cool.parseColour(data); // Set the colour on the JPanel
+                                }
+
+                                if (data.contains("FILL") || data.contains("fiil")) { // If the line contains Fill
+                                    data = data.replace("FILL ", "");
+                                    data = data.replace("fill ", "");
+                                    if (data.contains("OFF")) {
+                                        cool.parseFillOff(); // Set the colour on the JPanel
+                                    } else {
+                                        cool.parseFill(data); // Set the colour on the JPanel
+                                    }
+                                }
+                                data = reader.readLine();
                             }
 
-                            if (data.contains("FILL")) { // If the line contains Fill
-                                data = data.replace("FILL ", "");
-                                if (data.contains("OFF")) {
-                                    cool.parseFillOff(); // Set the colour on the JPanel
-                                }
-                                else{
-                                    cool.parseFill(data); // Set the colour on the JPanel
-                                }
-                            }
-                            data = reader.readLine();
+                            // Redraw the canvas and display shapes/lines.
+                            cool.open();
+                            canvas.repaint();
+                            canvas.setVisible(true);
                         }
-
-                        // Redraw the canvas and display shapes/lines.
-                        canvas.revalidate();
-                        canvas.repaint();
-                        canvas.setVisible(true);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
                     }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            } else if (returnVal==JFileChooser.CANCEL_OPTION) { // Do nothing/return to normal operations.
+                } else if (returnVal == JFileChooser.CANCEL_OPTION) { // Do nothing/return to normal operations.
 
-            }
+                }
+
         }
     }
 
