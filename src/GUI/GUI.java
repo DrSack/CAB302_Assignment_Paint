@@ -77,7 +77,6 @@ public class GUI extends JFrame implements ActionListener {
             public void componentResized(ComponentEvent e) {
                 Component c = e.getComponent();
                 canvas.setSize(new Dimension(c.getSize().height, c.getSize().height));
-
                 if (c.getWidth() <= (c.getHeight() + 150)) {
                     canvas.setSize(new Dimension(c.getWidth() - 150, c.getWidth() - 150));
                 }
@@ -466,7 +465,7 @@ public class GUI extends JFrame implements ActionListener {
             canvas.PolyTruth = false;
         }
 
-        if(btnSrc == toolPolygon){
+        if (btnSrc == toolPolygon){
             canvas.PlotTruth = false;
             canvas.LineTruth = false;
             canvas.RecTruth = false;
