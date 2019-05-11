@@ -13,7 +13,7 @@ This is the GUI class which extends the JFrame, the point of this class is that 
  within this class and that class extends a JPanel which will be used to draw the shapes.
  *
  */
-public class GUI extends JFrame implements ActionListener {
+public class GUI extends JFrame implements ActionListener{
     private Color c = Color.BLACK;
 
     private String penC = "#000000";
@@ -352,7 +352,9 @@ public class GUI extends JFrame implements ActionListener {
         Object btnSrc = e.getSource();
 
         if(btnSrc == undo){
-        undo();
+            if(canvas.returnDraw() > 0){
+                undo();
+            }
         }
 
         if (btnSrc == outline) { // Change outline colour of Shape
@@ -708,4 +710,5 @@ public class GUI extends JFrame implements ActionListener {
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         new GUI("", "untitled");
     }
+
 }

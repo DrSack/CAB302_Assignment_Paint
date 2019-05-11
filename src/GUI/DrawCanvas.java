@@ -82,8 +82,48 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         addMouseListener(this);
         addMouseMotionListener(this);
     }
+    public int returnDraw(){
+        return realcounter;
+    }
 
-    
+    public void undo(){
+        if(realcounter> 0) {
+            commands.remove(commands.size()-1);
+            if(Filltrack.size() > 0){
+                if (Filltrack.get(Filltrack.size() - 1) == counter) {
+                    commands.remove(commands.size() - 1);
+                }
+            }
+
+            if(Colourtrack.size() > 0){
+                if(Colourtrack.get(Colourtrack.size() -1) == counter){
+                    commands.remove(commands.size() - 1);
+                }
+            }
+
+             if (Truth.get(counter - 1).equals("LinePlotTruth")) {
+                Truth.remove(counter- 1 );
+                removelines();
+
+            }
+            else if (Truth.get(counter - 1).equals("RecTruth")) {
+                Truth.remove(counter- 1 );
+                removelines();
+            }
+            else if (Truth.get(counter - 1).equals("ElliTruth")) {
+                Truth.remove(counter- 1 );
+                removelines();
+            }
+            else if (Truth.get(counter - 1).equals("PolyTruth")) {
+                Truth.remove(counter- 1 );
+                polylines.remove(polylines.size() - 1);
+            }
+            this.repaint();
+            counter--;
+            realcounter--;
+        }
+    }
+
     /**
      * This method is called from the GUI whether the button "fill" is enabled, and the colours picked also have
      * fill button enabled.
@@ -143,11 +183,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     // Return the vecFile String
     public String returnFile() {
+        realcounter = 0;
         System.out.println(commands.size());
         for(int i = 0 ;i < commands.size(); i++){
             System.out.println("try this");
             vecFile += commands.get(i);
         }
+        commands.clear();
         return vecFile;
     }
 
