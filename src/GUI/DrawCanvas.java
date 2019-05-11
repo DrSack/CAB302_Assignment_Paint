@@ -28,6 +28,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private  boolean Pen = false;
     private String colourtemp ="";
     private String pentemp = "";
+    private int SumPolygons = 0;
+
 
     boolean PlotTruth = false;
     boolean LineTruth = false;
@@ -76,7 +78,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      *
      * @param vec pass the parameter and set it as the current vecFile string.
      */
-    DrawCanvas(String vec) {
+    public DrawCanvas(String vec) {
         vecFile = vec;
         this.setVisible(true);
         addMouseListener(this);
@@ -87,9 +89,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         return realcounter;
     }
 
+    public int returnCounter(){return counter;}
+
     public void undo(){
         if (realcounter > 0) {
-            commands.remove(commands.size() - 1);
             if (Filltrack.size() > 0){
                 if (Filltrack.get(Filltrack.size() - 1) == counter) {
                     commands.remove(commands.size() - 1);
@@ -103,21 +106,20 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             }
 
              if (Truth.get(counter - 1).equals("LinePlotTruth")) {
+                 commands.remove(commands.size() - 1);
                 Truth.remove(counter- 1 );
                 removelines();
 
             }
             else if (Truth.get(counter - 1).equals("RecTruth")) {
+                 commands.remove(commands.size() - 1);
                 Truth.remove(counter- 1 );
                 removelines();
             }
             else if (Truth.get(counter - 1).equals("ElliTruth")) {
+                 commands.remove(commands.size() - 1);
                 Truth.remove(counter- 1 );
                 removelines();
-            }
-            else if (Truth.get(counter - 1).equals("PolyTruth")) {
-                Truth.remove(counter- 1 );
-                polylines.remove(polylines.size() - 1);
             }
             this.repaint();
             counter--;
@@ -187,7 +189,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         realcounter = 0;
         System.out.println(commands.size());
         for(int i = 0 ;i < commands.size(); i++){
-            System.out.println("try this");
             vecFile += commands.get(i);
         }
         commands.clear();

@@ -592,15 +592,17 @@ public class GUI extends JFrame implements ActionListener{
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
                     try {
-                        reader = new BufferedReader((new FileReader(file)));
-                        readerT = new BufferedReader((new FileReader(file)));
-                        readerChoose = new BufferedReader((new FileReader(file)));
 
-                        String VECfile = readerChoose.readLine();
-                        String VECfileTEST = readerT.readLine();
-                        String data = reader.readLine();
 
                         if (file.exists()) {
+                            reader = new BufferedReader((new FileReader(file)));
+                            readerT = new BufferedReader((new FileReader(file)));
+                            readerChoose = new BufferedReader((new FileReader(file)));
+
+                            String VECfile = readerChoose.readLine();
+                            String VECfileTEST = readerT.readLine();
+                            String data = reader.readLine();
+
                             double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
                             String getFile = ""; // Declare empty string
 
@@ -718,6 +720,11 @@ public class GUI extends JFrame implements ActionListener{
                             canvas.repaint();
                             canvas.setVisible(true);
                         }
+
+                        else{
+                            JOptionPane.showMessageDialog(null, "Error: File not found", "Error", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }

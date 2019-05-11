@@ -21,4 +21,10 @@ class DrawCanvasTest extends JPanel {
         assertEquals("VEC", Test.returnFile());
     }
 
+    @Test
+    void TestCanvasCounterIncrement(){
+        DrawCanvas Test = new DrawCanvas("");
+        Test.SetCoordinateDrawingPlotting(0.0,0.0,1.0,1.0);
+        assertEquals(1,Test.returnCounter());
+    }
 }
