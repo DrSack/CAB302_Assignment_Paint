@@ -59,32 +59,22 @@ public class GUI extends JFrame implements ActionListener {
      * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
     public GUI(String File, String title) {
+
+        // Setup the JFrame
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setPreferredSize(new Dimension(720, 610));
+        this.setMinimumSize(new Dimension(670,435));
+        this.setLocation(new Point(100, 100));
+
         this.setTitle(title);
-        this.setLayout(new BorderLayout(5, 5));
+        this.setLayout(new BorderLayout(6, 0));
 
         // Canvas
         vecFile = File;
 
-        canvasContainer = new JPanel(new BorderLayout());
-        canvasContainer.setBackground(Color.LIGHT_GRAY);
-
         canvas = new DrawCanvas(vecFile);
         canvas.setBackground(Color.WHITE);
-        canvas.setPreferredSize(new Dimension(600, 600));
-
-        // Change the size of the canvas based on the size of the window
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                Component c = e.getComponent();
-                canvas.setSize(new Dimension(c.getSize().height, c.getSize().height));
-                if (c.getWidth() <= (c.getHeight() + 150)) {
-                    canvas.setSize(new Dimension(c.getWidth() - 150, c.getWidth() - 150));
-                }
-
-                System.out.println("Canvas: " + canvas.getWidth() + "x" + canvas.getHeight());
-                System.out.println("Window: " + c.getWidth() + "x" + c.getHeight());
-            }
-        });
+        canvas.setPreferredSize(new Dimension(550, 550));
 
         // Setup components
         setupMenuBar();
@@ -93,20 +83,35 @@ public class GUI extends JFrame implements ActionListener {
         setupTools();
         setupColors();
         setupPanels();
+        setupResize();
 
         // Add the components to the frame
         this.setJMenuBar(menuBar);
         this.add(containerBoard, BorderLayout.WEST);
-        this.add(canvasContainer, BorderLayout.CENTER);
-        canvasContainer.add(canvas, BorderLayout.CENTER);
+        this.add(canvas, BorderLayout.CENTER);
 
-        // Display window
-        setMinimumSize(new Dimension(670,435));
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setPreferredSize(new Dimension(750, 600));
-        this.setLocation(new Point(100, 100));
+        // Display
         this.pack();
         this.setVisible(true);
+    }
+
+    /**
+     * Change the size of the canvas based on the size of the window
+     */
+    public void setupResize() {
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                Component c = e.getComponent();
+
+//                canvas.setSize(new Dimension(c.getSize().height, c.getSize().height));
+//                if (c.getWidth() <= (c.getHeight() + 150)) {
+//                    canvas.setSize(new Dimension(c.getWidth() - 150, c.getWidth() - 150));
+//                }
+
+                System.out.println("Canvas: " + canvas.getWidth() + "x" + canvas.getHeight());
+                System.out.println("Window: " + c.getWidth() + "x" + c.getHeight());
+            }
+        });
     }
 
     /**
