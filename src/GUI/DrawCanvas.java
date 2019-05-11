@@ -82,21 +82,22 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         addMouseListener(this);
         addMouseMotionListener(this);
     }
-    public int returnDraw(){
+
+    public int returnDraw() {
         return realcounter;
     }
 
     public void undo(){
-        if(realcounter> 0) {
-            commands.remove(commands.size()-1);
-            if(Filltrack.size() > 0){
+        if (realcounter > 0) {
+            commands.remove(commands.size() - 1);
+            if (Filltrack.size() > 0){
                 if (Filltrack.get(Filltrack.size() - 1) == counter) {
                     commands.remove(commands.size() - 1);
                 }
             }
 
-            if(Colourtrack.size() > 0){
-                if(Colourtrack.get(Colourtrack.size() -1) == counter){
+            if (Colourtrack.size() > 0){
+                if (Colourtrack.get(Colourtrack.size() - 1) == counter){
                     commands.remove(commands.size() - 1);
                 }
             }
@@ -524,7 +525,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         String y1 = df.format(my1);
         String x2 = df.format(mx2);
         String y2 = df.format(my2);
-
+        
 //        if(Pen){ // If the user decides to draw with a colour outline present
 //            vecFile += "\n" + pentemp; //Add outline colour command
 //            vecFile += "FILL OFF" +"\n"; // Disable fill

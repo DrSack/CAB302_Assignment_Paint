@@ -59,19 +59,25 @@ public class GUI extends JFrame implements ActionListener{
      * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
     public GUI(String File, String title) {
+        // Setup the JFrame
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setPreferredSize(new Dimension(720, 610));
+        this.setMinimumSize(new Dimension(600,435));
+        this.setLocation(new Point(100, 100));
+
         this.setTitle(title);
-        this.setLayout(new BorderLayout(5, 5));
+        this.setLayout(new BorderLayout(6, 0));
 
         // Canvas
         vecFile = File;
 
         canvasContainer = new JPanel(new BorderLayout());
         canvasContainer.setBackground(Color.LIGHT_GRAY);
+        canvasContainer.setSize(new Dimension(550, 550));
 
         canvas = new DrawCanvas(vecFile);
         canvas.setBackground(Color.WHITE);
-        canvas.setPreferredSize(new Dimension(600, 600));
-
+        canvas.setSize(new Dimension(550, 550));
 
         // Setup components
         setupMenuBar();
@@ -87,13 +93,29 @@ public class GUI extends JFrame implements ActionListener{
         this.add(canvasContainer, BorderLayout.CENTER);
         canvasContainer.add(canvas, BorderLayout.CENTER);
 
-        // Display window
-        setMinimumSize(new Dimension(670,435));
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setPreferredSize(new Dimension(750, 600));
-        this.setLocation(new Point(100, 100));
+        // Display
         this.pack();
         this.setVisible(true);
+        detectResize();
+    }
+
+    /**
+     * Change the size of the canvas based on the size of the window
+     */
+    public void detectResize() {
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                Component c = e.getComponent();
+
+                // Set the size of the canvas based on the height of the window if the height of the window is changed
+                canvas.setSize(new Dimension(c.getSize().height - 60, c.getSize().height - 60));
+
+                // Set the size of the canvas based on the width of the window if the window's width + the toolbar's width is smaller than the window's height
+                if (c.getWidth() - 100 <= (c.getHeight())) {
+                    canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
+                }
+            }
+        });
     }
 
     /**
