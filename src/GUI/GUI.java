@@ -383,7 +383,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) {
-            System.out.println("uhh");
             if(canvas.returnCounter() > 0){
                 undo();
             }
@@ -411,9 +410,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
             }
         }
 
-        if (btnSrc == outline) { // Change outline colour of Shape
+        if (btnSrc == outline && !OutlineOrFill) { // Change outline colour of Shape
             OutlineOrFill= true;
             ColourClick(penC);
+            readCommand("FILL OFF"+"\n");
             parseFillOff();
             fill.setForeground(null);
             outline.setForeground(Color.BLUE);

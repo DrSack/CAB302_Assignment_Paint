@@ -88,15 +88,26 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public int returnCounter(){return counter;}
 
     public void undo(){
-        if (counter > 0) {
-            if (Filltrack.size() > 0){
-                if (Filltrack.get(Filltrack.size() - 1) == counter-1) {
+        if (counter > 0 && commands.size() > 0) {
+            if (Filltrack.size() > 0) {
+                if (Filltrack.get(Filltrack.size() - 1) == counter) {
+                    Filltrack.remove(Filltrack.size() - 1);
+                    Fill.remove(Fill.size()-1);
                     commands.remove(commands.size() - 1);
                 }
             }
+
             if (Colourtrack.size() > 0){
                 if (Colourtrack.get(Colourtrack.size() - 1) == counter-1){
+                    Colourtrack.remove(Colourtrack.size() - 1);
+                    Colour.remove(Colour.size()-1);
                     commands.remove(commands.size() - 1);
+                }
+            }
+
+            if(offFill.size() > 0){
+                if (offFill.get(offFill.size() - 1) == counter){
+                    offFill.remove(offFill.size() - 1);
                     commands.remove(commands.size() - 1);
                 }
             }
@@ -106,11 +117,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 Truth.remove(counter- 1 );
                 removelines();
             }
+
             else if (Truth.get(counter - 1).equals("RecTruth")) {
                  commands.remove(commands.size() -1 );
-                Truth.remove(counter- 1 );
+                Truth.remove(Truth.size()- 1 );
                 removelines();
             }
+
             else if (Truth.get(counter - 1).equals("ElliTruth")) {
                  commands.remove(commands.size() - 1);
                 Truth.remove(counter- 1 );
@@ -118,6 +131,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             }
             this.repaint();
             counter--;
+        }
+
+        if(counter <= 0) {
+            if (Filltrack.size() > 0) {
+                if (Filltrack.get(Filltrack.size() - 1) == counter) {
+                    Filltrack.remove(Filltrack.size() - 1);
+                    Fill.remove(Fill.size()-1);
+                    commands.remove(commands.size() - 1);
+                }
+            }
         }
     }
 
@@ -176,9 +199,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             Colourtrack.remove(Colourtrack.size()-1);
             Colour.remove(Colour.size()-1);
         }
-        //add the counter to the trackarray
-        Colourtrack.add(counter);
-        Colour.add(Color.BLACK); //add colour to the Colour array
         pentemp = "PEN #000000"+"\n"; // temporarily store the VEC command.
         Pen = true;
     }
@@ -294,13 +314,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     // Pass an index and sets each X,Y value within the XYtrack class. Return the index value.
     public int parseArrayIndex(int index) {
-        XYtrack.setX1(parseArrayValue(index, this.getWidth()-1));
+        XYtrack.setX1(parseArrayValue(index, this.getWidth()));
         index++;
-        XYtrack.setY1(parseArrayValue(index, this.getHeight()-1));
+        XYtrack.setY1(parseArrayValue(index, this.getHeight()));
         index++;
-        XYtrack.setX2(parseArrayValue(index, this.getWidth()-1));
+        XYtrack.setX2(parseArrayValue(index, this.getWidth()));
         index++;
-        XYtrack.setY2(parseArrayValue(index, this.getHeight()-1));
+        XYtrack.setY2(parseArrayValue(index, this.getHeight()));
         index++;
         return index;
     }
@@ -434,6 +454,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void mousePressed(MouseEvent e) { // If mouse is pressed do something.....
         // Set the X1,Y1 coordinates to the Mousetrack class.
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+
         if(Filling){ // If the user decides to draw with a fill colour present
             commands.add(colourtemp); //add fill command to commands arraylist
             Filling = false; //Deactivate to not add more string to commands arraylist.
@@ -441,7 +462,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         if(Pen){ // If the user decides to draw with a colour outline present
             commands.add(pentemp); //Add outline colour command
-            commands.add("FILL OFF" +"\n"); // Disable fill
+            if(Filling){
+                commands.add("FILL OFF" +"\n");
+            }
             Pen = false; //Deactivate to not add more string to commands arraylist.
         }
 
