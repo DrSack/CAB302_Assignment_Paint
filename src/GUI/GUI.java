@@ -13,7 +13,7 @@ This is the GUI class which extends the JFrame, the point of this class is that 
  within this class and that class extends a JPanel which will be used to draw the shapes.
  *
  */
-public class GUI extends JFrame implements ActionListener{
+public class GUI extends JFrame implements ActionListener, KeyListener{
     private Color c = Color.BLACK;
 
     private String penC = "#000000";
@@ -49,6 +49,8 @@ public class GUI extends JFrame implements ActionListener{
     private JButton red = new JButton();
     private JButton extraColors;
 
+    private JComponent controlZ;
+
     private String vecFile = "";
 
     /**
@@ -75,7 +77,7 @@ public class GUI extends JFrame implements ActionListener{
         canvasContainer.setBackground(Color.LIGHT_GRAY);
         canvasContainer.setSize(new Dimension(550, 550));
 
-        canvas = new DrawCanvas(vecFile);
+        canvas = new DrawCanvas();
         canvas.setBackground(Color.WHITE);
         canvas.setSize(new Dimension(550, 550));
 
@@ -94,9 +96,12 @@ public class GUI extends JFrame implements ActionListener{
         canvasContainer.add(canvas, BorderLayout.CENTER);
 
         // Display
+        this.requestFocusInWindow();
         this.pack();
         this.setVisible(true);
+        this.setFocusable(true);
         detectResize();
+        this.addKeyListener(this);
     }
 
     /**
@@ -121,7 +126,7 @@ public class GUI extends JFrame implements ActionListener{
     /**
      * Add all tools to the shape JPanel
      */
-    public void setupShapes() {
+    private void setupShapes() {
         shapes = new JPanel(new GridLayout(5,1));
         shapes.add(toolPlot);
         shapes.add(toolLine);
@@ -134,7 +139,7 @@ public class GUI extends JFrame implements ActionListener{
      * Setup the tool panel that contains the Fill and Outline tool buttons as well
      * as 2 color preview fields for those 2 buttons
      */
-    public void setupTools() {
+    private void setupTools() {
         tools = new JPanel(new GridBagLayout());
         GridBagConstraints tc = new GridBagConstraints();
 
@@ -176,7 +181,7 @@ public class GUI extends JFrame implements ActionListener{
     /**
      * Setup all panels
      */
-    public void setupPanels() {
+    private void setupPanels() {
         // Container board
         containerBoard = new JPanel(new GridBagLayout());
         containerBoard.setPreferredSize(new Dimension(150,600));
@@ -333,9 +338,7 @@ public class GUI extends JFrame implements ActionListener{
      * picked
      */
 
-    private void parseLine(double x1, double y1, double x2, double y2) {
-        canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2);
-    }
+    private void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
 
     private void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
@@ -364,18 +367,47 @@ public class GUI extends JFrame implements ActionListener{
 
     private void undo(){canvas.undo();}
 
+    private void readCommand(String command){canvas.setOpenCoordinates(command);}
+
     private void FillClick(String hex) {canvas.setFillClick(hex);}
 
     public String returnFile() { // Return the vecFile string from the canvas class.
         return canvas.returnFile();
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) {
+            System.out.println("uhh");
+            if(canvas.returnCounter() > 0){
+                undo();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Error: Nothing left to undo", "Empty", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
     public void actionPerformed(ActionEvent e) {
+        this.requestFocusInWindow();
         Object btnSrc = e.getSource();
 
         if(btnSrc == undo){
-            if(canvas.returnDraw() > 0){
+            if(canvas.returnCounter() > 0){
                 undo();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Error: Nothing left to undo", "Empty", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
@@ -612,15 +644,18 @@ public class GUI extends JFrame implements ActionListener{
                                 VECfileTEST = readerT.readLine();
                                 counter++;
                             }
+                            GUI cool = new GUI(getFile + "\n", fc.getSelectedFile().getAbsolutePath());
+
                             while (VECfile != null) {
-                                getFile += VECfile;
-                                if (counterSTOP < counter - 1) { // If the file isn't at the end add another line
-                                    getFile += "\n";
+                                String hold = VECfile;
+                                if (counterSTOP < counter) { // If the file isn't at the end add another line
+                                    hold += "\n";
                                 }
+
+                                cool.readCommand(hold);//add command into arraylist
                                 counterSTOP++;
                                 VECfile = readerChoose.readLine();
                             }
-                            GUI cool = new GUI(getFile + "\n", fc.getSelectedFile().getAbsolutePath());
                             if (file.length() == 0) {
                                 canvas.setVisible(false);
                             }
@@ -738,6 +773,6 @@ public class GUI extends JFrame implements ActionListener{
     // Main class, run GUI.
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         new GUI("", "untitled");
-    }
 
+    }
 }
