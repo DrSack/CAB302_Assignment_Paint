@@ -413,7 +413,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         if (btnSrc == outline && !OutlineOrFill) { // Change outline colour of Shape
             OutlineOrFill= true;
             ColourClick(penC);
-            readCommand("FILL OFF"+"\n");
             parseFillOff();
             fill.setForeground(null);
             outline.setForeground(Color.BLUE);

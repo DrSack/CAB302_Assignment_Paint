@@ -71,19 +71,17 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     public void undo(){
-
-
         if(ExCommands.size() > 0){//Deletes extra commands if it is a PEN or FILL Colour
-            int i = ExCommands.get(ExCommands.size()-1);//If FILL or PEN is behind said command then only delete itself
+            int i = ExCommands.get(ExCommands.size()-1);
             System.out.println(i);
             System.out.println(commands.size()-1);
-            if(i == commands.size()-1){
+            if(i == commands.size()-1){//If FILL or PEN is behind said command then only delete itself
                 System.out.println("found");
                 commands.remove(commands.size()-1);
                 ExCommands.remove(ExCommands.size()-1);
                 if(ExCommands.size() > 0){
                     i = ExCommands.get(ExCommands.size()-1);
-                if(commands.size()-1 == i){
+                if(commands.size()-1 == i){//IF there is another command even if its the last string, delete it.
                     commands.remove(commands.size()-1);
                     ExCommands.remove(ExCommands.size()-1);
                 }
@@ -98,7 +96,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             }
         }
 
-        Draw.remove(Draw.size()-1);
+        Draw.remove(Draw.size()-1);// Delete the regular command.
         commands.remove(commands.size()-1);
 
         String vecFile = "";
@@ -168,7 +166,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void setFillClick(String hex) {
         //add the counter to the track array
-        System.out.println("work");
         f = (Color.decode(hex));
         colourtemp ="FILL "+hex.toUpperCase()+"\n"; // temporarily store the VEC command
         Filling = true;
