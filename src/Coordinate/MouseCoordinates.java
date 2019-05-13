@@ -15,6 +15,14 @@ public class MouseCoordinates {
         mousey = (double) y/height;
     }
 
+    public void setMousex(double mousex) {
+        this.mousex = mousex;
+    }
+
+    public void setMousey(double mousey) {
+        this.mousey = mousey;
+    }
+
     public double getX(){ return  mousex; }
 
     public double getY(){

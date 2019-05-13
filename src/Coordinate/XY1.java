@@ -8,6 +8,13 @@ public class XY1 extends MouseCoordinates{
         mousex = (double) x/width;
         mousey = (double) y/height;
     }
+    public void setMousex(double mousex) {
+        this.mousex = mousex;
+    }
+
+    public void setMousey(double mousey) {
+        this.mousey = mousey;
+    }
 
     public double getX(){ return  mousex; }
 

@@ -13,8 +13,8 @@ public class Ellipse extends ShapesDrawn{
     }
 
     @Override
-    public void draw(Graphics g) {
-        if(getFill()){
+    public void draw(Graphics g) {//Draw the Ellipse
+        if(getFill()){//If this particular shape has fill enabled fill the oval
             g.setColor(getFillC());
             if (getX2() <= getX1() && getY2() <= getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
                 g.fillOval(getX2(),getY2(),getX1()-getX2(),getY1()-getY2());
@@ -31,7 +31,7 @@ public class Ellipse extends ShapesDrawn{
 
         }
 
-        g.setColor(getPenC());
+        g.setColor(getPenC());//Draw the outline.
         if (getX2() <= getX1() && getY2() <= getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
             g.drawOval(getX2(),getY2(),getX1()-getX2(),getY1()-getY2());
         }

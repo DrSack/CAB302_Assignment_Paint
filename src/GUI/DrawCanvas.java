@@ -24,30 +24,24 @@ import java.util.ArrayList;
 public class DrawCanvas extends JPanel implements MouseListener, MouseMotionListener {
     private boolean drawingline = false;
     private boolean Filling = false;
-    private  boolean Pen = false;
+    private boolean Pen = false;
     private String colourtemp ="";
     private String pentemp = "";
+    private String tempf;
+
+    TruthValues t = new TruthValues();
 
     private ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>();
     private ArrayList<String> polylines = new ArrayList<>();
     private ArrayList<String> commands = new ArrayList<>();
 
-    boolean PlotTruth = false;
-    boolean LineTruth = false;
-    boolean RecTruth = false;
-    boolean ElliTruth = false;
-    boolean PolyTruth = false;
-
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
     private Color c = Color.black;
     private Color f;
-    private String tempf;
 
 
     private int MouseIncrement = 0;
 
-    private int[] x1Cor;
-    private int[] y1Cor;
     private double currentX, currentY, oldX, oldY, startX, startY;
 
     private MouseCoordinates Mxy = new XY1();
@@ -101,16 +95,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void setColourClick(String hex) {
         c = (Color.decode(hex));
         pentemp = "PEN "+hex.toUpperCase()+"\n"; // temporarily store the VEC command.
-        Filling = false;
+        offFill();
         Pen = true;
     }
-
 
     public void open(){
         pentemp = "PEN #000000"+"\n"; // temporarily store the VEC command.
         c = Color.black;
         f = Color.white;
-        Filling = false;
+        offFill();
         Pen = true;
     }
 
@@ -128,19 +121,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     // Clear the entire canvas and reset all values
     public void clearCanvas() {
         Draw.clear();
-        drawingline = false;
-        Filling = false;
-        PlotTruth = false;
-        LineTruth = false;
-        RecTruth = false;
-        ElliTruth = false;
-        PolyTruth = false;
+        offFill();
+        t.resetTruth();
         colourtemp ="";
+        drawingline = false;
     }
 
     // Add the hex code pen value to an ArrayList and add the counter value.
     public void SetColour(String hex) {
-        Filling = false;
+        offFill();
         System.out.println(hex);
         c = (Color.decode(hex));
     }
@@ -150,12 +139,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         f = (Color.decode(hex)); //Add the Hex colour code to the Fill arraylist
     }
 
-    public void offFill() {
+    public void offFill(){
+        Filling = false;
     }
 
     // Set coordinates for Lines or Plotting
     public void SetCoordinateDrawingPlotting(double X1, double Y1, double X2, double Y2) {
-        Draw.add(new LineOrPlot(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),c));
+        Draw.add(new LineOrPlot(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,c, f));
     }
 
     // Set coordinates for Rectangle
@@ -168,7 +158,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         Draw.add(new Ellipse(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,c,f));
     }
 
-
     public void SetCoordinatePolygon(double xP[], double yP[]) {
         int num = xP.length;
 
@@ -176,8 +165,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double holderY;
 
         // Initialize x1Cor and y1Cor
-        x1Cor = new int[num];
-        y1Cor = new int[num];
+        int[] x1Cor = new int[num];
+        int[] y1Cor = new int[num];
         String str = "";
 
         // For loop to add coordinates into arrayLine
@@ -193,9 +182,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
         polylines.add(str);
     }
-
-    // Pass an index and sets each X,Y value within the XYtrack class. Return the index value.
-
     /**
      * Whether this.repaint the paint method will be run through.
      *
@@ -204,24 +190,23 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void paint(Graphics g) {
         super.paint(g);
 
-        for(ShapesDrawn s : Draw){
-            s.resize(this.getWidth(),this.getHeight());
-            s.draw(g);
-        }
-
         // Set current mouse X,Y coordinates
         int x1 = (int)(Mxy.getX()* this.getWidth());
         int y1 = (int)(Mxy.getY()* this.getHeight());
         int x2 = (int)(Mxy2.getX()* this.getWidth());
         int y2 = (int)(Mxy2.getY()* this.getHeight());
 
+        for(ShapesDrawn s : Draw){
+            s.resize(this.getWidth(),this.getHeight());
+            s.draw(g);
+        }
+
         if (drawingline) { // If the user is still dragging the shapes, draw the shapes temporarily.
             g.setColor(c);
-
-            if (LineTruth) { // Temporarily draw a line
+            if (t.isLineTruth()) { // Temporarily draw a line
                 g.drawLine(x1, y1, x2, y2);
             }
-            if (RecTruth) { // Temporarily draw a rectangle
+            if (t.isRecTruth()) { // Temporarily draw a rectangle
                 if (x2 <= x1 && y2 <= y1) {
                     g.drawRect(x2,y2,x1-x2,y1-y2);
                 }
@@ -235,7 +220,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     g.drawRect(x1,y1,x2-x1,y2-y1);
                 }
             }
-            if (ElliTruth){ // Temporarily draw an Ellipse.
+            if (t.isElliTruth()){ // Temporarily draw an Ellipse.
                 if (x2 <= x1 && y2 <= y1) {
                     g.drawOval(x2,y2,x1-x2,y1-y2);
                 }
@@ -249,7 +234,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     g.drawOval(x1,y1,x2-x1,y2-y1);
                 }
             }
-            if (PolyTruth){
+            if (t.isPolyTruth()){
                 g.drawLine(x1, y1, x2, y2);
             }
         }
@@ -282,7 +267,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             Pen = false; //Deactivate to not add more string to commands arraylist.
         }
 
-        if (PlotTruth) { // If only plotting then get the position, add command to string, then repaint.
+        if (t.isPlotTruth()) { // If only plotting then get the position, add command to string, then repaint.
             Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
             SetCoordinateDrawingPlotting(Mxy.getX(), Mxy.getY(), Mxy.getX(), Mxy.getY());
             commands.add("PLOT " + "0" + df.format(Mxy.getX()) + " 0" + df.format(Mxy.getY()) + "\n");
@@ -290,7 +275,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
 
         // If polygon button is selected, able to draw polygon
-        if (PolyTruth) {
+        if (t.isPolyTruth()) {
             //** First left click gets position, adds string into commands arraylist, placeholders for x1 and y1 coordinates **//
             //**Increments the mouse clicked**//
             if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
@@ -333,6 +318,18 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mouseDragged(MouseEvent e) {
         Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        if ((Mxy2.getX())< 0.0) {
+            Mxy2.setMousex(0.0);
+        }
+        if ((Mxy2.getX())> 1.0) {
+            Mxy2.setMousex(1.0);
+        }
+        if (Mxy2.getY() < 0.0) {
+            Mxy2.setMousey(0.0);
+        }
+        if (Mxy2.getY() > 1.0) {
+            Mxy2.setMousey(1.0);
+        }
         drawingline = true;
         this.repaint();
     }
@@ -348,12 +345,17 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double mx2 = Mxy2.getX();
         double my2 = Mxy2.getY();
 
-        if (mx2 > this.getWidth()) {
-            mx2 = this.getWidth();
+        if ((Mxy2.getX())< 0.0) {
+            mx2 = 0.0;
         }
-
-        if (my2 > this.getHeight()) {
-            my2 = this.getHeight();
+        if ((Mxy2.getX())> 1.0) {
+            mx2 = 1.0;
+        }
+        if (Mxy2.getY() < 0.0) {
+            my2 = 0.0;
+        }
+        if (Mxy2.getY() > 1.0) {
+            my2 = 1.0;
         }
 
         //Convert the double formats to String with 2decimal places.
@@ -362,18 +364,18 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         String x2 = df.format(mx2);
         String y2 = df.format(my2);
 
-        if(LineTruth) { // If Line tool is picked then draw a line
+        if(t.isLineTruth()) { // If Line tool is picked then draw a line
             SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
             commands.add("LINE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
         }
 
-        if (RecTruth) { // If Rectangle tool is picked then draw a rectangle.
+        if (t.isRecTruth()) { // If Rectangle tool is picked then draw a rectangle.
             SetCoordinateRectangle(mx1, my1, mx2, my2);
             // Add mouse coordinates to commands arraylist
             commands.add("RECTANGLE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
         }
 
-        if (ElliTruth) { // If Ellipse tool is picked then draw an ellipse.
+        if (t.isElliTruth()) { // If Ellipse tool is picked then draw an ellipse.
             SetCoordinateEllipse(mx1, my1, mx2, my2);
             // Add mouse coordinates to commands arraylist
             commands.add("ELLIPSE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");

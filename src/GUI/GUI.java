@@ -487,44 +487,28 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
          */
 
         if (btnSrc == toolPlot) {
-            canvas.PlotTruth = true;
-            canvas.LineTruth = false;
-            canvas.RecTruth = false;
-            canvas.ElliTruth = false;
-            canvas.PolyTruth = false;
-
+            canvas.t.resetTruth();
+            canvas.t.setPlotTruth();
         }
 
         if (btnSrc == toolLine) {
-            canvas.PlotTruth = false;
-            canvas.LineTruth = true;
-            canvas.RecTruth = false;
-            canvas.ElliTruth = false;
-            canvas.PolyTruth = false;
+            canvas.t.resetTruth();
+            canvas.t.setLineTruth();
         }
 
         if (btnSrc == toolRect) {
-            canvas.PlotTruth = false;
-            canvas.LineTruth = false;
-            canvas.RecTruth = true;
-            canvas.ElliTruth = false;
-            canvas.PolyTruth = false;
+            canvas.t.resetTruth();
+            canvas.t.setRecTruth();
         }
 
         if (btnSrc == toolEllipse){
-            canvas.PlotTruth = false;
-            canvas.LineTruth = false;
-            canvas.RecTruth = false;
-            canvas.ElliTruth = true;
-            canvas.PolyTruth = false;
+            canvas.t.resetTruth();
+            canvas.t.setElliTruth();
         }
 
         if (btnSrc == toolPolygon){
-            canvas.PlotTruth = false;
-            canvas.LineTruth = false;
-            canvas.RecTruth = false;
-            canvas.ElliTruth = false;
-            canvas.PolyTruth = true;
+            canvas.t.resetTruth();
+            canvas.t.setPolyTruth();
         }
 
         if (btnSrc == create) { // Create a new JFrame Window.
