@@ -1,10 +1,8 @@
 package GUI;
 
 import Coordinate.*;
-import Tools.Ellipse;
-import Tools.LineOrPlot;
+import Tools.*;
 import Tools.Rectangle;
-import Tools.ShapesDrawn;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,16 +23,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private boolean drawingline = false;
     private boolean Filling = false;
     private boolean Pen = false;
+    private int tempEx;
     private String colourtemp ="";
     private String pentemp = "";
     private String tempf;
 
-    TruthValues t = new TruthValues();
-
-    private ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>();
+    private ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>();//Setup arraylist for storing shape information.
     private ArrayList<String> polylines = new ArrayList<>();
-    private ArrayList<String> commands = new ArrayList<>();
-    private ArrayList<Integer> ExCommands = new ArrayList<>();
+    private ArrayList<String> commands = new ArrayList<>();//Store all commands here
+    private ArrayList<Integer> ExCommands = new ArrayList<>();//the index value of every PEN and FILL in commands arraylist.
 
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
     private Color c = Color.black;
@@ -47,6 +44,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     private MouseCoordinates Mxy = new XY1();
     private MouseCoordinates Mxy2 = new XY2();
+    TruthValues t = new TruthValues();
 
     /**
      * This is the contructor which passes the string vec parameter to commands arraylist, where the class will add new lines
@@ -74,14 +72,25 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     public void undo(){
 
-        if(ExCommands.size() > 0){
-            int i = ExCommands.get(ExCommands.size()-1);
+
+        if(ExCommands.size() > 0){//Deletes extra commands if it is a PEN or FILL Colour
+            int i = ExCommands.get(ExCommands.size()-1);//If FILL or PEN is behind said command then only delete itself
+            System.out.println(i);
+            System.out.println(commands.size()-1);
             if(i == commands.size()-1){
                 System.out.println("found");
                 commands.remove(commands.size()-1);
                 ExCommands.remove(ExCommands.size()-1);
+                if(ExCommands.size() > 0){
+                    i = ExCommands.get(ExCommands.size()-1);
+                if(commands.size()-1 == i){
+                    commands.remove(commands.size()-1);
+                    ExCommands.remove(ExCommands.size()-1);
+                }
+                }
             }
-            else if(i == commands.size()){
+
+            else if(i == commands.size()){//If FILL or PEN is infront of said command then delete the command and itself.
                 System.out.println("found");
                 commands.remove(commands.size()-1);
                 commands.remove(commands.size()-1);
@@ -91,41 +100,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         Draw.remove(Draw.size()-1);
         commands.remove(commands.size()-1);
+
         String vecFile = "";
         System.out.println("Commands left: "+commands.size());
-
         for (String command : commands) {
             vecFile += command;
         }
         System.out.println(vecFile);
+
+
         this.repaint();
-    }
-
-    /**
-     * This method is called from the GUI whether the button "fill" is enabled, and the colours picked also have
-     * fill button enabled.
-     *
-     * @param hex passes the hex string and puts it into the Fill array
-     */
-    public void setFillClick(String hex) {
-        //add the counter to the track array
-        System.out.println("work");
-        f = (Color.decode(hex));
-        colourtemp ="FILL "+hex.toUpperCase()+"\n"; // temporarily store the VEC command
-        Filling = true;
-    }
-
-    /**
-     * This method is called from the GUI whether the button "outline" is enabled, and the colours picked also have
-     * outline button enabled.
-     *
-     * @param hex passes the hex string and puts it into the colour array
-     */
-    public void setColourClick(String hex) {
-        c = (Color.decode(hex));
-        pentemp = "PEN "+hex.toUpperCase()+"\n"; // temporarily store the VEC command.
-        offFill();
-        Pen = true;
     }
 
     public void open(){
@@ -150,10 +134,25 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     // Clear the entire canvas and reset all values
     public void clearCanvas() {
         Draw.clear();
+        ExCommands.clear();
+        commands.clear();
         offFill();
         t.resetTruth();
         colourtemp ="";
         drawingline = false;
+    }
+
+    /**
+     * This method is called from the GUI whether the button "outline" is enabled, and the colours picked also have
+     * outline button enabled.
+     *
+     * @param hex passes the hex string and puts it into the colour array
+     */
+    public void setColourClick(String hex) {
+        c = (Color.decode(hex));
+        pentemp = "PEN "+hex.toUpperCase()+"\n"; // temporarily store the VEC command.
+        offFill();
+        Pen = true;
     }
 
     // Add the hex code pen value to an ArrayList and add the counter value.
@@ -161,6 +160,19 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         offFill();
         System.out.println(hex);
         c = (Color.decode(hex));
+    }
+    /**
+     * This method is called from the GUI whether the button "fill" is enabled, and the colours picked also have
+     * fill button enabled.
+     *
+     * @param hex passes the hex string and puts it into the Fill array
+     */
+    public void setFillClick(String hex) {
+        //add the counter to the track array
+        System.out.println("work");
+        f = (Color.decode(hex));
+        colourtemp ="FILL "+hex.toUpperCase()+"\n"; // temporarily store the VEC command
+        Filling = true;
     }
 
     public void SetFill(String hex) {
@@ -231,41 +243,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
 
         if (drawingline) { // If the user is still dragging the shapes, draw the shapes temporarily.
-            g.setColor(c);
-            if (t.isLineTruth()) { // Temporarily draw a line
-                g.drawLine(x1, y1, x2, y2);
-            }
-            if (t.isRecTruth()) { // Temporarily draw a rectangle
-                if (x2 <= x1 && y2 <= y1) {
-                    g.drawRect(x2,y2,x1-x2,y1-y2);
-                }
-                else if (x2 <= x1) {
-                    g.drawRect(x2,y1,x1-x2,y2-y1);
-                }
-                else if (y2 <= y1) {
-                    g.drawRect(x1,y2,x2-x1,y1-y2);
-                }
-                else {
-                    g.drawRect(x1,y1,x2-x1,y2-y1);
-                }
-            }
-            if (t.isElliTruth()){ // Temporarily draw an Ellipse.
-                if (x2 <= x1 && y2 <= y1) {
-                    g.drawOval(x2,y2,x1-x2,y1-y2);
-                }
-                else if (x2 <= x1) {
-                    g.drawOval(x2,y1,x1-x2,y2-y1);
-                }
-                else if (y2 <= y1) {
-                    g.drawOval(x1,y2,x2-x1,y1-y2);
-                }
-                else {
-                    g.drawOval(x1,y1,x2-x1,y2-y1);
-                }
-            }
-            if (t.isPolyTruth()){
-                g.drawLine(x1, y1, x2, y2);
-            }
+            TemporaryDraw Temp = new TemporaryDraw();
+            Temp.temporary(g,x1,y1,x2,y2,c,f,t.isLineTruth(),t.isRecTruth(),t.isElliTruth(),t.isPolyTruth(), Filling);
         }
     }
 
@@ -277,23 +256,36 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mousePressed(MouseEvent e) { // If mouse is pressed do something.....
         // Set the X1,Y1 coordinates to the Mousetrack class.
+        Boolean DoubleC = false;
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
 
         if(Filling){ // If the user decides to draw with a fill colour present
-            System.out.println(f.toString());
-            if(colourtemp != tempf){
+            if(Pen){
+                DoubleC = true;
+            }
+            if(colourtemp != tempf || ExCommands.size() < tempEx){
                 tempf = colourtemp;
                 commands.add(colourtemp); //add fill command to commands arraylist
                 ExCommands.add(commands.size());
+                if(ExCommands.size() < tempEx){
+                    Pen = true;
+                    DoubleC = true;
+                }
+                tempEx = ExCommands.size();
             }
         }
 
         if(Pen){ // If the user decides to draw with a colour outline present
             commands.add(pentemp); //Add outline colour command
             ExCommands.add(commands.size());
+            tempEx = commands.size();
             if(Filling){
-                commands.add("FILL OFF" +"\n");
-                ExCommands.add(commands.size());
+                if(!DoubleC){
+                    commands.add("FILL OFF" +"\n");
+                    ExCommands.add(commands.size());
+                    tempEx = commands.size();
+                }
+
             }
             Pen = false; //Deactivate to not add more string to commands arraylist.
         }
