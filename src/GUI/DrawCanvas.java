@@ -34,6 +34,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>();
     private ArrayList<String> polylines = new ArrayList<>();
     private ArrayList<String> commands = new ArrayList<>();
+    private ArrayList<Integer> ExCommands = new ArrayList<>();
 
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
     private Color c = Color.black;
@@ -60,6 +61,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     public void setOpenCoordinates(String command){
         commands.add(command);
+        if(command.contains("PEN") || command.contains("FILL")){
+            if(commands.size() > 0) {
+                ExCommands.add(commands.size());
+            }
+        }
     }
 
     public int returnCounter(){
@@ -67,8 +73,31 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     public void undo(){
+
+        if(ExCommands.size() > 0){
+            int i = ExCommands.get(ExCommands.size()-1);
+            if(i == commands.size()-1){
+                System.out.println("found");
+                commands.remove(commands.size()-1);
+                ExCommands.remove(ExCommands.size()-1);
+            }
+            else if(i == commands.size()){
+                System.out.println("found");
+                commands.remove(commands.size()-1);
+                commands.remove(commands.size()-1);
+                ExCommands.remove(ExCommands.size()-1);
+            }
+        }
+
         Draw.remove(Draw.size()-1);
         commands.remove(commands.size()-1);
+        String vecFile = "";
+        System.out.println("Commands left: "+commands.size());
+
+        for (String command : commands) {
+            vecFile += command;
+        }
+        System.out.println(vecFile);
         this.repaint();
     }
 
@@ -255,14 +284,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             if(colourtemp != tempf){
                 tempf = colourtemp;
                 commands.add(colourtemp); //add fill command to commands arraylist
+                ExCommands.add(commands.size());
             }
         }
 
         if(Pen){ // If the user decides to draw with a colour outline present
-
             commands.add(pentemp); //Add outline colour command
+            ExCommands.add(commands.size());
             if(Filling){
                 commands.add("FILL OFF" +"\n");
+                ExCommands.add(commands.size());
             }
             Pen = false; //Deactivate to not add more string to commands arraylist.
         }
