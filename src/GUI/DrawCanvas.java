@@ -157,7 +157,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     // Add the hex code pen value to an ArrayList and add the counter value.
     public void SetColour(String hex) {
-        offFill();
         System.out.println(hex);
         c = (Color.decode(hex));
     }
