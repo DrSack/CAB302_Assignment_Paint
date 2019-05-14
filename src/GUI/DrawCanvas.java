@@ -23,7 +23,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private boolean drawingline = false;
     private boolean Filling = false;
     private boolean Pen = false;
-    private int tempEx;
+    private int tempEx;// Stores the last known integer to keep track of ExCommands
     private String colourtemp ="";
     private String pentemp = "";
     private String tempf;
@@ -36,7 +36,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
     private Color c = Color.black;
     private Color f;
-
 
     private int MouseIncrement = 0;
 
@@ -70,50 +69,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         return Draw.size();
     }
 
-    public void undo(){
-        if(ExCommands.size() > 0){//Deletes extra commands if it is a PEN or FILL Colour
-            int i = ExCommands.get(ExCommands.size()-1);
-            System.out.println(i);
-            System.out.println(commands.size()-1);
-            if(i == commands.size()-1){//If FILL or PEN is behind said command then only delete itself
-                System.out.println("found");
-                commands.remove(commands.size()-1);
-                ExCommands.remove(ExCommands.size()-1);
-                if(ExCommands.size() > 0){
-                    i = ExCommands.get(ExCommands.size()-1);
-                if(commands.size()-1 == i){//IF there is another command even if its the last string, delete it.
-                    commands.remove(commands.size()-1);
-                    ExCommands.remove(ExCommands.size()-1);
-                }
-                }
-            }
-
-            else if(i == commands.size()){//If FILL or PEN is infront of said command then delete the command and itself.
-                System.out.println("found");
-                commands.remove(commands.size()-1);
-                commands.remove(commands.size()-1);
-                ExCommands.remove(ExCommands.size()-1);
-            }
-        }
-
-        Draw.remove(Draw.size()-1);// Delete the regular command.
-        commands.remove(commands.size()-1);
-
-        String vecFile = "";
-        System.out.println("Commands left: "+commands.size());
-        for (String command : commands) {
-            vecFile += command;
-        }
-        System.out.println(vecFile);
-
-
-        this.repaint();
-    }
 
     public void open(){
         pentemp = "PEN #000000"+"\n"; // temporarily store the VEC command.
         c = Color.black;
-        f = Color.white;
         offFill();
         Pen = true;
     }
@@ -129,6 +88,42 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         return vecFile;
     }
 
+    public void undo(){
+        if(ExCommands.size() > 0){//Deletes extra commands if it is a PEN or FILL Colour
+            int i = ExCommands.get(ExCommands.size()-1);
+            if(i == commands.size()-1){//If FILL or PEN is behind said command then only delete itself
+                System.out.println("found");
+                commands.remove(commands.size()-1);
+                ExCommands.remove(ExCommands.size()-1);
+                if(ExCommands.size() > 0){
+                    i = ExCommands.get(ExCommands.size()-1);
+                    if(commands.size()-1 == i){//IF there is another command even if its the last string, delete it.
+                        commands.remove(commands.size()-1);
+                        ExCommands.remove(ExCommands.size()-1);
+                    }
+                }
+            }
+
+            else if(i == commands.size()){//If FILL or PEN is infront of said command then delete the command and itself.
+                System.out.println("found");
+                commands.remove(commands.size()-1);
+                commands.remove(commands.size()-1);
+                ExCommands.remove(ExCommands.size()-1);
+            }
+        }
+
+        Draw.remove(Draw.size()-1);// Delete the regular command.
+        commands.remove(commands.size()-1);
+        this.repaint();
+
+        String vecFile = "";
+        System.out.println("Commands left: "+commands.size());
+        for (String command : commands) {
+            vecFile += command;
+        }
+        System.out.println(vecFile);
+    }
+
     // Clear the entire canvas and reset all values
     public void clearCanvas() {
         Draw.clear();
@@ -137,6 +132,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         offFill();
         t.resetTruth();
         colourtemp ="";
+        pentemp = "";
+        tempEx = 0;
+        tempf = "";
         drawingline = false;
     }
 
@@ -155,7 +153,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     // Add the hex code pen value to an ArrayList and add the counter value.
     public void SetColour(String hex) {
-        System.out.println(hex);
         c = (Color.decode(hex));
     }
     /**
@@ -275,14 +272,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             commands.add(pentemp); //Add outline colour command
             ExCommands.add(commands.size());
             tempEx = commands.size();
-            if(Filling){
                 if(!DoubleC){
                     commands.add("FILL OFF" +"\n");
                     ExCommands.add(commands.size());
                     tempEx = commands.size();
                 }
-
-            }
             Pen = false; //Deactivate to not add more string to commands arraylist.
         }
 

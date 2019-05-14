@@ -46,19 +46,19 @@ public abstract class ShapesDrawn {//Initialize variables
 
     public abstract void draw(Graphics g);
 
-    int getX1() {// return x1
+    public int getX1() {// return x1
         return x1;
     }
 
-    int getY1() {// return y1
+    public int getY1() {// return y1
         return y1;
     }
 
-    int getX2() {// return x2
+    public int getX2() {// return x2
         return x2;
     }
 
-    int getY2() {// return y2
+    public int getY2() {// return y2
         return y2;
     }
 
@@ -71,16 +71,16 @@ public abstract class ShapesDrawn {//Initialize variables
     }
 
     //Get penColour
-    Color getPenC(){
+    public Color getPenC(){
         return pen;
     }
     //Get fillColour
-    Color getFillC(){
+    public Color getFillC(){
         return filling;
     }
 
     //Return if the shape is filled or not
-    boolean getFill(){
+    public boolean getFill(){
         return Fill;
     }
 }

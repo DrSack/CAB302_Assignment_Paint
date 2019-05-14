@@ -49,10 +49,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     private JButton red = new JButton();
     private JButton extraColors;
 
-    private JComponent controlZ;
-
-    private String vecFile = "";
-
     /**
      This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
      The border itself is fixed, with a menu bar on the top, the buttons listed on the side, and the DrawCanvas class
@@ -60,7 +56,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
      * @param File is a string parameter that sets the vecFile string.
      * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
-    public GUI(String File, String title) {
+    public GUI(String title) {
         // Setup the JFrame
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(720, 610));
@@ -69,9 +65,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
 
         this.setTitle(title);
         this.setLayout(new BorderLayout(6, 0));
-
-        // Canvas
-        vecFile = File;
 
         canvasContainer = new JPanel(new BorderLayout());
         canvasContainer.setBackground(Color.LIGHT_GRAY);
@@ -511,7 +504,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         }
 
         if (btnSrc == create) { // Create a new JFrame Window.
-            new GUI("","untitled");
+            new GUI("untitled");
         }
 
         /**
@@ -627,7 +620,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
                             VECfileTEST = readerT.readLine();
                             counter++;
                         }
-                        GUI cool = new GUI(getFile + "\n", fc.getSelectedFile().getAbsolutePath());
+                        GUI cool = new GUI(fc.getSelectedFile().getAbsolutePath());
 
                         while (VECfile != null) {
                             String hold = VECfile;
@@ -755,7 +748,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
 
     // Main class, run GUI.
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        new GUI("", "untitled");
+        new GUI("untitled");
 
     }
 }
