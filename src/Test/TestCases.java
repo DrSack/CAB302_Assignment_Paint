@@ -116,7 +116,7 @@ class TestCases extends JPanel {
     void TestShapesFillTruth(){//Test if getFill returns true
         ArrayList<ShapesDrawn> Draw = new ArrayList<>();
         Draw.add(new LineOrPlot(1.0,1.0,1.0,1.0,300,300,true, Color.black,Color.WHITE));
-        assertEquals(true, Draw.get(0).getFill());
+        assertTrue(Draw.get(0).getFill());
     }
 
     @Test
@@ -140,11 +140,11 @@ class TestCases extends JPanel {
         Test.setPlotTruth();
         Test.setLineTruth();
         Test.setPolyTruth();
-        assertEquals(true, Test.isElliTruth());
-        assertEquals(true, Test.isRecTruth());
-        assertEquals(true, Test.isPlotTruth());
-        assertEquals(true, Test.isLineTruth());
-        assertEquals(true, Test.isPolyTruth());
+        assertTrue(Test.isElliTruth());
+        assertTrue(Test.isRecTruth());
+        assertTrue(Test.isPlotTruth());
+        assertTrue(Test.isLineTruth());
+        assertTrue(Test.isPolyTruth());
     }
 
     @Test
@@ -156,11 +156,11 @@ class TestCases extends JPanel {
         Test.setLineTruth();
         Test.setPolyTruth();
         Test.resetTruth();
-        assertEquals(false, Test.isElliTruth());
-        assertEquals(false, Test.isRecTruth());
-        assertEquals(false, Test.isPlotTruth());
-        assertEquals(false, Test.isLineTruth());
-        assertEquals(false, Test.isPolyTruth());
+        assertFalse(Test.isElliTruth());
+        assertFalse(Test.isRecTruth());
+        assertFalse(Test.isPlotTruth());
+        assertFalse(Test.isLineTruth());
+        assertFalse(Test.isPolyTruth());
     }
 
     @Test
