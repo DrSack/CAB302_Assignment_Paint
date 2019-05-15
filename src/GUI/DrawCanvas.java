@@ -30,8 +30,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private String tempf;
 
     private ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>();//Setup arraylist for storing shape information.
-    private ArrayList<String> polylines = new ArrayList<>();
     private ArrayList<String> commands = new ArrayList<>();//Store all commands here
+    private ArrayList<Double> polylines = new ArrayList<>();
     private ArrayList<Integer> ExCommands = new ArrayList<>();//the index value of every PEN and FILL in commands arraylist.
 
     private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
@@ -39,6 +39,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private Color f;
 
     private int MouseIncrement = 0;
+    private double[] xP, yP;
 
     private double currentX, currentY, oldX, oldY, startX, startY;
 
@@ -324,11 +325,17 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
                 String x1 = df.format(Mxy.getX());
                 String y1 = df.format(Mxy.getY());
+                double realX = Mxy.getX();
+                double realY = Mxy.getY();
                 this.currentX = Mxy.getX();
                 this.currentY = Mxy.getY();
                 this.startX = Mxy.getX();
                 this.startY = Mxy.getY();
                 commands.add("POLYGON " + "0" + x1 + " 0" + y1);
+                polylines.add(realX);
+                polylines.add(realY);
+
+
             }
             //** Second left click and every other click draws line **//
             else if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement > 0) {
@@ -341,7 +348,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 currentY = oldY;
                 String x2 = df.format(Mxy2.getX());
                 String y2 = df.format(Mxy2.getY());
+                double realX = Mxy.getX();
+                double realY = Mxy.getY();
                 commands.add(" 0" + x2 + " 0" + y2);
+                polylines.add(realX);
+                polylines.add(realY);
                 this.repaint();
             }
 
@@ -349,6 +360,18 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 2) {
                 SetCoordinateDrawingPlotting(oldX, oldY, startX, startY);
                 commands.add("\n");
+                xP = new double[polylines.size()/2];
+                yP = new double[polylines.size()/2];
+                for(int i = 0; i<polylines.size()/2; i++){
+                    xP[i] = polylines.get(2*i);
+                    yP[i] = polylines.get(2*i+1);
+                }
+                polylines.clear();
+                for(int i = 0; i<MouseIncrement; i++){
+                    Draw.remove(Draw.size()-1);
+                }
+                this.repaint();
+                SetCoordinatePolygon(xP, yP);
                 MouseIncrement = 0;
             }
             this.repaint();

@@ -126,4 +126,8 @@ public abstract class ShapesDrawn {//Initialize variables
     public boolean getFill(){
         return Fill;
     }
+
+    public Color SetColor(){
+        return pen;
+    }
 }
