@@ -28,6 +28,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private String colourtemp ="";
     private String pentemp = "";
     private String tempf;
+    private String polystr;
 
     private ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>();//Setup arraylist for storing shape information.
     private ArrayList<String> commands = new ArrayList<>();//Store all commands here
@@ -331,7 +332,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 this.currentY = Mxy.getY();
                 this.startX = Mxy.getX();
                 this.startY = Mxy.getY();
-                commands.add("POLYGON " + "0" + x1 + " 0" + y1);
+                polystr = ("POLYGON " + "0" + x1 + " 0" + y1);
                 polylines.add(realX);
                 polylines.add(realY);
 
@@ -350,7 +351,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 String y2 = df.format(Mxy2.getY());
                 double realX = Mxy.getX();
                 double realY = Mxy.getY();
-                commands.add(" 0" + x2 + " 0" + y2);
+                polystr += (" 0" + x2 + " 0" + y2);
                 polylines.add(realX);
                 polylines.add(realY);
                 this.repaint();
@@ -359,7 +360,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             //** Right click draws from x2 and y2 of the latest line to the start**//
             if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 2) {
                 SetCoordinateDrawingPlotting(oldX, oldY, startX, startY);
-                commands.add("\n");
+                polystr += "\n";
                 xP = new double[polylines.size()/2];
                 yP = new double[polylines.size()/2];
                 for(int i = 0; i<polylines.size()/2; i++){
@@ -373,6 +374,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 this.repaint();
                 SetCoordinatePolygon(xP, yP);
                 MouseIncrement = 0;
+                commands.add(polystr);
+
             }
             this.repaint();
         }
