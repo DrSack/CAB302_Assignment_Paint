@@ -53,7 +53,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
      This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
      The border itself is fixed, with a menu bar on the top, the buttons listed on the side, and the DrawCanvas class
      is for the rest of the JFrame.
-     * @param File is a string parameter that sets the vecFile string.
      * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
     public GUI(String title) {
@@ -373,6 +372,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
 
     }
 
+    /**
+     * If ctrl+z is pressed run the undo method, if the returncounter of the canvas is above 0 then do operations
+     * normally, but if it is below then display an error message.
+     * @param e will be used to get the key code for both ctrl and z
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) {
@@ -390,6 +394,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
 
     }
 
+    /**
+     *
+     * @param e this parameter is set to the source of the buttons which are used by the users to click
+     *          on buttons to activiate certain functionalities.
+     */
     public void actionPerformed(ActionEvent e) {
         this.requestFocusInWindow();
         Object btnSrc = e.getSource();
@@ -585,10 +594,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
          */
 
         if (btnSrc == open) {
-            BufferedReader reader;
-            BufferedReader readerT;
-            BufferedReader readerChoose;
-
             final JFileChooser fc = new JFileChooser();
             fc.setCurrentDirectory( new File( "./") ); // Set Directory to its root directory
 
@@ -599,23 +604,20 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                try {
-
-
-                    if (file.exists()) {
-                        reader = new BufferedReader((new FileReader(file)));
-                        readerT = new BufferedReader((new FileReader(file)));
-                        readerChoose = new BufferedReader((new FileReader(file)));
+                try {// Give out an exception error if a file doesnt exist
+                    if (file.exists()) {//If the file does exist
+                        BufferedReader reader = new BufferedReader((new FileReader(file)));
+                        BufferedReader readerT = new BufferedReader((new FileReader(file)));
+                        BufferedReader readerChoose = new BufferedReader((new FileReader(file)));
 
                         String VECfile = readerChoose.readLine();
                         String VECfileTEST = readerT.readLine();
                         String data = reader.readLine();
 
-                        double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-                        String getFile = ""; // Declare empty string
-
+                        double x1, y1, x2, y2;
                         int counter = 0; // Amount of lines count
                         int counterSTOP = 0; // Stop to notify the loop when to stop adding "\n"
+
                         while (VECfileTEST != null) { // This checks the amount of line the File has
                             VECfileTEST = readerT.readLine();
                             counter++;
@@ -636,7 +638,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
                             canvas.setVisible(false);
                         }
 
-                        while (data != null) {
+                        while (data != null) {//if there is data keep reading each line
                             if (data.contains("LINE")) {
                                 // Replaces PLOT with nothing
                                 data = data.replace("LINE ", "");
@@ -732,14 +734,14 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
                         canvas.setVisible(true);
                     }
 
-                    else{
+                    else{// Give an error message if the file does not exist.
                         JOptionPane.showMessageDialog(null, "Error: File not found", "Error", JOptionPane.INFORMATION_MESSAGE);
                     }
 
-                } catch (IOException e1) {
+                } catch (IOException e1) {// Catch IOEception
                     e1.printStackTrace();
                 }
-            } else if (returnVal == JFileChooser.CANCEL_OPTION) { // Do nothing/return to normal operations.
+            } else if (returnVal == JFileChooser.CANCEL_OPTION) { // Do nothing return to normal operations.
 
             }
 
@@ -747,7 +749,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     // Main class, run GUI.
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) {
         new GUI("untitled");
 
     }
