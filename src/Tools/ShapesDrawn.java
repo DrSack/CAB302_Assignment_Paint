@@ -9,6 +9,8 @@ import java.awt.*;
 public abstract class ShapesDrawn {//Initialize variables
     private int x1, y1, x2, y2;
     private double ox1,oy1,ox2,oy2;
+    private int x[], y[];
+    private double Ax[], Ay[];
 
     private Color pen;
     private Color filling;
@@ -44,6 +46,26 @@ public abstract class ShapesDrawn {//Initialize variables
         this.y2 = (int)(y2*height);
     }
 
+    ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling){
+        this.filling = filling;
+        this.pen = pen;
+        this.Fill = Fill;
+
+        this.x = new int[x.length];
+        this.y = new int[y.length];
+        this.Ay = new double[y.length];
+        this.Ax = new double[x.length];
+
+
+        for(int i = 0; i< x.length; i++){
+            Ax[i] = x[i];
+            Ay[i] = y[i];
+            this.x[i] = (int)(x[i]*width);
+            this.y[i] = (int)(y[i]*height);
+        }
+
+    }
+
     public abstract void draw(Graphics g);
 
     public int getX1() {// return x1
@@ -62,18 +84,34 @@ public abstract class ShapesDrawn {//Initialize variables
         return y2;
     }
 
+    public int[] getXarray(){// return all X coordinates in the array
+        return x;
+    }
+
+    public int[] getYarray(){// return all Y coordinates in the array
+        return y;
+    }
+
     //Everytime the window is resized scale the shape to the JPanels new dimensions
     public void resize(int width, int height) {
-    this.x1 = (int)(ox1*width);
-    this.y1 = (int)(oy1*height);
-    this.x2 = (int)(ox2*width);
-    this.y2 = (int)(oy2*height);
+        this.x1 = (int)(ox1*width);
+        this.y1 = (int)(oy1*height);
+        this.x2 = (int)(ox2*width);
+        this.y2 = (int)(oy2*height);
+
+//        for(int i = 0; i < x.length; i++){
+//            this.x[i] = (int)(Ax[i*width]);
+//            this.y[i] = (int)(Ay[i*height]);
+//        }
     }
+
+
 
     //Get penColour
     public Color getPenC(){
         return pen;
     }
+
     //Get fillColour
     public Color getFillC(){
         return filling;

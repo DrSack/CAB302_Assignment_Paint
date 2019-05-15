@@ -2,6 +2,7 @@ package GUI;
 
 import Coordinate.*;
 import Tools.*;
+import Tools.Polygon;
 import Tools.Rectangle;
 
 import javax.swing.*;
@@ -193,28 +194,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     public void SetCoordinatePolygon(double xP[], double yP[]) {
-        int num = xP.length;
-
-        double holderX;
-        double holderY;
-
-        // Initialize x1Cor and y1Cor
-        int[] x1Cor = new int[num];
-        int[] y1Cor = new int[num];
-        String str = "";
-
-        // For loop to add coordinates into arrayLine
-        for (int i = 0; i < num; i++) {
-            holderX = (xP[i] * this.getWidth());
-            x1Cor[i] = (int) holderX;
-            str += x1Cor[i] + " ";
-            for (int a = 0; a < 1; a++) {
-                holderY = (yP[i] * this.getHeight());
-                y1Cor[i] = (int) holderY;
-                str += y1Cor[i] + " ";
-            }
-        }
-        polylines.add(str);
+        Draw.add(new Polygon(xP, yP, this.getWidth(), this.getHeight(), Filling, c,f));
     }
     /**
      * Whether this.repaint the paint method will be run through.
