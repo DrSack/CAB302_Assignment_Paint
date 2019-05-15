@@ -15,8 +15,10 @@ public abstract class ShapesDrawn {//Initialize variables
     private Color pen;
     private Color filling;
 
-    private boolean Fill;
 
+
+    private boolean Fill;
+    private boolean Polygon;
 
     /**Set all variables of the particular shape
      *
@@ -47,9 +49,12 @@ public abstract class ShapesDrawn {//Initialize variables
     }
 
     ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling){
+
         this.filling = filling;
         this.pen = pen;
         this.Fill = Fill;
+        this.Polygon = true;
+
 
         this.x = new int[x.length];
         this.y = new int[y.length];
@@ -94,15 +99,20 @@ public abstract class ShapesDrawn {//Initialize variables
 
     //Everytime the window is resized scale the shape to the JPanels new dimensions
     public void resize(int width, int height) {
-        this.x1 = (int)(ox1*width);
-        this.y1 = (int)(oy1*height);
-        this.x2 = (int)(ox2*width);
-        this.y2 = (int)(oy2*height);
+        if(Polygon){
+            for(int i = 0; i < x.length; i++){
+                this.x[i] = (int)(Ax[i]*width);
+                this.y[i] = (int)(Ay[i]*height);
+            }
+        }
 
-//        for(int i = 0; i < x.length; i++){
-//            this.x[i] = (int)(Ax[i*width]);
-//            this.y[i] = (int)(Ay[i*height]);
-//        }
+        else{
+            this.x1 = (int)(ox1*width);
+            this.y1 = (int)(oy1*height);
+            this.x2 = (int)(ox2*width);
+            this.y2 = (int)(oy2*height);
+        }
+
     }
 
 
