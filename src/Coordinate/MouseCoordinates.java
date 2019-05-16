@@ -23,7 +23,7 @@ public class MouseCoordinates {
         this.mousey = mousey;
     }
 
-    public double getX(){ return  mousex; }
+    public double getX() { return  mousex; }
 
     public double getY(){
         return  mousey;

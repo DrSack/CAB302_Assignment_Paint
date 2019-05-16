@@ -32,7 +32,7 @@ public class TruthValues {
         RecTruth = true;
     }
 
-    public void resetTruth(){
+    public void resetTruth() {
         PlotTruth = false;
         LineTruth = false;
         RecTruth = false;
