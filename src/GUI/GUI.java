@@ -99,7 +99,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     /**
      * Change the size of the canvas based on the size of the window
      */
-    public void detectResize() {
+    private void detectResize() {
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 Component c = e.getComponent();
@@ -171,7 +171,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     * Setup all panels
+     * Setup all JPanels and their layout
      */
     private void setupPanels() {
         // Container board
@@ -205,7 +205,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     * Setup all colours
+     * Setup all colour buttons to make a color palette
      */
     private void setupColors() {
         black.setBackground(Color.BLACK);
@@ -258,7 +258,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     * Setup the buttons and associate the buttons created to the private variable Jbuttons.
+     * Setup the buttons and associate the buttons created to the private variable JButtons
      */
     private void setupButtons() {
         toolPlot = createButton("Plot");
@@ -269,7 +269,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     * Setup the buttons and associate the buttons created to the private variable JMenuItems.
+     * Setup the buttons and associate the buttons created to the private variable JMenuItems
      */
     private void setupMenuItemsFile() {
         create = createMenuItem("New");
@@ -279,7 +279,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     * Setup the buttons and associate the buttons created to the private variable JMenuItems.
+     * Setup the buttons and associate the buttons created to the private variable JMenuItems
      */
     private void setupMenuItemsEdit() {
         undo = createMenuItem("Undo");
@@ -287,7 +287,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     * Setup the MenuBar
+     * Setup the MenuBar with 2 JMenus File and Edit and add their JMenuItems
      */
     private void setupMenuBar() {
         // Menu bar
@@ -316,18 +316,17 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     *
-     * @param x1 is the x1 coordinate of what the current VECfile line
-     * @param y1 is the y1 coordinate of what the current VECfile line
-     * @param x2 is the x2 coordinate of what the current VECfile line
-     * @param y2 is the y2 coordinate of what the current VECfile line
-     *
      * All the parse methods below pass through the
      * xy1 amd xy2 coordinates to the canvas class in which it will add it onto an array to keep track of the
      * shapes drawn,
      *
      * Fill and Colour click methods also have an array that keeps track of whether they have been
      * picked
+     *
+     * @param x1 is the x1 coordinate of what the current VECfile line
+     * @param y1 is the y1 coordinate of what the current VECfile line
+     * @param x2 is the x2 coordinate of what the current VECfile line
+     * @param y2 is the y2 coordinate of what the current VECfile line
      */
 
     private void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
@@ -353,15 +352,15 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
 
     private void parseFillOff() { canvas.offFill(); }
 
-    private void ColourClick(String hex) { canvas.setColourClick(hex);}
+    private void ColourClick(String hex) { canvas.setColourClick(hex); }
 
-    private void open(){canvas.open();}
+    private void open() { canvas.open(); }
 
-    private void undo(){canvas.undo();}
+    private void undo() { canvas.undo(); }
 
-    private void readCommand(String command){canvas.setOpenCoordinates(command);}
+    private void readCommand(String command) { canvas.setOpenCoordinates(command); }
 
-    private void FillClick(String hex) {canvas.setFillClick(hex);}
+    private void FillClick(String hex) { canvas.setFillClick(hex); }
 
     public String returnFile() { // Return the vecFile string from the canvas class.
         return canvas.returnFile();
@@ -373,17 +372,17 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     * If ctrl+z is pressed run the undo method, if the returncounter of the canvas is above 0 then do operations
+     * If Ctrl+Z is pressed run the undo method, if the returnCounter of the canvas is above 0 then do operations
      * normally, but if it is below then display an error message.
      * @param e will be used to get the key code for both ctrl and z
      */
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) {
-            if(canvas.returnCounter() > 0){
+            if (canvas.returnCounter() > 0) {
                 undo();
             }
-            else{
+            else {
                 JOptionPane.showMessageDialog(null, "Error: Nothing left to undo", "Empty", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -395,19 +394,18 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     }
 
     /**
-     *
-     * @param e this parameter is set to the source of the buttons which are used by the users to click
-     *          on buttons to activiate certain functionalities.
+     * Find the source of the button clicks from users to do different things
+     * @param e this parameter is the ActionEvent that's detected from the users' mouse click
      */
     public void actionPerformed(ActionEvent e) {
         this.requestFocusInWindow();
         Object btnSrc = e.getSource();
 
-        if(btnSrc == undo){
-            if(canvas.returnCounter() > 0){
+        if (btnSrc == undo) {
+            if (canvas.returnCounter() > 0) {
                 undo();
             }
-            else{
+            else {
                 JOptionPane.showMessageDialog(null, "Error: Nothing left to undo", "Empty", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -486,7 +484,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
          * With the following other if statements below, these set the boolean values of the each tool
          * to either true or false, whether a specific button is clicked.
          */
-
         if (btnSrc == toolPlot) {
             canvas.t.resetTruth();
             canvas.t.setPlotTruth();
@@ -502,12 +499,12 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
             canvas.t.setRecTruth();
         }
 
-        if (btnSrc == toolEllipse){
+        if (btnSrc == toolEllipse) {
             canvas.t.resetTruth();
             canvas.t.setElliTruth();
         }
 
-        if (btnSrc == toolPolygon){
+        if (btnSrc == toolPolygon) {
             canvas.t.resetTruth();
             canvas.t.setPolyTruth();
         }
@@ -520,7 +517,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
          * The saveAs button when pressed essentially opens up the JFileChooser, and based on where the location
          * you pick, you can set the name of the VEC file and it will pass through the string vecFile through
          * FileWriter and save it with the name you have given it + .VEC
-         *
          */
 
         if (btnSrc == saveAs) { // If Save button is pressed
@@ -590,9 +586,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         /**
          * The open button essentially reads the .VEC passed through and depeding on the text put forth,
          * this will function differently, depending on the commands given by the VEC file opened.
-         *
          */
-
         if (btnSrc == open) {
             final JFileChooser fc = new JFileChooser();
             fc.setCurrentDirectory( new File( "./") ); // Set Directory to its root directory
@@ -604,8 +598,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                try {// Give out an exception error if a file doesnt exist
-                    if (file.exists()) {//If the file does exist
+                try { // Give out an exception error if a file doesnt exist
+                    if (file.exists()) { //If the file does exist
                         BufferedReader reader = new BufferedReader((new FileReader(file)));
                         BufferedReader readerT = new BufferedReader((new FileReader(file)));
                         BufferedReader readerChoose = new BufferedReader((new FileReader(file)));
@@ -638,7 +632,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
                             canvas.setVisible(false);
                         }
 
-                        while (data != null) {//if there is data keep reading each line
+                        while (data != null) { //if there is data keep reading each line
                             if (data.contains("LINE")) {
                                 // Replaces PLOT with nothing
                                 data = data.replace("LINE ", "");
@@ -734,11 +728,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
                         canvas.setVisible(true);
                     }
 
-                    else{// Give an error message if the file does not exist.
+                    else { // Give an error message if the file does not exist.
                         JOptionPane.showMessageDialog(null, "Error: File not found", "Error", JOptionPane.INFORMATION_MESSAGE);
                     }
 
-                } catch (IOException e1) {// Catch IOEception
+                } catch (IOException e1) { // Catch IOException
                     e1.printStackTrace();
                 }
             } else if (returnVal == JFileChooser.CANCEL_OPTION) { // Do nothing return to normal operations.
@@ -751,6 +745,5 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     // Main class, run GUI.
     public static void main(String[] args) {
         new GUI("untitled");
-
     }
 }

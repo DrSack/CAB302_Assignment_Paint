@@ -6,7 +6,7 @@ import java.awt.*;
  This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes
  *
  */
-public abstract class ShapesDrawn {//Initialize variables
+public abstract class ShapesDrawn { // Initialize variables
     private int x1, y1, x2, y2;
     private double ox1,oy1,ox2,oy2;
     private int x[], y[];
@@ -17,7 +17,6 @@ public abstract class ShapesDrawn {//Initialize variables
 
     private boolean Fill;
     private boolean Polygon;
-
 
     /**Set all variables of the particular shape
      *
@@ -47,7 +46,7 @@ public abstract class ShapesDrawn {//Initialize variables
         this.y2 = (int)(y2*height);
     }
 
-    ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling){
+    ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling) {
         this.filling = filling;
         this.pen = pen;
         this.Fill = Fill;
@@ -57,43 +56,35 @@ public abstract class ShapesDrawn {//Initialize variables
         this.Ay = new double[y.length];
         this.Ax = new double[x.length];
 
-
         for(int i = 0; i< x.length; i++){
             Ax[i] = x[i];
             Ay[i] = y[i];
             this.x[i] = (int)(x[i]*width);
             this.y[i] = (int)(y[i]*height);
         }
+
         Polygon = true;
     }
 
     public abstract void draw(Graphics g);
 
-    public int getX1() {// return x1
-        return x1;
-    }
+    public int getX1() { return x1; }
 
-    public int getY1() {// return y1
-        return y1;
-    }
+    public int getY1() { return y1; }
 
-    public int getX2() {// return x2
-        return x2;
-    }
+    public int getX2() { return x2; }
 
-    public int getY2() {// return y2
-        return y2;
-    }
+    public int getY2() { return y2; }
 
-    public int[] getXarray(){// return all X coordinates in the array
+    public int[] getXarray() { // Return all X coordinates in the array
         return x;
     }
 
-    public int[] getYarray(){// return all Y coordinates in the array
+    public int[] getYarray(){ // Return all Y coordinates in the array
         return y;
     }
 
-    //Everytime the window is resized scale the shape to the JPanels new dimensions
+    // Every time the window is resized scale the shape to the JPanels new dimensions
     public void resize(int width, int height) {
 
         if (Polygon) {
@@ -111,23 +102,22 @@ public abstract class ShapesDrawn {//Initialize variables
         }
     }
 
-
     //Get penColour
-    public Color getPenC(){
+    public Color getPenC() {
         return pen;
     }
 
     //Get fillColour
-    public Color getFillC(){
+    public Color getFillC() {
         return filling;
     }
 
     //Return if the shape is filled or not
-    public boolean getFill(){
+    public boolean getFill() {
         return Fill;
     }
 
-    public Color SetColor(){
+    public Color SetColor() {
         return pen;
     }
 }

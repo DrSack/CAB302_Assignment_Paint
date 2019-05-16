@@ -16,7 +16,7 @@ public class XY1 extends MouseCoordinates{
         this.mousey = mousey;
     }
 
-    public double getX(){ return  mousex; }
+    public double getX() { return  mousex; }
 
     public double getY(){
         return  mousey;
