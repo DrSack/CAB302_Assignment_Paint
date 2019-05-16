@@ -11,7 +11,7 @@ public class Polygon extends ShapesDrawn {
 
     @Override
     public void draw(Graphics g) {//Draws Polygon
-        if(getFill()){//If this particular shape has fill enabled fill the Rectangle
+        if(getFill()){//If this particular shape has fill enabled fill the Polygon
             g.setColor(getFillC());
             g.fillPolygon(getXarray(), getYarray(), getXarray().length);
         }

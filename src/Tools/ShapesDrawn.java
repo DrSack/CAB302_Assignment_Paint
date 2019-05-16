@@ -47,6 +47,12 @@ public abstract class ShapesDrawn {//Initialize variables
         this.y2 = (int)(y2*height);
     }
 
+    /**Set all variables of the particular shape
+     * @param x Set x coordinate into array
+     * @param y Set y coordinate into array
+     */
+
+    //Specifically for Polygons as it requires arrays to draw
     ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling){
         this.filling = filling;
         this.pen = pen;
@@ -68,6 +74,24 @@ public abstract class ShapesDrawn {//Initialize variables
     }
 
     public abstract void draw(Graphics g);
+
+    //Everytime the window is resized scale the shape to the JPanels new dimensions
+    public void resize(int width, int height) {
+
+        if (Polygon) {
+            for (int i = 0; i < x.length; i++) {
+                this.x[i] = (int) (Ax[i] * width);
+                this.y[i] = (int) (Ay[i] * height);
+            }
+        }
+
+        else {
+            this.x1 = (int) (ox1 * width);
+            this.y1 = (int) (oy1 * height);
+            this.x2 = (int) (ox2 * width);
+            this.y2 = (int) (oy2 * height);
+        }
+    }
 
     public int getX1() {// return x1
         return x1;
@@ -92,25 +116,6 @@ public abstract class ShapesDrawn {//Initialize variables
     public int[] getYarray(){// return all Y coordinates in the array
         return y;
     }
-
-    //Everytime the window is resized scale the shape to the JPanels new dimensions
-    public void resize(int width, int height) {
-
-        if (Polygon) {
-            for (int i = 0; i < x.length; i++) {
-                this.x[i] = (int) (Ax[i] * width);
-                this.y[i] = (int) (Ay[i] * height);
-            }
-        }
-
-        else {
-            this.x1 = (int) (ox1 * width);
-            this.y1 = (int) (oy1 * height);
-            this.x2 = (int) (ox2 * width);
-            this.y2 = (int) (oy2 * height);
-        }
-    }
-
 
     //Get penColour
     public Color getPenC(){

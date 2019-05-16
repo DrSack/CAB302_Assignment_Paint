@@ -319,8 +319,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         // If polygon button is selected, able to draw polygon
         if (t.isPolyTruth()) {
-            //** First left click gets position, adds string into commands arraylist, placeholders for x1 and y1 coordinates **//
-            //**Increments the mouse clicked**//
+            //First left click gets position, adds string into polystr and adds coordinates into polylines arrays,
+            //placeholders for x1 and y1 coordinates named realX and realY, also increments the mousecincrement every click
             if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
                 MouseIncrement++;
                 Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
@@ -335,10 +335,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 polystr = ("POLYGON " + "0" + x1 + " 0" + y1);
                 polylines.add(realX);
                 polylines.add(realY);
-
-
             }
-            //** Second left click and every other click draws line **//
+            //Second left click and every other click draws line, increments mouseincrement every click, adds coordinates
+            //polylines array, repaints the program every click to show line.
             else if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement > 0) {
                 MouseIncrement++;
                 Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
@@ -357,25 +356,23 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 this.repaint();
             }
 
-            //** Right click draws from x2 and y2 of the latest line to the start**//
-            if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 2) {
+            //Right click draws from x2 and y2 of the latest line to the start
+            if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 0) {
                 SetCoordinateDrawingPlotting(oldX, oldY, startX, startY);
-                polystr += "\n";
                 xP = new double[polylines.size()/2];
                 yP = new double[polylines.size()/2];
-                for(int i = 0; i<polylines.size()/2; i++){
+                for(int i = 0; i<polylines.size()/2; i++){ //Accesses the polylines array and setting x and y coordinates
                     xP[i] = polylines.get(2*i);
                     yP[i] = polylines.get(2*i+1);
                 }
-                polylines.clear();
-                for(int i = 0; i<MouseIncrement; i++){
+                for(int i = 0; i<MouseIncrement; i++){// Removes all the lines created based on how many mouse clicks
                     Draw.remove(Draw.size()-1);
                 }
-                this.repaint();
-                SetCoordinatePolygon(xP, yP);
-                MouseIncrement = 0;
-                commands.add(polystr);
-
+                polystr += "\n";
+                polylines.clear(); //Clears polylines to create another polygon shape
+                MouseIncrement = 0; //Sets mouseincrement to 0 to create another polygon shape
+                commands.add(polystr); // Adds polystr into the command list
+                SetCoordinatePolygon(xP, yP); //Redraws the polygon by calling this function
             }
             this.repaint();
         }
@@ -459,6 +456,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        //Used to temporarily draw polygon lines
         if(MouseIncrement >=1) {
             Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
             drawingline = true;
