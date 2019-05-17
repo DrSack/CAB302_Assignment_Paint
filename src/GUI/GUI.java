@@ -63,8 +63,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     public GUI(String title) {
         // Setup the JFrame
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setPreferredSize(new Dimension(720, 610));
-        this.setMinimumSize(new Dimension(600,435));
+        this.setPreferredSize(new Dimension(810, 700));
+        this.setMinimumSize(new Dimension(550,700));
         this.setLocation(new Point(100, 100));
 
         this.setTitle(title);
@@ -72,11 +72,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
 
         canvasContainer = new JPanel(new BorderLayout());
         canvasContainer.setBackground(Color.LIGHT_GRAY);
-        canvasContainer.setSize(new Dimension(550, 550));
+        canvasContainer.setSize(new Dimension(640, 640));
 
         canvas = new DrawCanvas();
         canvas.setBackground(Color.WHITE);
-        canvas.setSize(new Dimension(550, 550));
+        canvas.setSize(new Dimension(640, 640));
 
         // Setup components
         setupMenuBar();
@@ -117,6 +117,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
                 if (c.getWidth() - 100 <= (c.getHeight())) {
                     canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
                 }
+
+                System.out.println("Canvas: " + canvas.getWidth() + "x" + canvas.getHeight());
+                System.out.println("Window: " + c.getWidth() + "x" + c.getHeight());
             }
         });
     }
@@ -185,13 +188,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
         sizeSlider.setPaintLabels(true);
 
         sizeLabel = new JLabel();
-        sizeLabel.setText("size: " + sizeSlider.getValue() + "%");
+        sizeLabel.setText("Size (%)");
 
         sizeSlider.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent e) {
-                sizeLabel.setText("size: " + sizeSlider.getValue() + "%");
-            }
+            public void stateChanged(ChangeEvent e) { }
         });
     }
 
