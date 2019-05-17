@@ -3,7 +3,7 @@ package Tools;
 import java.awt.*;
 
 /**
- This class extends the ShapesDrawn class to draw plots
+ * This class extends the ShapesDrawn class to draw plots
  */
 public class LineOrPlot extends ShapesDrawn {
     // Setup all variables

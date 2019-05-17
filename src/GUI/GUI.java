@@ -10,10 +10,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.*;
 
 /**
- This is the GUI class which extends the JFrame, the point of this class is that it holds all
- buttons and functions that the rest of the program will deliver. The DrawCanvas class is also called upon
- within this class and that class extends a JPanel which will be used to draw the shapes.
- *
+ * This is the GUI class which extends the JFrame, the point of this class is that it holds all
+ * buttons and functions that the rest of the program will deliver. The DrawCanvas class is also called upon
+ * within this class and that class extends a JPanel which will be used to draw the shapes.
  */
 public class GUI extends JFrame implements ActionListener, KeyListener {
     private Color c = Color.BLACK;
@@ -55,9 +54,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     private JLabel sizeLabel;
 
     /**
-     This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
-     The border itself is fixed, with a menu bar on the top, the buttons listed on the side, and the DrawCanvas class
-     is for the rest of the JFrame.
+     * This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
+     * The border itself is fixed, with a menu bar on the top, the buttons listed on the side, and the DrawCanvas class
+     * is for the rest of the JFrame.
+     *
      * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
     public GUI(String title) {
@@ -271,6 +271,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
 
     /**
      * Create JMenuItem and return the object with action listener
+     *
      * @param title is a string that the user can the name of the JMenuItem
      * @return the JMenuItem
      */
@@ -283,6 +284,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
 
     /**
      * Create JButton and return the object with action listener
+     *
      * @param title is a string that the user can the name of the JButton
      * @return the JButton
      */
@@ -410,6 +412,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     /**
      * If Ctrl+Z is pressed run the undo method, if the returnCounter of the canvas is above 0 then do operations
      * normally, but if it is below then display an error message.
+     *
      * @param e will be used to get the key code for both ctrl and z
      */
     @Override
@@ -431,6 +434,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
 
     /**
      * Find the source of the button clicks from users to do different things
+     *
      * @param e this parameter is the ActionEvent that's detected from the users' mouse click
      */
     public void actionPerformed(ActionEvent e) {

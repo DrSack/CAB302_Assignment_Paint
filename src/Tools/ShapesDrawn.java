@@ -3,7 +3,7 @@ package Tools;
 import java.awt.*;
 
 /**
- This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes
+ * This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes
  */
 public abstract class ShapesDrawn { // Initialize variables
     private int x1, y1, x2, y2;
@@ -47,11 +47,11 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     * Set all variables of the particular shape
+     * Set all variables of the particular shape, especially for Polygons as it requires arrays to draw
+     *
      * @param x Set x coordinate into array
      * @param y Set y coordinate into array
      */
-    // Specifically for Polygons as it requires arrays to draw
     ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling) {
         this.filling = filling;
         this.pen = pen;

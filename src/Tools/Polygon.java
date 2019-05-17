@@ -4,6 +4,9 @@ import GUI.DrawCanvas;
 
 import java.awt.*;
 
+/**
+ * This class extends the ShapesDrawn class to draw and fill polygons
+ */
 public class Polygon extends ShapesDrawn {
     public Polygon(double x[], double y[],int width, int height, boolean Fill , Color c, Color f) {
         super(x, y, width,height,Fill,c,f);

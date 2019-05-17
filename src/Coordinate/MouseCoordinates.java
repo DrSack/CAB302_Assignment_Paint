@@ -7,25 +7,25 @@ package Coordinate;
 
 public class MouseCoordinates {
 
-    private double mousex, mousey;
+    private double mouseX, mouseY;
 
     // Set XY value for the mouse coordinates and also convert to double
     public void setMouseXY(int x, int y, int width, int height) {
-        mousex = (double) x/width;
-        mousey = (double) y/height;
+        mouseX = (double) x/width;
+        mouseY = (double) y/height;
     }
 
-    public void setMousex(double mousex) {
-        this.mousex = mousex;
+    public void setMousex(double mouseX) {
+        this.mouseX = mouseX;
     }
 
-    public void setMousey(double mousey) {
-        this.mousey = mousey;
+    public void setMousey(double mouseY) {
+        this.mouseY = mouseY;
     }
 
-    public double getX() { return  mousex; }
+    public double getX() { return  mouseX; }
 
     public double getY(){
-        return  mousey;
+        return  mouseY;
     }
 }

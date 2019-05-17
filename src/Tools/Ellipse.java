@@ -3,7 +3,7 @@ package Tools;
 import java.awt.*;
 
 /**
- This class extends the ShapesDrawn class to draw and fill ellipses
+ * This class extends the ShapesDrawn class to draw and fill ellipses
  */
 public class Ellipse extends ShapesDrawn {
 

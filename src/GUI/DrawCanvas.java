@@ -18,7 +18,6 @@ import java.util.ArrayList;
  *
  * Down below is all the private variables for booleans, strings, arrayLists, Color
  * variables and declaring encapsulation classes.
- *
  */
 public class DrawCanvas extends JPanel implements MouseListener, MouseMotionListener {
     private boolean drawingLine = false;
@@ -51,7 +50,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     /**
      * This is the constructor which passes the string vec parameter to commands arrayList, where the class will add new lines
      * based on the actions given from the GUI and users drawing motives.
-     *
      */
     public DrawCanvas() {
         this.setVisible(true);
@@ -61,6 +59,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     /**
      * Add VEC file commands being read by the JFileChooser.
+     *
      * @param command Whenever a new string of commands is read, pass it through here and add it into the
      * commands arrayList
      */
@@ -75,6 +74,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     /**
      * This returns the Draw.size() arrayList
+     *
      * @return The Amount of shapes there are in the list
      */
     public int returnCounter() {
@@ -92,7 +92,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         Pen = true;
     }
 
-    /**Return the vecFile to the GUI where it will be turned into a .VEC file
+    /**
+     * Return the vecFile to the GUI where it will be turned into a .VEC file
      *
      * @return The vecFile string that was just created from piecing all the commandline elements
      */
@@ -176,14 +177,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * Get the hexcolour code from the VECfile and set that colour to the current color c variable
-     * @param hex pass through the hexcolour code into c.
+     * Get the hex colour code from the VEC file and set that colour to the current color c variable and
+     * add the hex code pen value to an ArrayList and add the counter value.
+     *
+     * @param hex pass through the hex colour code into c.
      */
-
-    // Add the hex code pen value to an ArrayList and add the counter value.
     void SetColour(String hex) {
         c = (Color.decode(hex));
     }
+
     /**
      * This method is called from the GUI whether the button "fill" is enabled, and the colours picked also have
      * fill button enabled.
@@ -218,11 +220,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     /**
      * Next 3 methods all have the same functionality but instead fill out each constructor with different parameter values
      * and the drawing method is slightly different after each method.
+     *
      * @param X1 Pass though the double X1 value
      * @param Y1 Pass though the double Y1 value
      * @param X2 Pass though the double X2 value
      * @param Y2 Pass though the double Y2 value
      */
+
     // Set coordinates for Lines or Plotting
     public void SetCoordinateDrawingPlotting(double X1, double Y1, double X2, double Y2) {
         Draw.add(new LineOrPlot(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,c, f));
@@ -270,7 +274,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * The mouse pressed method essentially stores the X1 and Y2 coordinates for all shapes and tools
+     * The mouse pressed method essentially stores the X1 and Y2 coordinates for all shapes and tools.
+     *
      * @param e is the mouseEvent parameter where it will be used to call e.getX and e.getY to return the current mouse
      * x and y coordinates.
      */
@@ -379,7 +384,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
 
     /**
-     * Whenever the mouse is dragged get the X,Y2 coordinates then repaint to temporarily see the shapes outline
+     * Whenever the mouse is dragged get the X,Y2 coordinates then repaint to temporarily see the shapes outline.
+     *
      * @param e Is an MouseEvent Listener where this is to find e.getX, e.getY
      */
     @Override
