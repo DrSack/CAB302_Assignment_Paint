@@ -4,9 +4,8 @@ import java.awt.*;
 
 /**
  This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes
- *
  */
-public abstract class ShapesDrawn {//Initialize variables
+public abstract class ShapesDrawn { // Initialize variables
     private int x1, y1, x2, y2;
     private double ox1,oy1,ox2,oy2;
     private int x[], y[];
@@ -18,8 +17,8 @@ public abstract class ShapesDrawn {//Initialize variables
     private boolean Fill;
     private boolean Polygon;
 
-
-    /**Set all variables of the particular shape
+    /**
+     * Set all variables of the particular shape
      *
      * @param x1 Set x1 coordinate
      * @param y1 Set y1 coordinate
@@ -47,13 +46,13 @@ public abstract class ShapesDrawn {//Initialize variables
         this.y2 = (int)(y2*height);
     }
 
-    /**Set all variables of the particular shape
+    /**
+     * Set all variables of the particular shape
      * @param x Set x coordinate into array
      * @param y Set y coordinate into array
      */
-
-    //Specifically for Polygons as it requires arrays to draw
-    ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling){
+    // Specifically for Polygons as it requires arrays to draw
+    ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling) {
         this.filling = filling;
         this.pen = pen;
         this.Fill = Fill;
@@ -75,7 +74,7 @@ public abstract class ShapesDrawn {//Initialize variables
 
     public abstract void draw(Graphics g);
 
-    //Everytime the window is resized scale the shape to the JPanels new dimensions
+    // Every  time the window is resized scale the shape to the JPanels new dimensions
     public void resize(int width, int height) {
 
         if (Polygon) {

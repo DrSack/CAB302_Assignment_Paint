@@ -4,7 +4,6 @@ import java.awt.*;
 
 /**
  This class extends the ShapesDrawn class to draw and fill rectangles
- *
  */
 public class Rectangle extends ShapesDrawn {
 
@@ -30,9 +29,9 @@ public class Rectangle extends ShapesDrawn {
             }
         }
 
-        g.setColor(getPenC()); // Draw the outline.
+        g.setColor(getPenC()); // Draw the outline
 
-        if (getX2() <= getX1() && getY2() <= getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
+        if (getX2() <= getX1() && getY2() <= getY1()) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards
             g.drawRect(getX2(),getY2(),getX1()-getX2(),getY1()-getY2());
         }
         else if (getX2() <= getX1()) { // If X2 goes behind X1 then draw backwards

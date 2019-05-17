@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.*;
 
@@ -13,7 +15,7 @@ import java.util.*;
  within this class and that class extends a JPanel which will be used to draw the shapes.
  *
  */
-public class GUI extends JFrame implements ActionListener, KeyListener{
+public class GUI extends JFrame implements ActionListener, KeyListener {
     private Color c = Color.BLACK;
 
     private String penC = "#000000";
@@ -49,6 +51,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     private JButton red = new JButton();
     private JButton extraColors;
 
+    private JSlider sizeSlider;
+    private JLabel sizeLabel;
+
     /**
      This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
      The border itself is fixed, with a menu bar on the top, the buttons listed on the side, and the DrawCanvas class
@@ -78,6 +83,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         setupButtons();
         setupShapes();
         setupTools();
+        setupSize();
         setupColors();
         setupPanels();
 
@@ -170,8 +176,27 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         tools.add(fillColor, tc);
     }
 
+    // Setup a JSlider to adjust
+    private void setupSize() {
+        sizeSlider = new JSlider(JSlider.VERTICAL, 50, 300, 100);
+        sizeSlider.setMajorTickSpacing(50);
+        sizeSlider.setPaintTrack(true);
+        sizeSlider.setPaintTicks(true);
+        sizeSlider.setPaintLabels(true);
+
+        sizeLabel = new JLabel();
+        sizeLabel.setText("size: " + sizeSlider.getValue() + "%");
+
+        sizeSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                sizeLabel.setText("size: " + sizeSlider.getValue() + "%");
+            }
+        });
+    }
+
     /**
-     * Setup all JPanels and their layout
+     * Setup all JPanels and their layouts
      */
     private void setupPanels() {
         // Container board
@@ -180,28 +205,39 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Shapes board
-        gbc.weighty = 1;
+        gbc.weighty = 0.5;
         gbc.gridx = 0;
         gbc.gridy = 0;
         containerBoard.add(shapes, gbc);
 
         // Tools board
-        gbc.weighty = 1;
+        gbc.weighty = 0.5;
         gbc.gridx = 0;
         gbc.gridy = 1;
         containerBoard.add(tools, gbc);
 
         // Colors board
-        gbc.weighty = 0.2;
+        gbc.weighty = 1;
         gbc.gridx = 0;
         gbc.gridy = 2;
         containerBoard.add(colors, gbc);
 
         // Extra colors
-        gbc.weighty = 0.6;
+        gbc.weighty = 0.1;
         gbc.gridx = 0;
         gbc.gridy = 3;
         containerBoard.add(extraColors, gbc);
+
+        // Size slider and label
+        gbc.weighty = 0.1;
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        containerBoard.add(sizeSlider, gbc);
+
+        gbc.weighty = 0.1;
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        containerBoard.add(sizeLabel, gbc);
     }
 
     /**
@@ -339,7 +375,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
     }
 
-    //This uses arrays where the vecFile x,y coordinates exceed past the typical 4.
+    // This uses arrays where the vecFile x,y coordinates exceed past the typical 4.
     private void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
     }
@@ -427,7 +463,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
 
         for (JButton colorButton : colorButtons) { // For every button within the colorButtons array
             if (btnSrc == colorButton) { // If a particular button within that array is clicked
-                c = colorButton.getBackground(); // get the colour of the background.
+                c = colorButton.getBackground(); // Get the colour of the background.
 
                 // If the outline button is clicked, set the color of the pen and the color preview
                 if (OutlineOrFill) {
@@ -518,7 +554,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
          * you pick, you can set the name of the VEC file and it will pass through the string vecFile through
          * FileWriter and save it with the name you have given it + .VEC
          */
-
         if (btnSrc == saveAs) { // If Save button is pressed
             final JFileChooser fcSave = new JFileChooser();
             fcSave.setCurrentDirectory(new File("./")); // Set Directory to the src of the Program
@@ -616,6 +651,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
                             VECfileTEST = readerT.readLine();
                             counter++;
                         }
+
                         GUI cool = new GUI(fc.getSelectedFile().getAbsolutePath());
 
                         while (VECfile != null) {
@@ -624,7 +660,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
                                 hold += "\n";
                             }
 
-                            cool.readCommand(hold);//add command into arraylist
+                            cool.readCommand(hold);// Add command into arrayList
                             counterSTOP++;
                             VECfile = readerChoose.readLine();
                         }
@@ -632,7 +668,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
                             canvas.setVisible(false);
                         }
 
-                        while (data != null) { //if there is data keep reading each line
+                        while (data != null) { // If there is data keep reading each line
                             if (data.contains("LINE")) {
                                 // Replaces PLOT with nothing
                                 data = data.replace("LINE ", "");
@@ -738,7 +774,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
             } else if (returnVal == JFileChooser.CANCEL_OPTION) { // Do nothing return to normal operations.
 
             }
-
         }
     }
 
