@@ -262,6 +262,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int x2 = (int)(Mxy2.getX()* this.getWidth());
         int y2 = (int)(Mxy2.getY()* this.getHeight());
 
+        if(t.isGridTruth()){
+            double s = 0;
+            for(int i = 0; i < grid.getSetting(); i++){
+                g.setColor(Color.black);
+                g.drawLine(0,((int)(s*this.getHeight())),this.getWidth(), ((int)(s*this.getHeight())));
+                g.drawLine(((int)(s*this.getWidth())),0,((int)(s*this.getWidth())), this.getHeight());
+                s+=(1.0/grid.getSetting());
+            }
+        }
+
         for(ShapesDrawn s : Draw) { // For loop for redrawing all shapes
             s.resize(this.getWidth(),this.getHeight());
             s.draw(g);
@@ -270,15 +280,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         if (drawingLine) { // If the user is still dragging the shapes, draw the shapes temporarily.
             TemporaryDraw Temp = new TemporaryDraw();
             Temp.temporary(g,x1,y1,x2,y2,c,f,t.isLineTruth(),t.isRecTruth(),t.isElliTruth(),t.isPolyTruth(), Filling);
-        }
-
-        if(t.isGridTruth()){
-            double s = 0;
-            for(int i = 0; i < grid.getSetting(); i++){
-                g.drawLine(0,((int)(s*this.getHeight())),this.getWidth(), ((int)(s*this.getHeight())));
-                g.drawLine(((int)(s*this.getWidth())),0,((int)(s*this.getWidth())), this.getHeight());
-                s+=(1.0/grid.getSetting());
-            }
         }
     }
 
@@ -298,6 +299,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         // Set the X1,Y1 coordinates to the MouseTrack class.
         Boolean DoubleC = false;
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        Mxy2.setMouseXY(e.getX(),e.getY(), this.getWidth(), this.getHeight());
         double sx = 0.0;
         double sy = 0.0;
         int mx;
@@ -441,8 +443,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 commands.add(polystr); // Adds polystr into the command list
                 SetCoordinatePolygon(xP, yP); //Redraws the polygon by calling this function
             }
-            this.repaint();
+
         }
+        this.repaint();
     }
 
 
