@@ -3,10 +3,9 @@ package Tools;
 import java.awt.*;
 
 /**
- This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes
- *
+ * This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes
  */
-public abstract class ShapesDrawn {//Initialize variables
+public abstract class ShapesDrawn { // Initialize variables
     private int x1, y1, x2, y2;
     private double ox1,oy1,ox2,oy2;
     private int x[], y[];
@@ -18,8 +17,8 @@ public abstract class ShapesDrawn {//Initialize variables
     private boolean Fill;
     private boolean Polygon;
 
-
-    /**Set all variables of the particular shape
+    /**
+     * Set all variables of the particular shape
      *
      * @param x1 Set x1 coordinate
      * @param y1 Set y1 coordinate
@@ -47,7 +46,13 @@ public abstract class ShapesDrawn {//Initialize variables
         this.y2 = (int)(y2*height);
     }
 
-    ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling){
+    /**
+     * Set all variables of the particular shape, especially for Polygons as it requires arrays to draw
+     *
+     * @param x Set x coordinate into array
+     * @param y Set y coordinate into array
+     */
+    ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling) {
         this.filling = filling;
         this.pen = pen;
         this.Fill = Fill;
@@ -68,6 +73,24 @@ public abstract class ShapesDrawn {//Initialize variables
     }
 
     public abstract void draw(Graphics g);
+
+    // Every  time the window is resized scale the shape to the JPanels new dimensions
+    public void resize(int width, int height) {
+
+        if (Polygon) {
+            for (int i = 0; i < x.length; i++) {
+                this.x[i] = (int) (Ax[i] * width);
+                this.y[i] = (int) (Ay[i] * height);
+            }
+        }
+
+        else {
+            this.x1 = (int) (ox1 * width);
+            this.y1 = (int) (oy1 * height);
+            this.x2 = (int) (ox2 * width);
+            this.y2 = (int) (oy2 * height);
+        }
+    }
 
     public int getX1() {// return x1
         return x1;
@@ -93,25 +116,6 @@ public abstract class ShapesDrawn {//Initialize variables
         return y;
     }
 
-    //Everytime the window is resized scale the shape to the JPanels new dimensions
-    public void resize(int width, int height) {
-
-        if (Polygon) {
-            for (int i = 0; i < x.length; i++) {
-                this.x[i] = (int) (Ax[i] * width);
-                this.y[i] = (int) (Ay[i] * height);
-            }
-        }
-
-        else {
-            this.x1 = (int) (ox1 * width);
-            this.y1 = (int) (oy1 * height);
-            this.x2 = (int) (ox2 * width);
-            this.y2 = (int) (oy2 * height);
-        }
-    }
-
-
     //Get penColour
     public Color getPenC(){
         return pen;
@@ -125,5 +129,9 @@ public abstract class ShapesDrawn {//Initialize variables
     //Return if the shape is filled or not
     public boolean getFill(){
         return Fill;
+    }
+
+    public Color SetColor(){
+        return pen;
     }
 }

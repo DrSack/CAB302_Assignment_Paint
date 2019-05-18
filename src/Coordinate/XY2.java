@@ -1,26 +1,26 @@
 package Coordinate;
 
-public class XY2 extends MouseCoordinates{
+public class XY2 extends MouseCoordinates {
 
-    private double mousex, mousey;
+    private double mouseX, mouseY;
 
     public void setMouseXY(int x, int y, int width, int height) {
-        mousex = (double) x/width;
-        mousey = (double) y/height;
+        mouseX = (double) x/width;
+        mouseY = (double) y/height;
     }
-    public void setMousex(double mousex) {
-        this.mousex = mousex;
+    public void setMousex(double mouseX) {
+        this.mouseX = mouseX;
     }
 
-    public void setMousey(double mousey) {
-        this.mousey = mousey;
+    public void setMousey(double mouseY) {
+        this.mouseY = mouseY;
     }
 
     public double getX(){
-        return  mousex;
+        return  mouseX;
     }
 
     public double getY(){
-        return  mousey;
+        return  mouseY;
     }
 }
