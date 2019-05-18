@@ -65,20 +65,20 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     public GUI(String title) {
         // Setup the JFrame
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setPreferredSize(new Dimension(810, 700));
-        this.setMinimumSize(new Dimension(550,700));
-        this.setLocation(new Point(100, 100));
+        this.setPreferredSize(new Dimension(840, 730));
+        this.setMinimumSize(new Dimension(550,730));
+        this.setLocation(new Point(250, 50));
 
         this.setTitle(title);
         this.setLayout(new BorderLayout(6, 0));
 
         canvasContainer = new JPanel(new BorderLayout());
         canvasContainer.setBackground(Color.LIGHT_GRAY);
-        canvasContainer.setSize(new Dimension(640, 640));
+        canvasContainer.setSize(new Dimension(670, 670));
 
         canvas = new DrawCanvas();
         canvas.setBackground(Color.WHITE);
-        canvas.setSize(new Dimension(640, 640));
+        canvas.setSize(new Dimension(670, 670));
 
         // Setup components
         setupMenuBar();
@@ -178,11 +178,12 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         tools.add(fillColor, tc);
     }
 
-    // Setup a JSlider to adjust
+    // Setup a JSlider to adjust the size of the Grid
     private void setupSize() {
         gridSlider = new JSlider(JSlider.VERTICAL, 50, 300, 100);
         gridSlider.setMajorTickSpacing(50);
         gridSlider.setValue(100);
+        gridSlider.setSnapToTicks(true);
         gridSlider.setPaintTrack(true);
         gridSlider.setPaintTicks(true);
         gridSlider.setPaintLabels(true);
@@ -631,8 +632,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                 File file = new File(filePathWithoutExt + ".VEC");
 
                 // If the save button is pressed save the file followed with the file name inputted the .VEC extension
-                if (file.exists())
-                { // If the file already exist pop up a confirm Dialog panel.
+                if (file.exists()) { // If the file already exist pop up a confirm Dialog panel.
                     value = JOptionPane.showConfirmDialog(this,
                             "Replace existing file?"); // Asks if the user wants to replace the file.
                     if (value == JOptionPane.YES_OPTION) {
@@ -651,6 +651,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                     if (value == JOptionPane.NO_OPTION) // If no then do nothing
                         return;
                 }
+
                 if (!file.exists()) {
                     try { // If the file doesn't already exist, create it and write the file with the current vecFile string.
                         FileWriter filewrite = new FileWriter(file);
@@ -664,7 +665,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                     }
                 }
 
-            } // If cancel is selected on the JFileChooser do nothing and return to normal operations.
+            }
+
+            // If cancel is selected on the JFileChooser do nothing and return to normal operations.
             else if (value == JFileChooser.CANCEL_OPTION) {
 
             }
@@ -716,6 +719,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                             counterSTOP++;
                             VECfile = readerChoose.readLine();
                         }
+
                         if (file.length() == 0) {
                             canvas.setVisible(false);
                         }
@@ -784,6 +788,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                 // Initializing xP and yP
                                 double xP[] = new double[numbers / 2];
                                 double yP[] = new double[numbers / 2];
+
                                 // Parsing numbers into array
                                 for (int i = 0; i < numbers / 2; i++) {
                                     xP[i] = Double.parseDouble(param[2 * i]);
@@ -801,6 +806,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                             if (data.contains("FILL") || data.contains("fiil")) { // If the line contains Fill
                                 data = data.replace("FILL ", "");
                                 data = data.replace("fill ", "");
+
                                 if (data.contains("OFF")) {
                                     cool.parseFillOff(); // Set the colour on the JPanel
                                 } else {
@@ -823,6 +829,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                 } catch (IOException e1) { // Catch IOException
                     e1.printStackTrace();
                 }
+
             } else if (returnVal == JFileChooser.CANCEL_OPTION) { // Do nothing return to normal operations.
 
             }

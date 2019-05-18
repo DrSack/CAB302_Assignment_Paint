@@ -24,10 +24,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private boolean Filling = false;
     private boolean Pen = false;
     private int tempEx; // Store the last known integer to keep track of ExCommands
-    private String colourtemp = "";
-    private String pentemp = "";
-    private String tempf;
-    private String polystr;
+    private String colourTemp = "";
+    private String penTemp = "";
+    private String tempF;
+    private String polyStr;
 
     private ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>(); // Setup arrayList for storing shape information.
     private ArrayList<String> commands = new ArrayList<>(); // Store all commands here
@@ -86,7 +86,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      *If a VEC file was open, reset all values back to its default state after the file parsing section of the GUI
      */
     void open() {
-        pentemp = "PEN #000000"+"\n"; // Temporarily store the VEC command.
+        penTemp = "PEN #000000" + "\n"; // Temporarily store the VEC command.
         c = Color.black;
         offFill();
         Pen = true;
@@ -159,10 +159,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         commands.clear();
         offFill();
         t.resetTruth();
-        colourtemp ="";
-        pentemp = "";
+        colourTemp = "";
+        penTemp = "";
         tempEx = 0;
-        tempf = "";
+        tempF = "";
         drawingLine = false;
     }
 
@@ -174,7 +174,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void setColourClick(String hex) {
         c = (Color.decode(hex));
-        pentemp = "PEN " + hex.toUpperCase() + "\n"; // Temporarily store the VEC command.
+        penTemp = "PEN " + hex.toUpperCase() + "\n"; // Temporarily store the VEC command.
         offFill();
         Pen = true;
     }
@@ -198,7 +198,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void setFillClick(String hex) {
         // Add the counter to the track array
         f = (Color.decode(hex));
-        colourtemp ="FILL "+hex.toUpperCase() + "\n"; // Temporarily store the VEC command
+        colourTemp = "FILL " + hex.toUpperCase() + "\n"; // Temporarily store the VEC command
         Filling = true;
     }
 
@@ -299,14 +299,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     @Override
     public void mousePressed(MouseEvent e) { // If mouse is pressed do something
-        // Set the X1,Y1 coordinates to the MouseTrack class.
-        Boolean DoubleC = false;
-        Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-        Mxy2.setMouseXY(e.getX(),e.getY(), this.getWidth(), this.getHeight());
         double sx = 0.0;
         double sy = 0.0;
         int mx;
         int my;
+
+        // Set the X1,Y1 coordinates to the MouseTrack class.
+        Boolean DoubleC = false;
+        Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        Mxy2.setMouseXY(e.getX(),e.getY(), this.getWidth(), this.getHeight());
+
         if (t.isGridTruth()) {
             for (int y = 0; y < grid.getSetting()+1; y++) {
                 for (int x = 0; x < grid.getSetting()+1; x++) {
@@ -329,9 +331,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 DoubleC = true;
             }
 
-            if (colourtemp != tempf || ExCommands.size() < tempEx) {
-                tempf = colourtemp;
-                commands.add(colourtemp); // Add fill command to commands arrayList
+            if (colourTemp != tempF || ExCommands.size() < tempEx) {
+                tempF = colourTemp;
+                commands.add(colourTemp); // Add fill command to commands arrayList
                 ExCommands.add(commands.size());
                 if (ExCommands.size() < tempEx) {
                     Pen = true;
@@ -342,11 +344,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
 
         if (Pen && !t.isPolyTruth()) { // If the user decides to draw with a colour outline present
-            commands.add(pentemp); //Add outline colour command
+            commands.add(penTemp); //Add outline colour command
             ExCommands.add(commands.size());
             tempEx = commands.size();
             if (!DoubleC) {
-                commands.add("FILL OFF" +"\n");
+                commands.add("FILL OFF" + "\n");
                 ExCommands.add(commands.size());
                 tempEx = commands.size();
             }
@@ -362,7 +364,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         // If polygon button is selected, able to draw polygon
         if (t.isPolyTruth()) {
-            // First left click gets position, adds string into polystr and adds coordinates into polylines arrays,
+            // First left click gets position, adds string into polyStr and adds coordinates into polylines arrays,
             //placeholders for x1 and y1 coordinates named realX and realY, also increments the mouseIncrement every click
             if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
                 MouseIncrement++;
@@ -375,7 +377,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 this.currentY = Mxy.getY();
                 this.startX = Mxy.getX();
                 this.startY = Mxy.getY();
-                polystr = ("POLYGON " + "0" + x1 + " 0" + y1);
+                polyStr = ("POLYGON " + "0" + x1 + " 0" + y1);
                 polylines.add(realX);
                 polylines.add(realY);
             }
@@ -393,7 +395,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 String y2 = df.format(Mxy2.getY());
                 double realX = Mxy.getX();
                 double realY = Mxy.getY();
-                polystr += (" 0" + x2 + " 0" + y2);
+                polyStr += (" 0" + x2 + " 0" + y2);
                 polylines.add(realX);
                 polylines.add(realY);
                 this.repaint();
@@ -411,7 +413,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 for (int i = 0; i<MouseIncrement; i++) { // Remove all the lines created based on how many mouse clicks
                     Draw.remove(Draw.size()-1);
                 }
-                polystr += "\n";
+                polyStr += "\n";
                 polylines.clear(); //Clears polylines to create another polygon shape
                 MouseIncrement = 0; //Sets mouseIncrement to 0 to create another polygon shape
 
@@ -420,9 +422,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                         DoubleC = true;
                     }
 
-                    if (colourtemp != tempf || ExCommands.size() < tempEx) {
-                        tempf = colourtemp;
-                        commands.add(colourtemp); // Add fill command to commands arrayList
+                    if (colourTemp != tempF || ExCommands.size() < tempEx) {
+                        tempF = colourTemp;
+                        commands.add(colourTemp); // Add fill command to commands arrayList
                         ExCommands.add(commands.size());
                         if (ExCommands.size() < tempEx) {
                             Pen = true;
@@ -433,16 +435,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 }
 
                 if (Pen) {
-                    commands.add(pentemp); //Add outline colour command
+                    commands.add(penTemp); // Add outline colour command
                     ExCommands.add(commands.size());
                     tempEx = commands.size();
                     if (!DoubleC) {
-                        commands.add("FILL OFF" +"\n");
+                        commands.add("FILL OFF" + "\n");
                         ExCommands.add(commands.size());
                         tempEx = commands.size();
                     }
                 }
-                commands.add(polystr); // Adds polystr into the command list
+                commands.add(polyStr); // Adds polyStr into the command list
                 SetCoordinatePolygon(xP, yP); //Redraws the polygon by calling this function
             }
         }
