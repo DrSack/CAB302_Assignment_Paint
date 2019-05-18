@@ -8,13 +8,14 @@ import java.awt.*;
  * This class extends the ShapesDrawn class to draw and fill polygons
  */
 public class Polygon extends ShapesDrawn {
+
     public Polygon(double x[], double y[],int width, int height, boolean Fill , Color c, Color f) {
         super(x, y, width,height,Fill,c,f);
     }
 
     @Override
     public void draw(Graphics g) { // Draws Polygon
-        if(getFill()){ // If this particular shape has fill enabled fill the Polygon
+        if (getFill()) { // If this particular shape has fill enabled fill the Polygon
             g.setColor(getFillC());
             g.fillPolygon(getXarray(), getYarray(), getXarray().length);
         }

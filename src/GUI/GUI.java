@@ -15,6 +15,7 @@ import java.util.*;
  * within this class and that class extends a JPanel which will be used to draw the shapes.
  */
 public class GUI extends JFrame implements ActionListener, KeyListener, ChangeListener{
+
     private Color c = Color.BLACK;
 
     private String penC = "#000000";
@@ -49,10 +50,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     private JButton magenta = new JButton();
     private JButton red = new JButton();
     private JButton extraColors;
-    private JButton sliderButton;
+    private JButton gridButton;
 
-    private JSlider sizeSlider;
-    private JLabel sizeLabel;
+    private JSlider gridSlider;
+    private JLabel gridLabel;
 
     /**
      * This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
@@ -99,8 +100,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         this.pack();
         this.setVisible(true);
         this.setFocusable(true);
-        detectResize();
         this.addKeyListener(this);
+        detectResize();
     }
 
     /**
@@ -179,17 +180,19 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     // Setup a JSlider to adjust
     private void setupSize() {
-        sizeSlider = new JSlider(JSlider.VERTICAL, 50, 300, 100);
-        sizeSlider.setMajorTickSpacing(50);
-        sizeSlider.setValue(100);
-        sizeSlider.setPaintTrack(true);
-        sizeSlider.setPaintTicks(true);
-        sizeSlider.setPaintLabels(true);
+        gridSlider = new JSlider(JSlider.VERTICAL, 50, 300, 100);
+        gridSlider.setMajorTickSpacing(50);
+        gridSlider.setValue(100);
+        gridSlider.setPaintTrack(true);
+        gridSlider.setPaintTicks(true);
+        gridSlider.setPaintLabels(true);
 
-        sizeLabel = new JLabel();
-        sizeLabel.setText("Size (%)");
+        gridButton = createButton("Grid");
 
-        sizeSlider.addChangeListener(this);
+        gridLabel = new JLabel();
+        gridLabel.setText("Size (%)");
+
+        gridSlider.addChangeListener(this);
     }
 
     /**
@@ -225,21 +228,21 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         gbc.gridy = 3;
         containerBoard.add(extraColors, gbc);
 
+        // Grid's button, slider and label
         gbc.weighty = 0.1;
         gbc.gridx = 0;
         gbc.gridy = 4;
-        containerBoard.add(sliderButton, gbc);
+        containerBoard.add(gridButton, gbc);
 
-        // Size slider and label
         gbc.weighty = 0.1;
         gbc.gridx = 0;
         gbc.gridy = 5;
-        containerBoard.add(sizeSlider, gbc);
+        containerBoard.add(gridSlider, gbc);
 
         gbc.weighty = 0.1;
         gbc.gridx = 0;
         gbc.gridy = 6;
-        containerBoard.add(sizeLabel, gbc);
+        containerBoard.add(gridLabel, gbc);
     }
 
     /**
@@ -269,7 +272,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             colors.add(colorButton);
         }
         extraColors = createButton("More Colors...");
-        sliderButton = createButton("Grid");
     }
 
     /**
@@ -439,14 +441,14 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     public void stateChanged(ChangeEvent e) {
         this.requestFocusInWindow();
         double amount;
-        if(canvas.t.isGridTruth()){
-            if(sizeSlider.getValue()%50 == 0){
-                amount = (sizeSlider.getValue()/100.0)*4.0;
+        if (canvas.t.isGridTruth()) {
+            if (gridSlider.getValue()%50 == 0) {
+                amount = (gridSlider.getValue()/100.0)*4.0;
                 canvas.SetGrid(amount);
                 canvas.repaint();
             }
-            else if(sizeSlider.getValue()%50 == 1){
-                amount =  (sizeSlider.getValue()/100.0)*4.0;
+            else if (gridSlider.getValue()%50 == 1) {
+                amount =  (gridSlider.getValue()/100.0)*4.0;
                 canvas.SetGrid(amount);
                 canvas.repaint();
             }
@@ -463,18 +465,18 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         this.requestFocusInWindow();
         Object btnSrc = e.getSource();
 
-        if(btnSrc == sliderButton){
-            if(!canvas.t.isGridTruth()){
+        if (btnSrc == gridButton) {
+            if (!canvas.t.isGridTruth()) {
                 double amount;
                 System.out.println("true");
                 canvas.t.setGridTruth();
-                if(sizeSlider.getValue()%50 == 0){
-                    amount = (double) (sizeSlider.getValue()/100.0)*4.0;
+                if (gridSlider.getValue()%50 == 0) {
+                    amount = (double) (gridSlider.getValue()/100.0)*4.0;
                     canvas.SetGrid(amount);
                     canvas.repaint();
                 }
-                else if(sizeSlider.getValue()%50 == 1){
-                    amount = (double) (sizeSlider.getValue()/100.0)*4.0;
+                else if (gridSlider.getValue()%50 == 1) {
+                    amount = (double) (gridSlider.getValue()/100.0)*4.0;
                     canvas.SetGrid(amount);
                     canvas.repaint();
                 }
@@ -484,7 +486,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                 canvas.t.setGridFalse();
                 canvas.repaint();
             }
-
         }
 
         if (btnSrc == undo) {

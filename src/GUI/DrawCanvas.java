@@ -11,7 +11,6 @@ import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-
 /**
  * This is the DrawCanvas class that is called upon within the GUI class, this is class extends JPanel and is
  * Responsible for creating the Shapes drawn on the screen, based on the XY values of the mouse.
@@ -20,11 +19,12 @@ import java.util.ArrayList;
  * variables and declaring encapsulation classes.
  */
 public class DrawCanvas extends JPanel implements MouseListener, MouseMotionListener {
+
     private boolean drawingLine = false;
     private boolean Filling = false;
     private boolean Pen = false;
     private int tempEx; // Store the last known integer to keep track of ExCommands
-    private String colourtemp ="";
+    private String colourtemp = "";
     private String pentemp = "";
     private String tempf;
     private String polystr;
@@ -81,7 +81,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public int returnCounter() {
         return Draw.size();
     }
-
 
     /**
      *If a VEC file was open, reset all values back to its default state after the file parsing section of the GUI
@@ -262,7 +261,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int x2 = (int)(Mxy2.getX()* this.getWidth());
         int y2 = (int)(Mxy2.getY()* this.getHeight());
 
-        if(t.isGridTruth()){
+        if (t.isGridTruth()){
             double s = 0;
             for(int i = 0; i < grid.getSetting(); i++){
                 g.setColor(Color.black);
@@ -304,12 +303,12 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double sy = 0.0;
         int mx;
         int my;
-        if(t.isGridTruth()){
+        if (t.isGridTruth()){
             for(int y = 0; y < grid.getSetting()+1; y++) {
                 for (int x = 0; x < grid.getSetting()+1; x++) {
                     my = (int)(sy*this.getHeight());
                     mx = (int)(sx*this.getWidth());
-                    if(e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
+                    if (e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
                         Mxy.setMouseXY(mx, my, this.getWidth(),this.getHeight());
                         drawingLine = true;
                         this.repaint();
@@ -429,7 +428,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     }
                 }
 
-                if(Pen){
+                if (Pen){
                     commands.add(pentemp); //Add outline colour command
                     ExCommands.add(commands.size());
                     tempEx = commands.size();
@@ -462,12 +461,12 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int mx;
         int my;
 
-        if(t.isGridTruth()){
+        if (t.isGridTruth()){
             for(int y = 0; y < grid.getSetting()+1; y++) {
                 for (int x = 0; x < grid.getSetting()+1; x++) {
                     my = (int)(sy*this.getHeight());
                     mx = (int)(sx*this.getWidth());
-                    if(e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
+                    if (e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
                         Mxy2.setMouseXY(mx, my, this.getWidth(),this.getHeight());
                         drawingLine = true;
                         this.repaint();
@@ -504,12 +503,12 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int mx;
         int my;
 
-        if(t.isGridTruth()){
+        if (t.isGridTruth()){
             for(int y = 0; y < grid.getSetting()+1; y++) {
                 for (int x = 0; x < grid.getSetting()+1; x++) {
                     my = (int)(sy*this.getHeight());
                     mx = (int)(sx*this.getWidth());
-                    if(e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
+                    if (e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
                         Mxy2.setMouseXY(mx, my, this.getWidth(),this.getHeight());
                         mx2 = Mxy2.getX();
                         my2 = Mxy2.getY();

@@ -6,6 +6,7 @@ import java.awt.*;
  * This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes
  */
 public abstract class ShapesDrawn { // Initialize variables
+
     private int x1, y1, x2, y2;
     private double ox1,oy1,ox2,oy2;
     private int x[], y[];
@@ -62,8 +63,7 @@ public abstract class ShapesDrawn { // Initialize variables
         this.Ay = new double[y.length];
         this.Ax = new double[x.length];
 
-
-        for(int i = 0; i< x.length; i++){
+        for (int i = 0; i< x.length; i++){
             Ax[i] = x[i];
             Ay[i] = y[i];
             this.x[i] = (int)(x[i]*width);
@@ -76,14 +76,12 @@ public abstract class ShapesDrawn { // Initialize variables
 
     // Every  time the window is resized scale the shape to the JPanels new dimensions
     public void resize(int width, int height) {
-
         if (Polygon) {
             for (int i = 0; i < x.length; i++) {
                 this.x[i] = (int) (Ax[i] * width);
                 this.y[i] = (int) (Ay[i] * height);
             }
         }
-
         else {
             this.x1 = (int) (ox1 * width);
             this.y1 = (int) (oy1 * height);

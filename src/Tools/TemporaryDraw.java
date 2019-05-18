@@ -5,14 +5,13 @@ import java.awt.*;
 public class TemporaryDraw {
 
     public void temporary(Graphics g, int x1, int y1, int x2,int y2, Color c,Color f, boolean Line, boolean Rec, boolean Ell, boolean Poly, boolean Fill) {
-
         g.setColor(c);
         if (Line) { // Temporarily draw a line
             g.drawLine(x1, y1, x2, y2);
         }
 
         if (Rec) {
-            if(Fill) { // If this has fill enabled fill the Rectangle
+            if (Fill) { // If this has fill enabled fill the Rectangle
                 g.setColor(f);
                 if (x2 <= x1 && y2 <= y1) {
                     g.fillRect(x2,y2,x1-x2,y1-y2);
@@ -46,7 +45,7 @@ public class TemporaryDraw {
         }
 
         if (Ell) {
-            if(Fill) { // If this has fill enabled fill the Ellipse
+            if (Fill) { // If this has fill enabled fill the Ellipse
                 g.setColor(f);
                 if (x2 <= x1 && y2 <= y1) {
                     g.fillOval(x2,y2,x1-x2,y1-y2);

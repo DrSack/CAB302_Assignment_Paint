@@ -1,13 +1,13 @@
 package GUI;
 
 public class TruthValues {
+
     private boolean PlotTruth = false;
     private boolean LineTruth = false;
     private boolean RecTruth = false;
     private boolean ElliTruth = false;
     private boolean PolyTruth = false;
     private boolean GridTruth = false;
-
 
     public boolean isElliTruth() { return ElliTruth; }
     public void setElliTruth() {
@@ -38,9 +38,7 @@ public class TruthValues {
     public void setGridFalse() {
         GridTruth = false;
     }
-    public void setGridTruth() {
-        GridTruth = true;
-    }
+    public void setGridTruth() { GridTruth = true; }
 
     public void resetTruth() {
         PlotTruth = false;
