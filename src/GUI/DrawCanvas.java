@@ -42,6 +42,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private double[] xP, yP;
 
     private double currentX, currentY, oldX, oldY, startX, startY;
+    private int GridTotal = 0;
 
     private MouseCoordinates Mxy = new XY1();
     private MouseCoordinates Mxy2 = new XY2();
@@ -246,6 +247,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         Draw.add(new Polygon(xP, yP, this.getWidth(), this.getHeight(), Filling, c,f));
     }
 
+    public void SetGrid(double setting){
+        GridTotal = (int) setting;
+        System.out.println(GridTotal);
+    }
+
     /**
      * Whether this.repaint the paint method will be run through.
      */
@@ -256,6 +262,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int y1 = (int)(Mxy.getY()* this.getHeight());
         int x2 = (int)(Mxy2.getX()* this.getWidth());
         int y2 = (int)(Mxy2.getY()* this.getHeight());
+
+        if(t.isGridTruth()){
+            double s = (1.0/GridTotal);
+            for(int i = 0; i < GridTotal; i++){
+            g.drawLine(0,((int)(s*this.getHeight())),this.getWidth(), ((int)(s*this.getHeight())));
+            g.drawLine(((int)(s*this.getWidth())),0,((int)(s*this.getWidth())), this.getHeight());
+            s+=(1.0/GridTotal);
+            }
+        }
 
         for(ShapesDrawn s : Draw) { // For loop for redrawing all shapes
             s.resize(this.getWidth(),this.getHeight());
@@ -285,7 +300,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         Boolean DoubleC = false;
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
 
-        if (Filling) { // If the user decides to draw with a fill colour present
+        if (Filling && !t.isPolyTruth()) { // If the user decides to draw with a fill colour present
             if (Pen) {
                 DoubleC = true;
             }
@@ -302,15 +317,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             }
         }
 
-        if (Pen) { // If the user decides to draw with a colour outline present
+        if (Pen && !t.isPolyTruth()) { // If the user decides to draw with a colour outline present
             commands.add(pentemp); //Add outline colour command
             ExCommands.add(commands.size());
             tempEx = commands.size();
-                if (!DoubleC) {
-                    commands.add("FILL OFF" +"\n");
-                    ExCommands.add(commands.size());
-                    tempEx = commands.size();
-                }
+            if (!DoubleC) {
+                commands.add("FILL OFF" +"\n");
+                ExCommands.add(commands.size());
+                tempEx = commands.size();
+            }
             Pen = false; // Deactivate to not add more string to commands arrayList.
         }
 
@@ -375,6 +390,35 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 polystr += "\n";
                 polylines.clear(); //Clears polylines to create another polygon shape
                 MouseIncrement = 0; //Sets mouseIncrement to 0 to create another polygon shape
+
+                if (Filling) { // If the user decides to draw with a fill colour present
+                    if (Pen) {
+                        DoubleC = true;
+                    }
+
+                    if (colourtemp != tempf || ExCommands.size() < tempEx) {
+                        tempf = colourtemp;
+                        commands.add(colourtemp); // Add fill command to commands arrayList
+                        ExCommands.add(commands.size());
+                        if (ExCommands.size() < tempEx) {
+                            Pen = true;
+                            DoubleC = true;
+                        }
+                        tempEx = ExCommands.size();
+                    }
+                }
+
+                if(Pen){
+                    commands.add(pentemp); //Add outline colour command
+                    ExCommands.add(commands.size());
+                    tempEx = commands.size();
+                    if (!DoubleC) {
+                        commands.add("FILL OFF" +"\n");
+                        ExCommands.add(commands.size());
+                        tempEx = commands.size();
+                    }
+                }
+
                 commands.add(polystr); // Adds polystr into the command list
                 SetCoordinatePolygon(xP, yP); //Redraws the polygon by calling this function
             }

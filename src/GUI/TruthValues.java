@@ -6,6 +6,8 @@ public class TruthValues {
     private boolean RecTruth = false;
     private boolean ElliTruth = false;
     private boolean PolyTruth = false;
+    private boolean GridTruth = false;
+
 
     public boolean isElliTruth() { return ElliTruth; }
     public void setElliTruth() {
@@ -30,6 +32,14 @@ public class TruthValues {
     public boolean isRecTruth() { return RecTruth; }
     public void setRecTruth() {
         RecTruth = true;
+    }
+
+    public boolean isGridTruth() { return GridTruth; }
+    public void setGridFalse() {
+        GridTruth = false;
+    }
+    public void setGridTruth() {
+        GridTruth = true;
     }
 
     public void resetTruth() {

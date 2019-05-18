@@ -131,7 +131,7 @@ public abstract class ShapesDrawn { // Initialize variables
         return Fill;
     }
 
-    public Color SetColor(){
-        return pen;
+    public void SetColor(Color c){
+        this.pen = c;
     }
 }

@@ -49,6 +49,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     private JButton magenta = new JButton();
     private JButton red = new JButton();
     private JButton extraColors;
+    private JButton sliderButton;
 
     private JSlider sizeSlider;
     private JLabel sizeLabel;
@@ -117,9 +118,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
                 if (c.getWidth() - 100 <= (c.getHeight())) {
                     canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
                 }
-
-                System.out.println("Canvas: " + canvas.getWidth() + "x" + canvas.getHeight());
-                System.out.println("Window: " + c.getWidth() + "x" + c.getHeight());
             }
         });
     }
@@ -183,6 +181,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     private void setupSize() {
         sizeSlider = new JSlider(JSlider.VERTICAL, 50, 300, 100);
         sizeSlider.setMajorTickSpacing(50);
+        sizeSlider.setValue(100);
         sizeSlider.setPaintTrack(true);
         sizeSlider.setPaintTicks(true);
         sizeSlider.setPaintLabels(true);
@@ -192,7 +191,22 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
 
         sizeSlider.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent e) { }
+            public void stateChanged(ChangeEvent e) {
+                double amount;
+                if(canvas.t.isGridTruth()){
+                    if(sizeSlider.getValue()%50 == 0){
+                        amount = (double)(sizeSlider.getValue()/100.0)*4.0;
+                        canvas.SetGrid(amount);
+                        canvas.repaint();
+                    }
+                    else if(sizeSlider.getValue()%50 == 1){
+                        amount = (double) (sizeSlider.getValue()/100.0)*4.0;
+                        canvas.SetGrid(amount);
+                        canvas.repaint();
+                    }
+
+                }
+            }
         });
     }
 
@@ -229,15 +243,20 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
         gbc.gridy = 3;
         containerBoard.add(extraColors, gbc);
 
-        // Size slider and label
         gbc.weighty = 0.1;
         gbc.gridx = 0;
         gbc.gridy = 4;
+        containerBoard.add(sliderButton, gbc);
+
+        // Size slider and label
+        gbc.weighty = 0.1;
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         containerBoard.add(sizeSlider, gbc);
 
         gbc.weighty = 0.1;
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         containerBoard.add(sizeLabel, gbc);
     }
 
@@ -268,6 +287,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
             colors.add(colorButton);
         }
         extraColors = createButton("More Colors...");
+        sliderButton = createButton("Grid");
     }
 
     /**
@@ -441,6 +461,30 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent e) {
         this.requestFocusInWindow();
         Object btnSrc = e.getSource();
+
+        if(btnSrc == sliderButton){
+            if(!canvas.t.isGridTruth()){
+                double amount;
+                System.out.println("true");
+                canvas.t.setGridTruth();
+                if(sizeSlider.getValue()%50 == 0){
+                    amount = (double) (sizeSlider.getValue()/100.0)*4.0;
+                    canvas.SetGrid(amount);
+                    canvas.repaint();
+                }
+                else if(sizeSlider.getValue()%50 == 1){
+                    amount = (double) (sizeSlider.getValue()/100.0)*4.0;
+                    canvas.SetGrid(amount);
+                    canvas.repaint();
+                }
+            }
+            else {
+                System.out.println("false");
+                canvas.t.setGridFalse();
+                canvas.repaint();
+            }
+
+        }
 
         if (btnSrc == undo) {
             if (canvas.returnCounter() > 0) {
