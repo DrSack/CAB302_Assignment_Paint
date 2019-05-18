@@ -14,7 +14,7 @@ import java.util.*;
  * buttons and functions that the rest of the program will deliver. The DrawCanvas class is also called upon
  * within this class and that class extends a JPanel which will be used to draw the shapes.
  */
-public class GUI extends JFrame implements ActionListener, KeyListener {
+public class GUI extends JFrame implements ActionListener, KeyListener, ChangeListener{
     private Color c = Color.BLACK;
 
     private String penC = "#000000";
@@ -189,25 +189,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
         sizeLabel = new JLabel();
         sizeLabel.setText("Size (%)");
 
-        sizeSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                double amount;
-                if(canvas.t.isGridTruth()){
-                    if(sizeSlider.getValue()%50 == 0){
-                        amount = (double)(sizeSlider.getValue()/100.0)*4.0;
-                        canvas.SetGrid(amount);
-                        canvas.repaint();
-                    }
-                    else if(sizeSlider.getValue()%50 == 1){
-                        amount = (double) (sizeSlider.getValue()/100.0)*4.0;
-                        canvas.SetGrid(amount);
-                        canvas.repaint();
-                    }
-
-                }
-            }
-        });
+        sizeSlider.addChangeListener(this);
     }
 
     /**
@@ -451,6 +433,25 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        this.requestFocusInWindow();
+        double amount;
+        if(canvas.t.isGridTruth()){
+            if(sizeSlider.getValue()%50 == 0){
+                amount = (sizeSlider.getValue()/100.0)*4.0;
+                canvas.SetGrid(amount);
+                canvas.repaint();
+            }
+            else if(sizeSlider.getValue()%50 == 1){
+                amount =  (sizeSlider.getValue()/100.0)*4.0;
+                canvas.SetGrid(amount);
+                canvas.repaint();
+            }
+
+        }
     }
 
     /**
@@ -830,4 +831,5 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     public static void main(String[] args) {
         new GUI("untitled");
     }
+
 }

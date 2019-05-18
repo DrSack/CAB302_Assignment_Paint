@@ -130,8 +130,4 @@ public abstract class ShapesDrawn { // Initialize variables
     public boolean getFill(){
         return Fill;
     }
-
-    public void SetColor(Color c){
-        this.pen = c;
-    }
 }

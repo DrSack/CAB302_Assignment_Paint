@@ -42,11 +42,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private double[] xP, yP;
 
     private double currentX, currentY, oldX, oldY, startX, startY;
-    private int GridTotal = 0;
 
     private MouseCoordinates Mxy = new XY1();
     private MouseCoordinates Mxy2 = new XY2();
     TruthValues t = new TruthValues();
+    Grid grid = new Grid();
 
     /**
      * This is the constructor which passes the string vec parameter to commands arrayList, where the class will add new lines
@@ -248,8 +248,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     public void SetGrid(double setting){
-        GridTotal = (int) setting;
-        System.out.println(GridTotal);
+        grid.setSetting((int)setting, this.getHeight(),this.getWidth());
     }
 
     /**
@@ -263,15 +262,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int x2 = (int)(Mxy2.getX()* this.getWidth());
         int y2 = (int)(Mxy2.getY()* this.getHeight());
 
-        if(t.isGridTruth()){
-            double s = (1.0/GridTotal);
-            for(int i = 0; i < GridTotal; i++){
-            g.drawLine(0,((int)(s*this.getHeight())),this.getWidth(), ((int)(s*this.getHeight())));
-            g.drawLine(((int)(s*this.getWidth())),0,((int)(s*this.getWidth())), this.getHeight());
-            s+=(1.0/GridTotal);
-            }
-        }
-
         for(ShapesDrawn s : Draw) { // For loop for redrawing all shapes
             s.resize(this.getWidth(),this.getHeight());
             s.draw(g);
@@ -280,6 +270,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         if (drawingLine) { // If the user is still dragging the shapes, draw the shapes temporarily.
             TemporaryDraw Temp = new TemporaryDraw();
             Temp.temporary(g,x1,y1,x2,y2,c,f,t.isLineTruth(),t.isRecTruth(),t.isElliTruth(),t.isPolyTruth(), Filling);
+        }
+
+        if(t.isGridTruth()){
+            double s = 0;
+            for(int i = 0; i < grid.getSetting(); i++){
+                g.drawLine(0,((int)(s*this.getHeight())),this.getWidth(), ((int)(s*this.getHeight())));
+                g.drawLine(((int)(s*this.getWidth())),0,((int)(s*this.getWidth())), this.getHeight());
+                s+=(1.0/grid.getSetting());
+            }
         }
     }
 
@@ -299,7 +298,27 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         // Set the X1,Y1 coordinates to the MouseTrack class.
         Boolean DoubleC = false;
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        double sx = 0.0;
+        double sy = 0.0;
+        int mx;
+        int my;
+        if(t.isGridTruth()){
+            for(int y = 0; y < grid.getSetting()+1; y++) {
+                for (int x = 0; x < grid.getSetting()+1; x++) {
+                    my = (int)(sy*this.getHeight());
+                    mx = (int)(sx*this.getWidth());
+                    if(e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
+                        Mxy.setMouseXY(mx, my, this.getWidth(),this.getHeight());
+                        drawingLine = true;
+                        this.repaint();
+                    }
+                    sx += (1.0/grid.getSetting());
+                }
+                sx = 0.0;
+                sy += (1.0/grid.getSetting());
 
+            }
+        }
         if (Filling && !t.isPolyTruth()) { // If the user decides to draw with a fill colour present
             if (Pen) {
                 DoubleC = true;
@@ -435,20 +454,32 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mouseDragged(MouseEvent e) {
         Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-        if ((Mxy2.getX())< 0.0) {
-            Mxy2.setMousex(0.0);
+        double sx = 0.0;
+        double sy = 0.0;
+        int mx;
+        int my;
+
+        if(t.isGridTruth()){
+            for(int y = 0; y < grid.getSetting()+1; y++) {
+                for (int x = 0; x < grid.getSetting()+1; x++) {
+                    my = (int)(sy*this.getHeight());
+                    mx = (int)(sx*this.getWidth());
+                    if(e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
+                        Mxy2.setMouseXY(mx, my, this.getWidth(),this.getHeight());
+                        drawingLine = true;
+                        this.repaint();
+                    }
+                    sx += (1.0/grid.getSetting());
+                }
+                sx = 0.0;
+                sy += (1.0/grid.getSetting());
+
+            }
         }
-        if ((Mxy2.getX())> 1.0) {
-            Mxy2.setMousex(1.0);
-        }
-        if (Mxy2.getY() < 0.0) {
-            Mxy2.setMousey(0.0);
-        }
-        if (Mxy2.getY() > 1.0) {
-            Mxy2.setMousey(1.0);
-        }
+
         drawingLine = true;
         this.repaint();
+
     }
 
     @Override
@@ -464,6 +495,31 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double my1 = Mxy.getY();
         double mx2 = Mxy2.getX();
         double my2 = Mxy2.getY();
+
+        double sx = 0.0;
+        double sy = 0.0;
+        int mx;
+        int my;
+
+        if(t.isGridTruth()){
+            for(int y = 0; y < grid.getSetting()+1; y++) {
+                for (int x = 0; x < grid.getSetting()+1; x++) {
+                    my = (int)(sy*this.getHeight());
+                    mx = (int)(sx*this.getWidth());
+                    if(e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
+                        Mxy2.setMouseXY(mx, my, this.getWidth(),this.getHeight());
+                        mx2 = Mxy2.getX();
+                        my2 = Mxy2.getY();
+                        drawingLine = true;
+                        this.repaint();
+                    }
+                    sx += (1.0/grid.getSetting());
+                }
+                sx = 0.0;
+                sy += (1.0/grid.getSetting());
+
+            }
+        }
 
         if ((Mxy2.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
             mx2 = 0.0;
