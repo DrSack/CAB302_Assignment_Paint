@@ -452,7 +452,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                 canvas.SetGrid(amount);
                 canvas.repaint();
             }
-
         }
     }
 
@@ -468,6 +467,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         if (btnSrc == gridButton) {
             if (!canvas.t.isGridTruth()) {
                 double amount;
+                gridButton.setForeground(Color.BLUE);
                 System.out.println("true");
                 canvas.t.setGridTruth();
                 if (gridSlider.getValue()%50 == 0) {
@@ -483,6 +483,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             }
             else {
                 System.out.println("false");
+                gridButton.setForeground(null);
                 canvas.t.setGridFalse();
                 canvas.repaint();
             }
@@ -535,9 +536,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         if (btnSrc == extraColors) {
             c = JColorChooser.showDialog(null, "Pick a color", c);
 
-            // Change the pen color back to white if the user doesn't pick anything or clicks cancel
+            // Change the pen color back to black if the user doesn't pick anything or clicks cancel
             if (c == null) {
-                c = Color.WHITE;
+                c = Color.BLACK;
             }
 
             // If the outline button is clicked, set the color of the pen and the color preview
@@ -832,5 +833,4 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     public static void main(String[] args) {
         new GUI("untitled");
     }
-
 }

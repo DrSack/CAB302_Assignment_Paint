@@ -112,35 +112,38 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * if there is PEN and or FILL before or after the current command line.
      */
     public void undo() {
-        if (ExCommands.size() > 0) { // Deletes extra commands if it is a PEN or FILL Colour
-            int i = ExCommands.get(ExCommands.size()-1);
+        if (ExCommands.size() > 0) { // Delete extra commands if it is a PEN or FILL Colour
+            int i = ExCommands.get(ExCommands.size() - 1);
+
             if (i == commands.size()-1) { // If FILL or PEN is behind said command then only delete itself
                 System.out.println("found");
-                commands.remove(commands.size()-1);
-                ExCommands.remove(ExCommands.size()-1);
+                commands.remove(commands.size() - 1);
+                ExCommands.remove(ExCommands.size() - 1);
+
                 if (ExCommands.size() > 0) {
-                    i = ExCommands.get(ExCommands.size()-1);
+                    i = ExCommands.get(ExCommands.size()- 1 );
+
                     if (commands.size()-1 == i) { // If there is another command even if its the last string, delete it
-                        commands.remove(commands.size()-1);
-                        ExCommands.remove(ExCommands.size()-1);
+                        commands.remove(commands.size() - 1);
+                        ExCommands.remove(ExCommands.size() - 1);
                     }
                 }
             }
 
             else if (i == commands.size()) { // If FILL or PEN is in front of said command then delete the command and itself
-                System.out.println("found");
-                commands.remove(commands.size()-1);
-                commands.remove(commands.size()-1);
-                ExCommands.remove(ExCommands.size()-1);
+                System.out.println("Found");
+                commands.remove(commands.size() - 1);
+                commands.remove(commands.size() - 1);
+                ExCommands.remove(ExCommands.size() - 1);
             }
         }
 
-        Draw.remove(Draw.size()-1); // Delete the regular command.
-        commands.remove(commands.size()-1);
+        Draw.remove(Draw.size() - 1); // Delete the regular command.
+        commands.remove(commands.size() - 1);
         this.repaint();
 
         String vecFile = "";
-        System.out.println("Commands left: "+commands.size());
+        System.out.println("Commands left: " + commands.size());
         for (String command : commands) {
             vecFile += command;
         }
@@ -171,7 +174,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void setColourClick(String hex) {
         c = (Color.decode(hex));
-        pentemp = "PEN "+hex.toUpperCase()+"\n"; // Temporarily store the VEC command.
+        pentemp = "PEN " + hex.toUpperCase() + "\n"; // Temporarily store the VEC command.
         offFill();
         Pen = true;
     }
@@ -195,7 +198,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void setFillClick(String hex) {
         // Add the counter to the track array
         f = (Color.decode(hex));
-        colourtemp ="FILL "+hex.toUpperCase()+"\n"; // Temporarily store the VEC command
+        colourtemp ="FILL "+hex.toUpperCase() + "\n"; // Temporarily store the VEC command
         Filling = true;
     }
 
@@ -207,7 +210,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void SetFill(String hex) {
         Filling = true;
-        f = (Color.decode(hex)); //Add the Hex colour code to f.
+        f = (Color.decode(hex)); // Add the Hex colour code to f.
     }
 
     /**
@@ -246,8 +249,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         Draw.add(new Polygon(xP, yP, this.getWidth(), this.getHeight(), Filling, c,f));
     }
 
-    public void SetGrid(double setting){
-        grid.setSetting((int)setting, this.getHeight(),this.getWidth());
+    public void SetGrid(double setting) {
+        grid.setSetting((int)setting, this.getHeight(), this.getWidth());
     }
 
     /**
@@ -255,23 +258,24 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void paint(Graphics g) {
         super.paint(g);
-        // Set current mouse X,Y coordinates
-        int x1 = (int)(Mxy.getX()* this.getWidth());
-        int y1 = (int)(Mxy.getY()* this.getHeight());
-        int x2 = (int)(Mxy2.getX()* this.getWidth());
-        int y2 = (int)(Mxy2.getY()* this.getHeight());
 
-        if (t.isGridTruth()){
+        // Set current mouse X,Y coordinates
+        int x1 = (int)(Mxy.getX() * this.getWidth());
+        int y1 = (int)(Mxy.getY() * this.getHeight());
+        int x2 = (int)(Mxy2.getX() * this.getWidth());
+        int y2 = (int)(Mxy2.getY() * this.getHeight());
+
+        if (t.isGridTruth()) {
             double s = 0;
-            for(int i = 0; i < grid.getSetting(); i++){
-                g.setColor(Color.black);
-                g.drawLine(0,((int)(s*this.getHeight())),this.getWidth(), ((int)(s*this.getHeight())));
-                g.drawLine(((int)(s*this.getWidth())),0,((int)(s*this.getWidth())), this.getHeight());
-                s+=(1.0/grid.getSetting());
+            for (int i = 0; i < grid.getSetting(); i++) {
+                g.setColor(Color.LIGHT_GRAY);
+                g.drawLine(0,((int) (s*this.getHeight())), this.getWidth(), ((int) (s*this.getHeight())));
+                g.drawLine(((int) (s*this.getWidth())),0,((int) (s*this.getWidth())), this.getHeight());
+                s += (1.0/grid.getSetting());
             }
         }
 
-        for(ShapesDrawn s : Draw) { // For loop for redrawing all shapes
+        for (ShapesDrawn s : Draw) { // For loop for redrawing all shapes
             s.resize(this.getWidth(),this.getHeight());
             s.draw(g);
         }
@@ -303,8 +307,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double sy = 0.0;
         int mx;
         int my;
-        if (t.isGridTruth()){
-            for(int y = 0; y < grid.getSetting()+1; y++) {
+        if (t.isGridTruth()) {
+            for (int y = 0; y < grid.getSetting()+1; y++) {
                 for (int x = 0; x < grid.getSetting()+1; x++) {
                     my = (int)(sy*this.getHeight());
                     mx = (int)(sx*this.getWidth());
@@ -400,11 +404,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 SetCoordinateDrawingPlotting(oldX, oldY, startX, startY);
                 xP = new double[polylines.size()/2];
                 yP = new double[polylines.size()/2];
-                for(int i = 0; i<polylines.size()/2; i++) { //Access the polylines array and setting x and y coordinates
+                for (int i = 0; i<polylines.size()/2; i++) { //Access the polylines array and setting x and y coordinates
                     xP[i] = polylines.get(2*i);
                     yP[i] = polylines.get(2*i+1);
                 }
-                for(int i = 0; i<MouseIncrement; i++) { // Remove all the lines created based on how many mouse clicks
+                for (int i = 0; i<MouseIncrement; i++) { // Remove all the lines created based on how many mouse clicks
                     Draw.remove(Draw.size()-1);
                 }
                 polystr += "\n";
@@ -428,7 +432,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     }
                 }
 
-                if (Pen){
+                if (Pen) {
                     commands.add(pentemp); //Add outline colour command
                     ExCommands.add(commands.size());
                     tempEx = commands.size();
@@ -438,11 +442,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                         tempEx = commands.size();
                     }
                 }
-
                 commands.add(polystr); // Adds polystr into the command list
                 SetCoordinatePolygon(xP, yP); //Redraws the polygon by calling this function
             }
-
         }
         this.repaint();
     }
@@ -461,8 +463,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int mx;
         int my;
 
-        if (t.isGridTruth()){
-            for(int y = 0; y < grid.getSetting()+1; y++) {
+        if (t.isGridTruth()) {
+            for (int y = 0; y < grid.getSetting()+1; y++) {
                 for (int x = 0; x < grid.getSetting()+1; x++) {
                     my = (int)(sy*this.getHeight());
                     mx = (int)(sx*this.getWidth());
@@ -475,13 +477,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 }
                 sx = 0.0;
                 sy += (1.0/grid.getSetting());
-
             }
         }
-
         drawingLine = true;
         this.repaint();
-
     }
 
     @Override
@@ -503,8 +502,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int mx;
         int my;
 
-        if (t.isGridTruth()){
-            for(int y = 0; y < grid.getSetting()+1; y++) {
+        if (t.isGridTruth()) {
+            for (int y = 0; y < grid.getSetting()+1; y++) {
                 for (int x = 0; x < grid.getSetting()+1; x++) {
                     my = (int)(sy*this.getHeight());
                     mx = (int)(sx*this.getWidth());
@@ -519,7 +518,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 }
                 sx = 0.0;
                 sy += (1.0/grid.getSetting());
-
             }
         }
 
