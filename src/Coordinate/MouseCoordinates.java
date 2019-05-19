@@ -1,7 +1,7 @@
 package Coordinate;
 
 /**
- * This it the MouseCoordinates encapsulation class that sets MouseXY coordinates from integers to double based on the
+ * This it the MouseCoordinates Polymorphism class that sets MouseXY coordinates from integers to double based on the
  * screen JPanel height of the program.
  */
 public class MouseCoordinates {
@@ -15,11 +15,11 @@ public class MouseCoordinates {
     }
 
     public void setMousex(double mouseX) {
-        this.mouseX = mouseX;
+
     }
 
     public void setMousey(double mouseY) {
-        this.mouseY = mouseY;
+
     }
 
     public double getX() { return  mouseX; }

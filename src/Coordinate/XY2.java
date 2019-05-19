@@ -1,5 +1,8 @@
 package Coordinate;
 
+/**
+ * This extends the MouseCoordiantes polymorphism class where this sets the XY2 mouse value to double values
+ */
 public class XY2 extends MouseCoordinates {
 
     private double mouseX, mouseY;
@@ -13,9 +16,7 @@ public class XY2 extends MouseCoordinates {
         this.mouseX = mouseX;
     }
 
-    public void setMousey(double mouseY) {
-        this.mouseY = mouseY;
-    }
+    public void setMousey(double mouseY) { this.mouseY = mouseY; }
 
     public double getX(){
         return  mouseX;

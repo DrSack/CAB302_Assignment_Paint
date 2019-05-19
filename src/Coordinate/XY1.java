@@ -1,5 +1,8 @@
 package Coordinate;
 
+/**
+ * This extends the MouseCoordiantes polymorphism class where this sets the XY1 mouse value to double values
+ */
 public class XY1 extends MouseCoordinates {
 
     private double mouseX, mouseY;

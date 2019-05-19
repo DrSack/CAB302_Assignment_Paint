@@ -34,7 +34,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private ArrayList<Double> polylines = new ArrayList<>();
     private ArrayList<Integer> ExCommands = new ArrayList<>(); // The index value of every PEN and FILL in commands arrayList.
 
-    private DecimalFormat df = new DecimalFormat("#.00"); // Updates double variables to 2 decimal places.
+    private DecimalFormat df = new DecimalFormat("#.00000"); // Updates double variables to 5 decimal places.
     private Color c = Color.black;
     private Color f;
 
@@ -481,6 +481,20 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 sy += (1.0/grid.getSetting());
             }
         }
+
+        if ((Mxy2.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
+            Mxy2.setMousex(0.0);
+        }
+        if ((Mxy2.getX())> 1.0) { // If the x value is in front of the JPanel screen set mx2 to the maximum coordinate
+            Mxy2.setMousex(1.0);
+        }
+        if (Mxy2.getY() < 0.0) { // If the y value is behind 0 set my2 as 0
+            Mxy2.setMousey(0.0);
+        }
+        if (Mxy2.getY() > 1.0) { // If the y value is in front of the JPanel screen set my2 to the maximum coordinate
+            Mxy2.setMousey(1.0);
+        }
+
         drawingLine = true;
         this.repaint();
     }

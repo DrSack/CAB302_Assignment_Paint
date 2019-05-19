@@ -4,6 +4,7 @@ import Coordinate.MouseCoordinates;
 import Coordinate.XY1;
 import Coordinate.XY2;
 import GUI.*;
+import Tools.Grid;
 import Tools.LineOrPlot;
 import Tools.ShapesDrawn;
 import org.junit.jupiter.api.Test;
@@ -175,5 +176,12 @@ class TestCases extends JPanel {
         assertEquals(0.5, Test1.getY());
         assertEquals(0.5, Test2.getX());
         assertEquals(0.5, Test2.getY());
+    }
+
+    @Test
+    void TestGrid() { // Test coordinates
+        Grid test = new Grid();
+        test.setSetting(6,0,0);
+        assertEquals(6,test.getSetting());
     }
 }

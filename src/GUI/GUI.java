@@ -78,7 +78,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
         canvas = new DrawCanvas();
         canvas.setBackground(Color.WHITE);
-        canvas.setSize(new Dimension(670, 670));
+        canvas.setSize(new Dimension(665, 665));
 
         // Setup components
         setupMenuBar();
@@ -707,7 +707,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                             counter++;
                         }
 
-                        GUI cool = new GUI(fc.getSelectedFile().getAbsolutePath());
+                        GUI frame = new GUI(fc.getSelectedFile().getAbsolutePath());
 
                         while (VECfile != null) {
                             String hold = VECfile;
@@ -715,7 +715,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                 hold += "\n";
                             }
 
-                            cool.readCommand(hold);// Add command into arrayList
+                            frame.readCommand(hold);// Add command into arrayList
                             counterSTOP++;
                             VECfile = readerChoose.readLine();
                         }
@@ -725,7 +725,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                         }
 
                         while (data != null) { // If there is data keep reading each line
-                            if (data.contains("LINE")) {
+                            if (data.startsWith("LINE")) {
                                 // Replaces PLOT with nothing
                                 data = data.replace("LINE ", "");
 
@@ -735,10 +735,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                 y1 = Double.parseDouble(param[1]);
                                 x2 = Double.parseDouble(param[2]);
                                 y2 = Double.parseDouble(param[3]);
-                                cool.parseLine(x1, y1, x2, y2);
+                                frame.parseLine(x1, y1, x2, y2);
                             }
 
-                            if (data.contains("PLOT")) {
+                            else if (data.startsWith("PLOT")) {
                                 // Replaces PLOT with nothing
                                 data = data.replace("PLOT ", "");
 
@@ -746,10 +746,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                 String param[] = data.split(" ");
                                 x1 = Double.parseDouble(param[0]);
                                 y1 = Double.parseDouble(param[1]);
-                                cool.parseLine(x1, y1, x1, y1);
+                                frame.parseLine(x1, y1, x1, y1);
                             }
 
-                            if (data.contains("RECTANGLE")) {
+                            else if (data.startsWith("RECTANGLE")) {
                                 // Replaces RECTANGLE with nothing
                                 data = data.replace("RECTANGLE ", "");
 
@@ -759,10 +759,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                 y1 = Double.parseDouble(param[1]);
                                 x2 = Double.parseDouble(param[2]);
                                 y2 = Double.parseDouble(param[3]);
-                                cool.parseRect(x1, y1, x2, y2);
+                                frame.parseRect(x1, y1, x2, y2);
                             }
 
-                            if (data.contains("ELLIPSE")) {
+                            else if (data.startsWith("ELLIPSE")) {
                                 // Replaces ELLIPSE with nothing
                                 data = data.replace("ELLIPSE ", "");
 
@@ -772,10 +772,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                 y1 = Double.parseDouble(param[1]);
                                 x2 = Double.parseDouble(param[2]);
                                 y2 = Double.parseDouble(param[3]);
-                                cool.parseEllipse(x1, y1, x2, y2);
+                                frame.parseEllipse(x1, y1, x2, y2);
                             }
 
-                            if (data.contains("POLYGON")) {
+                            else if (data.startsWith("POLYGON")) {
                                 int numbers;
 
                                 // Replaces POLYGON with nothing
@@ -794,30 +794,34 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                     xP[i] = Double.parseDouble(param[2 * i]);
                                     yP[i] = Double.parseDouble(param[2 * i + 1]);
                                 }
-                                cool.parsePolygon(xP, yP);
+                                frame.parsePolygon(xP, yP);
                             }
 
-                            if (data.contains("PEN") || data.contains("pen")) { // If the line contains pen
+                            else if (data.startsWith("PEN") || data.startsWith("pen")) { // If the line contains pen
                                 data = data.replace("PEN ", "");
                                 data = data.replace("pen ", "");
-                                cool.parseColour(data); // Set the colour on the JPanel
+                                frame.parseColour(data); // Set the colour on the JPanel
                             }
 
-                            if (data.contains("FILL") || data.contains("fiil")) { // If the line contains Fill
+                            else if (data.startsWith("FILL") || data.startsWith("fill")) { // If the line contains Fill
                                 data = data.replace("FILL ", "");
                                 data = data.replace("fill ", "");
 
                                 if (data.contains("OFF")) {
-                                    cool.parseFillOff(); // Set the colour on the JPanel
+                                    frame.parseFillOff(); // Set the colour on the JPanel
                                 } else {
-                                    cool.parseFill(data); // Set the colour on the JPanel
+                                    frame.parseFill(data); // Set the colour on the JPanel
                                 }
+                            }
+                            else if(data!=null){
+                                JOptionPane.showMessageDialog(null, "Error: Unknown command: "+data, "Error", JOptionPane.INFORMATION_MESSAGE);
+                                break;
                             }
                             data = reader.readLine();
                         }
 
                         // Redraw the canvas and display shapes/lines.
-                        cool.open();
+                        frame.open();
                         canvas.repaint();
                         canvas.setVisible(true);
                     }
