@@ -303,6 +303,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double sy = 0.0;
         int mx;
         int my;
+        double mx1 = Mxy.getX();
+        double my1 = Mxy.getY();
+        double mx2 = Mxy2.getX();
+        double my2 = Mxy2.getY();
 
         // Set the X1,Y1 coordinates to the MouseTrack class.
         Boolean DoubleC = false;
@@ -326,6 +330,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
             }
         }
+
         if (Filling && !t.isPolyTruth()) { // If the user decides to draw with a fill colour present
             if (Pen) {
                 DoubleC = true;
@@ -365,34 +370,28 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         // If polygon button is selected, able to draw polygon
         if (t.isPolyTruth()) {
             // First left click gets position, adds string into polyStr and adds coordinates into polylines arrays,
-            //placeholders for x1 and y1 coordinates named realX and realY, also increments the mouseIncrement every click
+            //placeholders for x1 and y1 coordinates named realX and realY, also increments the mouseIncrement every
+            //click
             if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
                 MouseIncrement++;
-                Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-                String x1 = df.format(Mxy.getX());
-                String y1 = df.format(Mxy.getY());
+                mx1 = Mxy.getX();
+                my1 = Mxy.getY();
+                String x1 = df.format(mx1);
+                String y1 = df.format(my1);
                 double realX = Mxy.getX();
                 double realY = Mxy.getY();
-                this.currentX = Mxy.getX();
-                this.currentY = Mxy.getY();
-                this.startX = Mxy.getX();
-                this.startY = Mxy.getY();
                 polyStr = ("POLYGON " + "0" + x1 + " 0" + y1);
                 polylines.add(realX);
                 polylines.add(realY);
             }
-            // Second left click and every other click draws line, increments mouseIncrement every click, adds coordinates
-            //polyLines array, repaints the program every click to show line.
+            // Second left click and every other click draws line, increments mouseIncrement every click, adds
+            // coordinates into polyLines array, repaints the program every click to show line.
             else if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement > 0) {
                 MouseIncrement++;
                 Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-                this.oldX = Mxy2.getX();
-                this.oldY = Mxy2.getY();
-                SetCoordinateDrawingPlotting(currentX, currentY, oldX, oldY);
-                currentX = oldX;
-                currentY = oldY;
-                String x2 = df.format(Mxy2.getX());
-                String y2 = df.format(Mxy2.getY());
+                SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
+                String x2 = df.format(mx2);
+                String y2 = df.format(my2);
                 double realX = Mxy.getX();
                 double realY = Mxy.getY();
                 polyStr += (" 0" + x2 + " 0" + y2);
@@ -402,15 +401,14 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             }
 
             // Right click draws from x2 and y2 of the latest line to the start
-            if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 0) {
-                SetCoordinateDrawingPlotting(oldX, oldY, startX, startY);
+            else if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 0) {
                 xP = new double[polylines.size()/2];
                 yP = new double[polylines.size()/2];
                 for (int i = 0; i<polylines.size()/2; i++) { //Access the polylines array and setting x and y coordinates
                     xP[i] = polylines.get(2*i);
                     yP[i] = polylines.get(2*i+1);
                 }
-                for (int i = 0; i<MouseIncrement; i++) { // Remove all the lines created based on how many mouse clicks
+                for (int i = 0; i<MouseIncrement-1; i++) { // Remove all the lines created based on how many mouse clicks
                     Draw.remove(Draw.size()-1);
                 }
                 polyStr += "\n";
@@ -578,8 +576,43 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mouseMoved(MouseEvent e) {
         // Used to temporarily draw polygon lines
-        if (MouseIncrement >=1) {
-            Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+        if (MouseIncrement >0) {
+            Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
+            double sx = 0.0;
+            double sy = 0.0;
+            int mx;
+            int my;
+
+            if (t.isGridTruth()) {
+                for (int y = 0; y < grid.getSetting()+1; y++) {
+                    for (int x = 0; x < grid.getSetting()+1; x++) {
+                        my = (int)(sy*this.getHeight());
+                        mx = (int)(sx*this.getWidth());
+                        if (e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
+                            Mxy2.setMouseXY(mx, my, this.getWidth(),this.getHeight());
+                            drawingLine = true;
+                            this.repaint();
+                        }
+                        sx += (1.0/grid.getSetting());
+                    }
+                    sx = 0.0;
+                    sy += (1.0/grid.getSetting());
+                }
+            }
+
+            if ((Mxy2.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
+                Mxy2.setMousex(0.0);
+            }
+            if ((Mxy2.getX())> 1.0) { // If the x value is in front of the JPanel screen set mx2 to the maximum coordinate
+                Mxy2.setMousex(1.0);
+            }
+            if (Mxy2.getY() < 0.0) { // If the y value is behind 0 set my2 as 0
+                Mxy2.setMousey(0.0);
+            }
+            if (Mxy2.getY() > 1.0) { // If the y value is in front of the JPanel screen set my2 to the maximum coordinate
+                Mxy2.setMousey(1.0);
+            }
+
             drawingLine = true;
         }
         else drawingLine = false;
