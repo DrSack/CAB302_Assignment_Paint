@@ -23,7 +23,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private boolean drawingLine = false;
     private boolean Filling = false;
     private boolean Pen = false;
-    private boolean drawingPoly = false;
+    boolean drawingPoly = false;
     private int tempEx; // Store the last known integer to keep track of ExCommands
     private String colourTemp = "";
     private String penTemp = "";
@@ -154,7 +154,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * Clear the entire canvas and reset values
      */
     public void clearCanvas() {
-        if (!drawingPoly) {
             Draw.clear();
             ExCommands.clear();
             commands.clear();
@@ -165,7 +164,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             tempEx = 0;
             tempF = "";
             drawingLine = false;
-        }
     }
 
     /**

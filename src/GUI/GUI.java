@@ -406,6 +406,14 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     private void FillClick(String hex) { canvas.setFillClick(hex); }
 
+    private void ToolColourReset(){
+        toolPlot.setForeground(null);
+        toolLine.setForeground(null);
+        toolEllipse.setForeground(null);
+        toolRect.setForeground(null);
+        toolPolygon.setForeground(null);
+    }
+
     public String returnFile() { // Return the vecFile string from the canvas class.
         return canvas.returnFile();
     }
@@ -492,7 +500,13 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
         if (btnSrc == undo) {
             if (canvas.returnCounter() > 0) {
-                undo();
+                if (!canvas.drawingPoly) {
+                    undo();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
+                }
+
             }
             else {
                 JOptionPane.showMessageDialog(null, "Error: Nothing left to undo", "Empty", JOptionPane.INFORMATION_MESSAGE);
@@ -564,9 +578,15 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
         if (btnSrc == clear) { // If clear is clicked on clear the canvas and repaint.
             fill.setForeground(null);
-            outline.setForeground(null);
-            canvas.clearCanvas();
-            canvas.repaint();
+            outline.setForeground(Color.BLUE);
+            ToolColourReset();
+            if (!canvas.drawingPoly) {
+                canvas.clearCanvas();
+                canvas.repaint();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
 
         /**
@@ -574,26 +594,36 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
          * to either true or false, whether a specific button is clicked.
          */
         if (btnSrc == toolPlot) {
+            ToolColourReset();
+            toolPlot.setForeground(Color.BLUE);
             canvas.t.resetTruth();
             canvas.t.setPlotTruth();
         }
 
         if (btnSrc == toolLine) {
+            ToolColourReset();
+            toolLine.setForeground(Color.BLUE);
             canvas.t.resetTruth();
             canvas.t.setLineTruth();
         }
 
         if (btnSrc == toolRect) {
+            ToolColourReset();
+            toolRect.setForeground(Color.BLUE);
             canvas.t.resetTruth();
             canvas.t.setRecTruth();
         }
 
         if (btnSrc == toolEllipse) {
+            ToolColourReset();
+            toolEllipse.setForeground(Color.BLUE);
             canvas.t.resetTruth();
             canvas.t.setElliTruth();
         }
 
         if (btnSrc == toolPolygon) {
+            ToolColourReset();
+            toolPolygon.setForeground(Color.BLUE);
             canvas.t.resetTruth();
             canvas.t.setPolyTruth();
         }
