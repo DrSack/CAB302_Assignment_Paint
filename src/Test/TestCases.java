@@ -6,6 +6,7 @@ import Coordinate.XY2;
 import GUI.*;
 import Tools.Grid;
 import Tools.LineOrPlot;
+import Tools.Rectangle;
 import Tools.ShapesDrawn;
 import org.junit.jupiter.api.Test;
 
@@ -44,9 +45,28 @@ class TestCases extends JPanel {
         DrawCanvas Test = new DrawCanvas();
         Test.setOpenCoordinates("LINE 0.0 0.0 1.0 1.0");
         Test.SetCoordinateDrawingPlotting(0.0,0.0,1.0,1.0);
+        assertEquals("LINE 0.0 0.0 1.0 1.0", Test.returnFile());
         Test.undo();
         assertEquals("", Test.returnFile());
         assertEquals(0, Test.returnCounter());
+    }
+
+    @Test
+    void TestCanvasMultipleUndo(){
+        DrawCanvas Test = new DrawCanvas();
+        Test.setOpenCoordinates("ELLIPSE 0.0 0.0 1.0 1.0");
+        Test.SetCoordinateEllipse(0.0, 0.0, 1.0, 1.0);
+        Test.setOpenCoordinates("LINE 2.0 2.0 4.0 4.0");
+        Test.SetCoordinateDrawingPlotting(2.0, 2.0, 4.0, 4.0);
+        Test.setOpenCoordinates("RECTANGLE 3.0 3.0 2.0 2.0");
+        Test.SetCoordinateRectangle(3.0, 3.0, 2.0, 2.0);
+        assertEquals("ELLIPSE 0.0 0.0 1.0 1.0LINE 2.0 2.0 4.0 4.0RECTANGLE 3.0 3.0 2.0 2.0",
+                Test.returnFile());
+        Test.undo();
+        Test.undo();
+        assertEquals("ELLIPSE 0.0 0.0 1.0 1.0", Test.returnFile());
+        Test.undo();
+        assertEquals("", Test.returnFile());
     }
 
     @Test
@@ -121,7 +141,7 @@ class TestCases extends JPanel {
     }
 
     @Test
-    void TestShapesResize() { // Test case for resizing the window and checking if the dimensions of the shape changes
+    void TestShapesResizeLine() { // Test case for resizing the window and checking if the dimensions of the shape changes
         int w = 150;
         int h = 150;
         ArrayList<ShapesDrawn> Draw = new ArrayList<>();
@@ -132,6 +152,7 @@ class TestCases extends JPanel {
         assertEquals(w,Draw.get(0).getX2());
         assertEquals(h,Draw.get(0).getY2());
     }
+    
 
     @Test
     void TestTruthValues() { // Test if setting all truth values to true are really true
