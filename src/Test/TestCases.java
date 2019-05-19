@@ -202,7 +202,7 @@ class TestCases extends JPanel {
     @Test
     void TestGrid() { // Test coordinates
         Grid test = new Grid();
-        test.setSetting(6,0,0);
+        test.setSetting(6);
         assertEquals(6,test.getSetting());
     }
 }

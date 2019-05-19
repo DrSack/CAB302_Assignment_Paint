@@ -4,7 +4,7 @@ public class Grid {
 
     private int total;
 
-    public void setSetting(int setting, int height, int width) {
+    public void setSetting(int setting) {
         this.total = setting;
     }
 
