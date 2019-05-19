@@ -154,16 +154,18 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * Clear the entire canvas and reset values
      */
     public void clearCanvas() {
-        Draw.clear();
-        ExCommands.clear();
-        commands.clear();
-        offFill();
-        t.resetTruth();
-        colourTemp = "";
-        penTemp = "";
-        tempEx = 0;
-        tempF = "";
-        drawingLine = false;
+        if (!drawingPoly) {
+            Draw.clear();
+            ExCommands.clear();
+            commands.clear();
+            offFill();
+            t.resetTruth();
+            colourTemp = "";
+            penTemp = "";
+            tempEx = 0;
+            tempF = "";
+            drawingLine = false;
+        }
     }
 
     /**
