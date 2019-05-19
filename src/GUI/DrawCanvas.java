@@ -23,6 +23,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private boolean drawingLine = false;
     private boolean Filling = false;
     private boolean Pen = false;
+    private boolean drawingPoly = false;
     private int tempEx; // Store the last known integer to keep track of ExCommands
     private String colourTemp = "";
     private String penTemp = "";
@@ -41,7 +42,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private int MouseIncrement = 0;
     private double[] xP, yP;
 
-    private double currentX, currentY, oldX, oldY, startX, startY;
 
     private MouseCoordinates Mxy = new XY1();
     private MouseCoordinates Mxy2 = new XY2();
@@ -112,42 +112,42 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * if there is PEN and or FILL before or after the current command line.
      */
     public void undo() {
-        if (ExCommands.size() > 0) { // Delete extra commands if it is a PEN or FILL Colour
-            int i = ExCommands.get(ExCommands.size() - 1);
+        if(!drawingPoly) {
+            if (ExCommands.size() > 0) { // Delete extra commands if it is a PEN or FILL Colour
+                int i = ExCommands.get(ExCommands.size() - 1);
 
-            if (i == commands.size()-1) { // If FILL or PEN is behind said command then only delete itself
-                System.out.println("found");
-                commands.remove(commands.size() - 1);
-                ExCommands.remove(ExCommands.size() - 1);
+                if (i == commands.size() - 1) { // If FILL or PEN is behind said command then only delete itself
+                    System.out.println("found");
+                    commands.remove(commands.size() - 1);
+                    ExCommands.remove(ExCommands.size() - 1);
 
-                if (ExCommands.size() > 0) {
-                    i = ExCommands.get(ExCommands.size()- 1 );
+                    if (ExCommands.size() > 0) {
+                        i = ExCommands.get(ExCommands.size() - 1);
 
-                    if (commands.size()-1 == i) { // If there is another command even if its the last string, delete it
-                        commands.remove(commands.size() - 1);
-                        ExCommands.remove(ExCommands.size() - 1);
+                        if (commands.size() - 1 == i) { // If there is another command even if its the last string, delete it
+                            commands.remove(commands.size() - 1);
+                            ExCommands.remove(ExCommands.size() - 1);
+                        }
                     }
+                } else if (i == commands.size()) { // If FILL or PEN is in front of said command then delete the command and itself
+                    System.out.println("Found");
+                    commands.remove(commands.size() - 1);
+                    commands.remove(commands.size() - 1);
+                    ExCommands.remove(ExCommands.size() - 1);
                 }
             }
 
-            else if (i == commands.size()) { // If FILL or PEN is in front of said command then delete the command and itself
-                System.out.println("Found");
-                commands.remove(commands.size() - 1);
-                commands.remove(commands.size() - 1);
-                ExCommands.remove(ExCommands.size() - 1);
+            Draw.remove(Draw.size() - 1); // Delete the regular command.
+            commands.remove(commands.size() - 1);
+            this.repaint();
+
+            String vecFile = "";
+            System.out.println("Commands left: " + commands.size());
+            for (String command : commands) {
+                vecFile += command;
             }
+            System.out.println(vecFile);
         }
-
-        Draw.remove(Draw.size() - 1); // Delete the regular command.
-        commands.remove(commands.size() - 1);
-        this.repaint();
-
-        String vecFile = "";
-        System.out.println("Commands left: " + commands.size());
-        for (String command : commands) {
-            vecFile += command;
-        }
-        System.out.println(vecFile);
     }
 
     /**
@@ -370,19 +370,17 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         // If polygon button is selected, able to draw polygon
         if (t.isPolyTruth()) {
             // First left click gets position, adds string into polyStr and adds coordinates into polylines arrays,
-            //placeholders for x1 and y1 coordinates named realX and realY, also increments the mouseIncrement every
-            //click
+            // increments the mouseIncrement every click. Also makes drawingPoly into true so you can't undo until finished.
             if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
+                drawingPoly = true;
                 MouseIncrement++;
                 mx1 = Mxy.getX();
                 my1 = Mxy.getY();
                 String x1 = df.format(mx1);
                 String y1 = df.format(my1);
-                double realX = Mxy.getX();
-                double realY = Mxy.getY();
                 polyStr = ("POLYGON " + "0" + x1 + " 0" + y1);
-                polylines.add(realX);
-                polylines.add(realY);
+                polylines.add(Mxy.getX());
+                polylines.add(Mxy.getY());
             }
             // Second left click and every other click draws line, increments mouseIncrement every click, adds
             // coordinates into polyLines array, repaints the program every click to show line.
@@ -392,16 +390,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
                 String x2 = df.format(mx2);
                 String y2 = df.format(my2);
-                double realX = Mxy.getX();
-                double realY = Mxy.getY();
                 polyStr += (" 0" + x2 + " 0" + y2);
-                polylines.add(realX);
-                polylines.add(realY);
+                polylines.add(Mxy.getX());
+                polylines.add(Mxy.getY());
                 this.repaint();
             }
 
             // Right click draws from x2 and y2 of the latest line to the start
             else if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 0) {
+                drawingPoly = false; // Make it into false to be able to undo the entire shape
                 xP = new double[polylines.size()/2];
                 yP = new double[polylines.size()/2];
                 for (int i = 0; i<polylines.size()/2; i++) { //Access the polylines array and setting x and y coordinates
