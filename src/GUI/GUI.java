@@ -178,7 +178,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         tools.add(fillColor, tc);
     }
 
-    // Setup a JSlider to adjust the size of the Grid
+    /**
+     * Setup a JSlider to adjust the size of the Grid
+     */
     private void setupSize() {
         gridSlider = new JSlider(JSlider.VERTICAL, 50, 300, 100);
         gridSlider.setMajorTickSpacing(50);

@@ -9,8 +9,10 @@ public abstract class ShapesDrawn { // Initialize variables
 
     private int x1, y1, x2, y2;
     private double ox1,oy1,ox2,oy2;
-    private int x[], y[];
-    private double Ax[], Ay[];
+    private int[] x;
+    private int[] y;
+    private double[] Ax;
+    private double[] Ay;
 
     private Color pen;
     private Color filling;
@@ -53,7 +55,7 @@ public abstract class ShapesDrawn { // Initialize variables
      * @param x Set x coordinate into array
      * @param y Set y coordinate into array
      */
-    ShapesDrawn(double x[], double y[],int width, int height, boolean Fill, Color pen, Color filling) {
+    ShapesDrawn(double[] x, double[] y, int width, int height, boolean Fill, Color pen, Color filling) {
         this.filling = filling;
         this.pen = pen;
         this.Fill = Fill;
@@ -72,9 +74,16 @@ public abstract class ShapesDrawn { // Initialize variables
         Polygon = true;
     }
 
+    /**
+     * @param g the graphics parameter which is called from the paint method.
+     */
     public abstract void draw(Graphics g);
 
-    // Every  time the window is resized scale the shape to the JPanels new dimensions
+    /**
+     * Every  time the window is resized scale the shape to the JPanels new dimensions
+     * @param width The width of the JPanel
+     * @param height The height of the JPanel
+     */
     public void resize(int width, int height) {
         if (Polygon) {
             for (int i = 0; i < x.length; i++) {
@@ -90,41 +99,70 @@ public abstract class ShapesDrawn { // Initialize variables
         }
     }
 
+    /**
+     * @return the x1 coordinate
+     */
     public int getX1() {// return x1
         return x1;
     }
 
+    /**
+     * @return the y1 coordinate
+     */
     public int getY1() {// return y1
         return y1;
     }
 
+    /**
+     * @return the x2 coordinate
+     */
     public int getX2() {// return x2
         return x2;
     }
 
+    /**
+     * @return the y2 coordinate
+     */
     public int getY2() {// return y2
         return y2;
     }
 
+    /**
+     * @return the Polygon x array coordinates
+     */
     public int[] getXarray(){// return all X coordinates in the array
         return x;
     }
 
+    /**
+     * @return the Polygon y array coordinates
+     */
     public int[] getYarray(){// return all Y coordinates in the array
         return y;
     }
 
-    //Get penColour
+    /**
+     *
+     * @return Get pen colour
+     */
     public Color getPenC(){
         return pen;
     }
 
-    //Get fillColour
+    /**
+     *
+     * @return Get fill colour
+     */
+
     public Color getFillC(){
         return filling;
     }
 
-    //Return if the shape is filled or not
+    /**
+     *
+     * @return Return if the shape is filled or not
+     */
+
     public boolean getFill(){
         return Fill;
     }

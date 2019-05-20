@@ -30,7 +30,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private String tempF;
     private String polyStr;
 
-    private ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>(); // Setup arrayList for storing shape information.
+    public ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>(); // Setup arrayList for storing shape information.
     private ArrayList<String> commands = new ArrayList<>(); // Store all commands here
     private ArrayList<Double> polylines = new ArrayList<>();
     private ArrayList<Integer> ExCommands = new ArrayList<>(); // The index value of every PEN and FILL in commands arrayList.
@@ -46,7 +46,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     private MouseCoordinates Mxy = new XY1();
     private MouseCoordinates Mxy2 = new XY2();
     TruthValues t = new TruthValues();
-    Grid grid = new Grid();
+    private Grid grid = new Grid();
 
     /**
      * This is the constructor which passes the string vec parameter to commands arrayList, where the class will add new lines
@@ -185,9 +185,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      *
      * @param hex pass through the hex colour code into c.
      */
-    void SetColour(String hex) {
+    public void SetColour(String hex) {
         c = (Color.decode(hex));
     }
+
+    /**
+     * @return Return the pen outline colour
+     */
+
+    public Color returnColour() { return c; }
 
     /**
      * This method is called from the GUI whether the button "fill" is enabled, and the colours picked also have
@@ -221,8 +227,19 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * Next 3 methods all have the same functionality but instead fill out each constructor with different parameter values
-     * and the drawing method is slightly different after each method.
+     * @return Return the fill colour
+     */
+
+    public Color returnFill(){ return f; }
+
+    /**
+     * @return Return the Filling current boolean value
+     */
+    public boolean returnFilltruth(){return Filling;}
+
+    /**
+     * Pass through the dimensions of each coordinate into Drawing Plotting which is responsible for creating object
+     * within the ShapesDraw class and storing them into the Draw arraylist. This method is used for both line and plot.
      *
      * @param X1 Pass though the double X1 value
      * @param Y1 Pass though the double Y1 value
@@ -232,25 +249,112 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     // Set coordinates for Lines or Plotting
     public void SetCoordinateDrawingPlotting(double X1, double Y1, double X2, double Y2) {
-        Draw.add(new LineOrPlot(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,c, f));
+        Draw.add(new LineOrPlot(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,returnColour(), returnFill()));
     }
+
+    /**
+     * Pass through the dimensions of each coordinate into drawing a rectangle. This creates a new object and stores it inside
+     * the Draw arraylist
+     *
+     * @param X1 Pass though the double X1 value
+     * @param Y1 Pass though the double Y1 value
+     * @param X2 Pass though the double X2 value
+     * @param Y2 Pass though the double Y2 value
+     */
 
     // Set coordinates for Rectangle
     public void SetCoordinateRectangle(double X1, double Y1, double X2, double Y2) {
-        Draw.add(new Rectangle(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,c,f));
+        Draw.add(new Rectangle(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,returnColour(),returnFill()));
     }
+
+    /**
+     * Pass through the dimensions of each coordinate into drawing a Ellipse. This creates a new object and stores it inside
+     * the Draw arraylist
+     *
+     * @param X1 Pass though the double X1 value
+     * @param Y1 Pass though the double Y1 value
+     * @param X2 Pass though the double X2 value
+     * @param Y2 Pass though the double Y2 value
+     */
 
     // Set coordinates for Ellipse
     public void SetCoordinateEllipse(double X1, double Y1, double X2, double Y2) {
-        Draw.add(new Ellipse(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,c,f));
+        Draw.add(new Ellipse(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,returnColour(),returnFill()));
     }
 
-    public void SetCoordinatePolygon(double xP[], double yP[]) {
-        Draw.add(new Polygon(xP, yP, this.getWidth(), this.getHeight(), Filling, c,f));
+    /**
+     * Pass through the dimensions of each coordinate within 2 arrays into drawing a Polygon.
+     * This creates a new object and stores it inside the Draw arraylist.
+     *
+     * @param xP passes the x coordinates array.
+     * @param yP passes the y coordinates array.
+     */
+
+    public void SetCoordinatePolygon(double[] xP, double[] yP) {
+        Draw.add(new Polygon(xP, yP, this.getWidth(), this.getHeight(), Filling, returnColour(),returnFill()));
     }
 
-    public void SetGrid(double setting) {
-        grid.setSetting((int)setting, this.getHeight(), this.getWidth());
+    /**
+     * Set the number value for the variable value within the grid class, as this is used to draw the total amount
+     * of line grids.
+     *
+     * @param setting pass the double value of initiating the setting
+     */
+
+    void SetGrid(double setting) {
+        grid.setSetting((int)setting);
+    }
+
+    /**
+     * Makes it so that all drawings are within the canvas itself.
+     * @param M Pass the MouseCoordinates class object
+     */
+
+    private void SetBoundaries(MouseCoordinates M){
+        if ((M.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
+            M.setMousex(0.0);
+        }
+        if ((M.getX())> 1.0) { // If the x value is in front of the JPanel screen set mx2 to the maximum coordinate
+            M.setMousex(1.0);
+        }
+        if (M.getY() < 0.0) { // If the y value is behind 0 set my2 as 0
+            M.setMousey(0.0);
+        }
+        if (M.getY() > 1.0) { // If the y value is in front of the JPanel screen set my2 to the maximum coordinate
+            M.setMousey(1.0);
+        }
+    }
+
+    /**
+     *This sets up the boundaries of each grid intersection, and latches the shape being drawn to the intersections
+     * of whatever grid intersection is being onto.
+     *
+     * @param xm passes the MouseListener x coordinate
+     * @param xy passes the MouseListener y coordinate
+     * @param M pass the MouseCoordinates class object
+     */
+    private void SetGridBoundaries(int xm, int xy, MouseCoordinates M){
+        double sx = 0.0;
+        double sy = 0.0;
+        int mx;
+        int my;
+        if (t.isGridTruth()) {
+            for (int y = 0; y < grid.getSetting()+1; y++) {
+                for (int x = 0; x < grid.getSetting()+1; x++) {
+                    my = (int)(sy*this.getHeight());
+                    mx = (int)(sx*this.getWidth());
+                    if (xy > my-25 && xy < my+25 && xm > mx-25 && xm < mx+25 ) {
+                        M.setMouseXY(mx, my, this.getWidth(),this.getHeight());
+                        drawingLine = true;
+                        this.repaint();
+                    }
+                    sx += (1.0/grid.getSetting());
+                }
+                sx = 0.0;
+                sy += (1.0/grid.getSetting());
+
+            }
+        }
     }
 
     /**
@@ -265,9 +369,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int x2 = (int)(Mxy2.getX() * this.getWidth());
         int y2 = (int)(Mxy2.getY() * this.getHeight());
 
-        if (t.isGridTruth()) {
+        if (t.isGridTruth()) {// If the grid is active then draw it here
             double s = 0;
-            for (int i = 0; i < grid.getSetting(); i++) {
+            for (int i = 0; i < grid.getSetting(); i++) {//Use the settings number to dictate how many lines are to be drawn.
                 g.setColor(Color.LIGHT_GRAY);
                 g.drawLine(0,((int) (s*this.getHeight())), this.getWidth(), ((int) (s*this.getHeight())));
                 g.drawLine(((int) (s*this.getWidth())),0,((int) (s*this.getWidth())), this.getHeight());
@@ -282,7 +386,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         if (drawingLine) { // If the user is still dragging the shapes, draw the shapes temporarily.
             TemporaryDraw Temp = new TemporaryDraw();
-            Temp.temporary(g,x1,y1,x2,y2,c,f,t.isLineTruth(),t.isRecTruth(),t.isElliTruth(),t.isPolyTruth(), Filling);
+            Temp.temporary(g,x1,y1,x2,y2,c,f,t.isLineTruth(),t.isRecTruth(),t.isElliTruth(),t.isPolyTruth(), returnFilltruth());
         }
     }
 
@@ -299,10 +403,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     @Override
     public void mousePressed(MouseEvent e) { // If mouse is pressed do something
-        double sx = 0.0;
-        double sy = 0.0;
-        int mx;
-        int my;
         double mx1 = Mxy.getX();
         double my1 = Mxy.getY();
         double mx2 = Mxy2.getX();
@@ -313,23 +413,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         Mxy2.setMouseXY(e.getX(),e.getY(), this.getWidth(), this.getHeight());
 
-        if (t.isGridTruth()) {
-            for (int y = 0; y < grid.getSetting()+1; y++) {
-                for (int x = 0; x < grid.getSetting()+1; x++) {
-                    my = (int)(sy*this.getHeight());
-                    mx = (int)(sx*this.getWidth());
-                    if (e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
-                        Mxy.setMouseXY(mx, my, this.getWidth(),this.getHeight());
-                        drawingLine = true;
-                        this.repaint();
-                    }
-                    sx += (1.0/grid.getSetting());
-                }
-                sx = 0.0;
-                sy += (1.0/grid.getSetting());
-
-            }
-        }
+        //Set the grid boundaries whether the grid is triggered.
+        SetGridBoundaries(e.getX(),e.getY(),Mxy);
 
         if (Filling && !t.isPolyTruth()) { // If the user decides to draw with a fill colour present
             if (Pen) {
@@ -455,41 +540,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mouseDragged(MouseEvent e) {
         Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-        double sx = 0.0;
-        double sy = 0.0;
-        int mx;
-        int my;
-
-        if (t.isGridTruth()) {
-            for (int y = 0; y < grid.getSetting()+1; y++) {
-                for (int x = 0; x < grid.getSetting()+1; x++) {
-                    my = (int)(sy*this.getHeight());
-                    mx = (int)(sx*this.getWidth());
-                    if (e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
-                        Mxy2.setMouseXY(mx, my, this.getWidth(),this.getHeight());
-                        drawingLine = true;
-                        this.repaint();
-                    }
-                    sx += (1.0/grid.getSetting());
-                }
-                sx = 0.0;
-                sy += (1.0/grid.getSetting());
-            }
-        }
-
-        if ((Mxy2.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
-            Mxy2.setMousex(0.0);
-        }
-        if ((Mxy2.getX())> 1.0) { // If the x value is in front of the JPanel screen set mx2 to the maximum coordinate
-            Mxy2.setMousex(1.0);
-        }
-        if (Mxy2.getY() < 0.0) { // If the y value is behind 0 set my2 as 0
-            Mxy2.setMousey(0.0);
-        }
-        if (Mxy2.getY() > 1.0) { // If the y value is in front of the JPanel screen set my2 to the maximum coordinate
-            Mxy2.setMousey(1.0);
-        }
-
+        SetGridBoundaries(e.getX(),e.getY(),Mxy2);
+        SetBoundaries(Mxy2);
         drawingLine = true;
         this.repaint();
     }
@@ -505,45 +557,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         // Assign x,y to variables.
         double mx1 = Mxy.getX();
         double my1 = Mxy.getY();
-        double mx2 = Mxy2.getX();
-        double my2 = Mxy2.getY();
+        double mx2;
+        double my2;
 
-        double sx = 0.0;
-        double sy = 0.0;
-        int mx;
-        int my;
-
-        if (t.isGridTruth()) {
-            for (int y = 0; y < grid.getSetting()+1; y++) {
-                for (int x = 0; x < grid.getSetting()+1; x++) {
-                    my = (int)(sy*this.getHeight());
-                    mx = (int)(sx*this.getWidth());
-                    if (e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
-                        Mxy2.setMouseXY(mx, my, this.getWidth(),this.getHeight());
-                        mx2 = Mxy2.getX();
-                        my2 = Mxy2.getY();
-                        drawingLine = true;
-                        this.repaint();
-                    }
-                    sx += (1.0/grid.getSetting());
-                }
-                sx = 0.0;
-                sy += (1.0/grid.getSetting());
-            }
-        }
-
-        if ((Mxy2.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
-            mx2 = 0.0;
-        }
-        if ((Mxy2.getX())> 1.0) { // If the x value is in front of the JPanel screen set mx2 to the maximum coordinate
-            mx2 = 1.0;
-        }
-        if (Mxy2.getY() < 0.0) { // If the y value is behind 0 set my2 as 0
-            my2 = 0.0;
-        }
-        if (Mxy2.getY() > 1.0) { // If the y value is in front of the JPanel screen set my2 to the maximum coordinate
-            my2 = 1.0;
-        }
+        SetGridBoundaries(e.getX(),e.getY(),Mxy2);//Sets what is being drawn to be latched onto the nearest grid intersection.
+        mx2 = Mxy2.getX();//set mx2 to the current mxy2 X coordinate.
+        my2 = Mxy2.getY();//set mx2 to the current mxy2 Y coordinate.
+        SetBoundaries(Mxy2);// Only permits shapes to be drawn within the drawing canvas.
 
         // Convert the double formats to String with 2decimal places.
         String x1 = df.format(mx1);
@@ -571,45 +591,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     @Override
+    /**
+     * This is used to temporarily draw the polygon lines
+     */
     public void mouseMoved(MouseEvent e) {
         // Used to temporarily draw polygon lines
         if (MouseIncrement >0) {
             Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-            double sx = 0.0;
-            double sy = 0.0;
-            int mx;
-            int my;
-
-            if (t.isGridTruth()) {
-                for (int y = 0; y < grid.getSetting()+1; y++) {
-                    for (int x = 0; x < grid.getSetting()+1; x++) {
-                        my = (int)(sy*this.getHeight());
-                        mx = (int)(sx*this.getWidth());
-                        if (e.getY() > my-25 && e.getY() < my+25 && e.getX() > mx-25 && e.getX() < mx+25 ) {
-                            Mxy2.setMouseXY(mx, my, this.getWidth(),this.getHeight());
-                            drawingLine = true;
-                            this.repaint();
-                        }
-                        sx += (1.0/grid.getSetting());
-                    }
-                    sx = 0.0;
-                    sy += (1.0/grid.getSetting());
-                }
-            }
-
-            if ((Mxy2.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
-                Mxy2.setMousex(0.0);
-            }
-            if ((Mxy2.getX())> 1.0) { // If the x value is in front of the JPanel screen set mx2 to the maximum coordinate
-                Mxy2.setMousex(1.0);
-            }
-            if (Mxy2.getY() < 0.0) { // If the y value is behind 0 set my2 as 0
-                Mxy2.setMousey(0.0);
-            }
-            if (Mxy2.getY() > 1.0) { // If the y value is in front of the JPanel screen set my2 to the maximum coordinate
-                Mxy2.setMousey(1.0);
-            }
-
+            SetGridBoundaries(e.getX(), e.getY(), Mxy2);
+            SetBoundaries(Mxy2);
             drawingLine = true;
         }
         else drawingLine = false;

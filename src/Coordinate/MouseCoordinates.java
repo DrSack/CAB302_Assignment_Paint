@@ -8,23 +8,38 @@ public class MouseCoordinates {
 
     private double mouseX, mouseY;
 
-    // Set XY value for the mouse coordinates and also convert to double
+    /**
+     * Set XY value for the mouse coordinates and also convert to double
+     * @param x the current x coordinate of the MouseListener
+     * @param y the current y coordinate of the MouseListener
+     * @param width the JPanel width
+     * @param height the JPanel height
+     */
     public void setMouseXY(int x, int y, int width, int height) {
         mouseX = (double) x/width;
         mouseY = (double) y/height;
     }
 
-    public void setMousex(double mouseX) {
+    /**
+     * Manually set the mouseX coordinate
+     * @param mouseX pass through the double values
+     */
+    public void setMousex(double mouseX) { }
 
-    }
 
-    public void setMousey(double mouseY) {
+    /**
+     * Manually set the mouseY coordinate
+     * @param mouseY pass through the double values
+     */
+    public void setMousey(double mouseY) { }
 
-    }
-
+    /**
+     * @return mouseX double coordinate.
+     */
     public double getX() { return  mouseX; }
 
-    public double getY(){
-        return  mouseY;
-    }
+    /**
+     * @return mouseY double coordinate.
+     */
+    public double getY(){ return  mouseY; }
 }
