@@ -151,8 +151,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         fill.setPreferredSize(new Dimension(80, 25));
 
         // Color preview
-        outlineColor = new JButton();
-        fillColor = new JButton();
+        outlineColor = new JButton("");
+        fillColor = new JButton("");
         outlineColor.setEnabled(false);
         fillColor.setEnabled(false);
         outlineColor.setBackground(Color.BLACK);
@@ -551,7 +551,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
 
         if (btnSrc == extraColors) {
-            c = JColorChooser.showDialog(null, "Pick a color", c);
+            c = JColorChooser.showDialog(null, "Pick a color", c, false);
 
             // Change the pen color back to black if the user doesn't pick anything or clicks cancel
             if (c == null) {
