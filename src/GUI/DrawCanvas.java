@@ -32,7 +32,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     public ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>(); // Setup arrayList for storing shape information.
     private ArrayList<String> commands = new ArrayList<>(); // Store all commands here
-    private ArrayList<Double> polylines = new ArrayList<>();
+    private ArrayList<Double> polylines = new ArrayList<>(); // Store polygon coordinates to draw
     private ArrayList<Integer> ExCommands = new ArrayList<>(); // The index value of every PEN and FILL in commands arrayList.
 
     private DecimalFormat df = new DecimalFormat("#.00000"); // Updates double variables to 5 decimal places.
@@ -390,8 +390,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
+
+
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) { //Does nothing
 
     }
 
@@ -457,36 +459,36 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             // First left click gets position, adds string into polyStr and adds coordinates into polylines arrays,
             // increments the mouseIncrement every click. Also makes drawingPoly into true so you can't undo until finished.
             if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
-                drawingPoly = true;
+                drawingPoly = true; // Sets drawingPoly to true, if true cannot undo or clear
                 MouseIncrement++;
-                mx1 = Mxy.getX();
-                my1 = Mxy.getY();
-                String x1 = df.format(mx1);
-                String y1 = df.format(my1);
-                polyStr = ("POLYGON " + "0" + x1 + " 0" + y1);
-                polylines.add(Mxy.getX());
-                polylines.add(Mxy.getY());
+                mx1 = Mxy.getX(); // Gets x coordinate
+                my1 = Mxy.getY(); // Gets y coordinate
+                String x1 = df.format(mx1); // Formats the x coordinate into a string
+                String y1 = df.format(my1); // Formats the y coordinate into a string
+                polyStr = ("POLYGON " + "0" + x1 + " 0" + y1); //polyStr will be used to store into commands after right click
+                polylines.add(Mxy.getX()); // Adds coordinate into polylines used later to draw
+                polylines.add(Mxy.getY()); // Adds coordinate into polylines used later to draw
             }
             // Second left click and every other click draws line, increments mouseIncrement every click, adds
             // coordinates into polyLines array, repaints the program every click to show line.
             else if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement > 0) {
                 MouseIncrement++;
-                Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
-                SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
+                Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight()); // Sets the x2 and y2
+                SetCoordinateDrawingPlotting(mx1, my1, mx2, my2); //Draws a line depending on mouse clicked
                 String x2 = df.format(mx2);
                 String y2 = df.format(my2);
                 polyStr += (" 0" + x2 + " 0" + y2);
                 polylines.add(Mxy.getX());
                 polylines.add(Mxy.getY());
-                this.repaint();
+                this.repaint(); // Used to display the drawing
             }
 
             // Right click draws from x2 and y2 of the latest line to the start
             else if (SwingUtilities.isRightMouseButton(e) && MouseIncrement > 0) {
-                drawingPoly = false; // Make it into false to be able to undo the entire shape
+                drawingPoly = false; // Make it into false to be able to undo the entire shape or clear
                 xP = new double[polylines.size()/2];
                 yP = new double[polylines.size()/2];
-                for (int i = 0; i<polylines.size()/2; i++) { //Access the polylines array and setting x and y coordinates
+                for (int i = 0; i<polylines.size()/2; i++) { // Access the polylines array and setting x and y coordinates another set of arrays
                     xP[i] = polylines.get(2*i);
                     yP[i] = polylines.get(2*i+1);
                 }
@@ -494,8 +496,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     Draw.remove(Draw.size()-1);
                 }
                 polyStr += "\n";
-                polylines.clear(); //Clears polylines to create another polygon shape
-                MouseIncrement = 0; //Sets mouseIncrement to 0 to create another polygon shape
+                polylines.clear(); // Clears polylines to create another polygon shape
+                MouseIncrement = 0; // Sets mouseIncrement to 0 to be able to create another polygon shape
 
                 if (Filling) { // If the user decides to draw with a fill colour present
                     if (Pen) {
@@ -607,12 +609,12 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent e) { // Does nothing
 
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent e) { // Does nothing
 
     }
 }
