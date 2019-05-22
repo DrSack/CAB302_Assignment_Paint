@@ -434,12 +434,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z && !canvas.drawingPoly) { // Can only ctrl+z when not drawing polygon
+        if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) { // Can only ctrl+z when not drawing polygon
             if (canvas.returnCounter() > 0) {
                 if (!canvas.drawingPoly) {
                     undo();
                 }
-
                 else {
                     JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
                 }
