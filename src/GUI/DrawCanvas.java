@@ -154,16 +154,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * Clear the entire canvas and reset values
      */
     public void clearCanvas() {
-            Draw.clear();
-            ExCommands.clear();
-            commands.clear();
-            offFill();
-            t.resetTruth();
-            colourTemp = "";
-            penTemp = "";
-            tempEx = 0;
-            tempF = "";
-            drawingLine = false;
+        Draw.clear();
+        ExCommands.clear();
+        commands.clear();
+        offFill();
+        t.resetTruth();
+        colourTemp = "";
+        penTemp = "";
+        tempEx = 0;
+        tempF = "";
+        drawingLine = false;
     }
 
     /**
@@ -411,7 +411,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double my2 = Mxy2.getY();
 
         // Set the X1,Y1 coordinates to the MouseTrack class.
-        Boolean DoubleC = false;
+        boolean DoubleC = false;
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         Mxy2.setMouseXY(e.getX(),e.getY(), this.getWidth(), this.getHeight());
 
@@ -562,10 +562,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double mx2;
         double my2;
 
+        //Latch onto the nearest grid intersection.
         SetGridBoundaries(e.getX(),e.getY(),Mxy2);//Sets what is being drawn to be latched onto the nearest grid intersection.
         mx2 = Mxy2.getX();//set mx2 to the current mxy2 X coordinate.
         my2 = Mxy2.getY();//set mx2 to the current mxy2 Y coordinate.
+
+        //set mx2 and mxy to be within the canvas
         SetBoundaries(Mxy2);// Only permits shapes to be drawn within the drawing canvas.
+        mx2 = Mxy2.getX();//set mx2 to the current mxy2 X coordinate.
+        my2 = Mxy2.getY();//set mx2 to the current mxy2 Y coordinate.
 
         // Convert the double formats to String with 2decimal places.
         String x1 = df.format(mx1);

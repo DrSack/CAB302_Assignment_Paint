@@ -1,13 +1,14 @@
 package GUI;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This is the GUI class which extends the JFrame, the point of this class is that it holds all
@@ -66,7 +67,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         // Setup the JFrame
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(840, 730));
-        this.setMinimumSize(new Dimension(550,730));
+        this.setMinimumSize(new Dimension(550,600));
         this.setLocation(new Point(250, 50));
 
         this.setTitle(title);
@@ -435,14 +436,18 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     public void keyPressed(KeyEvent e) {
         if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z && !canvas.drawingPoly) { // Can only ctrl+z when not drawing polygon
             if (canvas.returnCounter() > 0) {
-                undo();
+                if (!canvas.drawingPoly) {
+                    undo();
+                }
+
+                else {
+                    JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
+
             else {
                 JOptionPane.showMessageDialog(null, "Error: Nothing left to undo", "Empty", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -457,12 +462,12 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         double amount;
         if (canvas.t.isGridTruth()) {
             if (gridSlider.getValue()%50 == 0) {
-                amount = (gridSlider.getValue()/100.0)*4.0;
+                amount = (gridSlider.getValue()/100.0)*6.0;
                 canvas.SetGrid(amount);
                 canvas.repaint();
             }
             else if (gridSlider.getValue()%50 == 1) {
-                amount =  (gridSlider.getValue()/100.0)*4.0;
+                amount =  (gridSlider.getValue()/100.0)*6.0;
                 canvas.SetGrid(amount);
                 canvas.repaint();
             }
@@ -485,12 +490,12 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                 System.out.println("true");
                 canvas.t.setGridTruth();
                 if (gridSlider.getValue()%50 == 0) {
-                    amount = (double) (gridSlider.getValue()/100.0)*4.0;
+                    amount = (double) (gridSlider.getValue()/100.0)*6.0;
                     canvas.SetGrid(amount);
                     canvas.repaint();
                 }
                 else if (gridSlider.getValue()%50 == 1) {
-                    amount = (double) (gridSlider.getValue()/100.0)*4.0;
+                    amount = (double) (gridSlider.getValue()/100.0)*6.0;
                     canvas.SetGrid(amount);
                     canvas.repaint();
                 }
@@ -554,25 +559,24 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
 
         if (btnSrc == extraColors) {
-            c = JColorChooser.showDialog(null, "Pick a color", c, false);
-
-            // Change the pen color back to black if the user doesn't pick anything or clicks cancel
-            if (c == null) {
-                c = Color.BLACK;
-            }
+            Color a = JColorChooser.showDialog(null, "Pick a color", c, false);
 
             // If the outline button is clicked, set the color of the pen and the color preview
             if (OutlineOrFill) {
-                penC = "#" + Integer.toHexString(c.getRGB()).substring(2);
-                ColourClick(penC);
-                outlineColor.setBackground(c);
+                if(a != null){
+                    penC = "#" + Integer.toHexString(a.getRGB()).substring(2);
+                    ColourClick(penC);
+                    outlineColor.setBackground(a);
+                }
             }
 
             // If the fill button is on, set the color of the pen and the color preview
             if (!OutlineOrFill) {
-                fillC = "#" + Integer.toHexString(c.getRGB()).substring(2);
-                FillClick(fillC);
-                fillColor.setBackground(c);
+                if(a != null) {
+                    fillC = "#" + Integer.toHexString(a.getRGB()).substring(2);
+                    FillClick(fillC);
+                    fillColor.setBackground(a);
+                }
             }
         }
 
