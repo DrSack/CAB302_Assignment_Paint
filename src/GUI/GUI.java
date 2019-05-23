@@ -602,31 +602,50 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
          * to either true or false, whether a specific button is clicked.
          */
         if (btnSrc == toolPlot) {
-            ToolColourReset();
-            toolPlot.setForeground(Color.BLUE);
-            canvas.t.resetTruth();
-            canvas.t.setPlotTruth();
+            if (!canvas.drawingPoly) {
+                ToolColourReset();
+                toolPlot.setForeground(Color.BLUE);
+                canvas.t.resetTruth();
+                canvas.t.setPlotTruth();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
 
         if (btnSrc == toolLine) {
-            ToolColourReset();
-            toolLine.setForeground(Color.BLUE);
-            canvas.t.resetTruth();
-            canvas.t.setLineTruth();
+            if (!canvas.drawingPoly) {
+                ToolColourReset();
+                toolLine.setForeground(Color.BLUE);
+                canvas.t.resetTruth();
+                canvas.t.setLineTruth();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
 
         if (btnSrc == toolRect) {
-            ToolColourReset();
-            toolRect.setForeground(Color.BLUE);
-            canvas.t.resetTruth();
-            canvas.t.setRecTruth();
+            if (!canvas.drawingPoly) {
+                ToolColourReset();
+                toolRect.setForeground(Color.BLUE);
+                canvas.t.resetTruth();
+                canvas.t.setRecTruth();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
 
         if (btnSrc == toolEllipse) {
-            ToolColourReset();
-            toolEllipse.setForeground(Color.BLUE);
-            canvas.t.resetTruth();
-            canvas.t.setElliTruth();
+            if (!canvas.drawingPoly) {
+                ToolColourReset();
+                toolEllipse.setForeground(Color.BLUE);
+                canvas.t.resetTruth();
+                canvas.t.setElliTruth();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
 
         if (btnSrc == toolPolygon) {
