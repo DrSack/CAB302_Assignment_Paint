@@ -117,7 +117,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 int i = ExCommands.get(ExCommands.size() - 1);
 
                 if (i == commands.size() - 1) { // If FILL or PEN is behind said command then only delete itself
-                    System.out.println("found");
                     commands.remove(commands.size() - 1);
                     ExCommands.remove(ExCommands.size() - 1);
 
@@ -130,7 +129,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                         }
                     }
                 } else if (i == commands.size()) { // If FILL or PEN is in front of said command then delete the command and itself
-                    System.out.println("Found");
                     commands.remove(commands.size() - 1);
                     commands.remove(commands.size() - 1);
                     ExCommands.remove(ExCommands.size() - 1);

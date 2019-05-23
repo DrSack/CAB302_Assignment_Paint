@@ -363,13 +363,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * All the parse methods below pass through the
-     * xy1 amd xy2 coordinates to the canvas class in which it will add it onto an array to keep track of the
-     * shapes drawn,
-     *
-     * Fill and Colour click methods also have an array that keeps track of whether they have been
-     * picked
-     *
+     *  Set and create the Line or Plot object based on the parameters and DrawCanvas current draw settings.
      * @param x1 is the x1 coordinate of what the current VECfile line
      * @param y1 is the y1 coordinate of what the current VECfile line
      * @param x2 is the x2 coordinate of what the current VECfile line
@@ -378,36 +372,90 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     private void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
 
+    /**
+     *  Set and create the Rectangle object based on the parameters and DrawCanvas current draw settings.
+     * @param x1 is the x1 coordinate of what the current VECfile line
+     * @param y1 is the y1 coordinate of what the current VECfile line
+     * @param x2 is the x2 coordinate of what the current VECfile line
+     * @param y2 is the y2 coordinate of what the current VECfile line
+     */
+
     private void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
     }
+
+    /**
+     *  Set and create the Ellipse object based on the parameters and DrawCanvas current draw settings.
+     * @param x1 is the x1 coordinate of what the current VECfile line
+     * @param y1 is the y1 coordinate of what the current VECfile line
+     * @param x2 is the x2 coordinate of what the current VECfile line
+     * @param y2 is the y2 coordinate of what the current VECfile line
+     */
 
     private void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
     }
 
-    // This uses arrays where the vecFile x,y coordinates exceed past the typical 4.
+    /**
+     *  Set and create the Polygon object based on the parameters and DrawCanvas current draw settings.
+     * @param xP The x coordinates of the polygon.
+     * @param yP The y coordinates of the polygon.
+     */
+
     private void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
     }
 
+    /**
+     *  Set the outline colour within the DrawCanvas class
+     * @param colour The string value of the outline hex colour code from the current vecfile line.
+     */
     private void parseColour(String colour) {
         canvas.SetColour(colour);
     }
 
+    /**
+     *  Set the fill colour within the DrawCanvas class
+     * @param colour The string value of the fill hex colour code from the current vecfile line.
+     */
     private void parseFill(String colour) { canvas.SetFill(colour); }
 
+    /**
+     * Turn off fill within the canvas
+     */
     private void parseFillOff() { canvas.offFill(); }
 
+    /**
+     *  Set the outline colour of the shape that will be drawn.
+     * @param hex The string value of the hex colour code from the colour chosen by the user.
+     */
     private void ColourClick(String hex) { canvas.setColourClick(hex); }
 
+    /**
+     * Set default drawcanvas drawing settings after opening a vecfile
+     */
     private void open() { canvas.open(); }
 
+    /**
+     * Call the undo function of the canvas
+     */
     private void undo() { canvas.undo(); }
 
+    /**
+     * Parse through each line of the vecFile and put it into an arraylist within DrawCanvas
+     */
     private void readCommand(String command) { canvas.setOpenCoordinates(command); }
 
+    /**
+     * Set the fill colour of the canvas based on what the string value vecfile line.
+     * @param hex Pass through the vecfile hex colour string into the canvas fill method
+     */
+
     private void FillClick(String hex) { canvas.setFillClick(hex); }
+
+    /**
+     * Reset the Foreground colour of the tool buttons.
+     */
 
     private void ToolColourReset(){
         toolPlot.setForeground(null);
@@ -872,6 +920,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                             }
                             else if(data!=null){
                                 JOptionPane.showMessageDialog(null, "Error: Unknown command: "+data, "Error", JOptionPane.INFORMATION_MESSAGE);
+                                frame.dispose();// close the window that has an error.
                                 break;
                             }
                             data = reader.readLine();
