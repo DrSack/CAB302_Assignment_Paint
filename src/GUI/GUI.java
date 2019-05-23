@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.swing.Timer;
 
 /**
  * This is the GUI class which extends the JFrame, the point of this class is that it holds all
@@ -64,10 +65,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
     public GUI(String title) {
-        // Setup the JFrame
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(840, 730));
-        this.setMinimumSize(new Dimension(550,600));
+        this.setMinimumSize(new Dimension(550,730));
         this.setLocation(new Point(250, 50));
 
         this.setTitle(title);
@@ -363,51 +363,52 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     *  Set and create the Line or Plot object based on the parameters and DrawCanvas current draw settings.
+     * Set and create the Line or Plot object based on the parameters and DrawCanvas current draw settings.
+     *
      * @param x1 is the x1 coordinate of what the current VECfile line
      * @param y1 is the y1 coordinate of what the current VECfile line
      * @param x2 is the x2 coordinate of what the current VECfile line
      * @param y2 is the y2 coordinate of what the current VECfile line
      */
-
     private void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
 
     /**
-     *  Set and create the Rectangle object based on the parameters and DrawCanvas current draw settings.
+     * Set and create the Rectangle object based on the parameters and DrawCanvas current draw settings.
+     *
      * @param x1 is the x1 coordinate of what the current VECfile line
      * @param y1 is the y1 coordinate of what the current VECfile line
      * @param x2 is the x2 coordinate of what the current VECfile line
      * @param y2 is the y2 coordinate of what the current VECfile line
      */
-
     private void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
     }
 
     /**
-     *  Set and create the Ellipse object based on the parameters and DrawCanvas current draw settings.
+     * Set and create the Ellipse object based on the parameters and DrawCanvas current draw settings.
+     *
      * @param x1 is the x1 coordinate of what the current VECfile line
      * @param y1 is the y1 coordinate of what the current VECfile line
      * @param x2 is the x2 coordinate of what the current VECfile line
      * @param y2 is the y2 coordinate of what the current VECfile line
      */
-
     private void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
     }
 
     /**
-     *  Set and create the Polygon object based on the parameters and DrawCanvas current draw settings.
+     * Set and create the Polygon object based on the parameters and DrawCanvas current draw settings.
+     *
      * @param xP The x coordinates of the polygon.
      * @param yP The y coordinates of the polygon.
      */
-
     private void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
     }
 
     /**
-     *  Set the outline colour within the DrawCanvas class
+     * Set the outline colour within the DrawCanvas class
+     *
      * @param colour The string value of the outline hex colour code from the current vecfile line.
      */
     private void parseColour(String colour) {
@@ -415,7 +416,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     *  Set the fill colour within the DrawCanvas class
+     * Set the fill colour within the DrawCanvas class
+     *
      * @param colour The string value of the fill hex colour code from the current vecfile line.
      */
     private void parseFill(String colour) { canvas.SetFill(colour); }
@@ -426,13 +428,14 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     private void parseFillOff() { canvas.offFill(); }
 
     /**
-     *  Set the outline colour of the shape that will be drawn.
+     * Set the outline colour of the shape that will be drawn.
+     *
      * @param hex The string value of the hex colour code from the colour chosen by the user.
      */
     private void ColourClick(String hex) { canvas.setColourClick(hex); }
 
     /**
-     * Set default drawcanvas drawing settings after opening a vecfile
+     * Set default drawCanvas drawing settings after opening a vec file
      */
     private void open() { canvas.open(); }
 
@@ -448,16 +451,15 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Set the fill colour of the canvas based on what the string value vecfile line.
+     *
      * @param hex Pass through the vecfile hex colour string into the canvas fill method
      */
-
     private void FillClick(String hex) { canvas.setFillClick(hex); }
 
     /**
      * Reset the Foreground colour of the tool buttons.
      */
-
-    private void ToolColourReset(){
+    private void ToolColourReset() {
         toolPlot.setForeground(null);
         toolLine.setForeground(null);
         toolEllipse.setForeground(null);
@@ -610,7 +612,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
             // If the outline button is clicked, set the color of the pen and the color preview
             if (OutlineOrFill) {
-                if(a != null){
+                if (a != null) {
                     penC = "#" + Integer.toHexString(a.getRGB()).substring(2);
                     ColourClick(penC);
                     outlineColor.setBackground(a);
@@ -619,7 +621,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
             // If the fill button is on, set the color of the pen and the color preview
             if (!OutlineOrFill) {
-                if(a != null) {
+                if (a != null) {
                     fillC = "#" + Integer.toHexString(a.getRGB()).substring(2);
                     FillClick(fillC);
                     fillColor.setBackground(a);
@@ -820,7 +822,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                 hold += "\n";
                             }
 
-                            frame.readCommand(hold);// Add command into arrayList
+                            frame.readCommand(hold); // Add command into arrayList
                             counterSTOP++;
                             VECfile = readerChoose.readLine();
                         }
@@ -918,9 +920,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                     frame.parseFill(data); // Set the colour on the JPanel
                                 }
                             }
-                            else if(data!=null){
+                            else if (data!=null) {
                                 JOptionPane.showMessageDialog(null, "Error: Unknown command: "+data, "Error", JOptionPane.INFORMATION_MESSAGE);
-                                frame.dispose();// close the window that has an error.
+                                frame.dispose(); // Close the window that has an error.
                                 break;
                             }
                             data = reader.readLine();

@@ -142,7 +142,6 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     *
      * @return Get pen colour
      */
     public Color getPenC(){
@@ -150,7 +149,6 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     *
      * @return Get fill colour
      */
 
@@ -159,7 +157,6 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     *
      * @return Return if the shape is filled or not
      */
 

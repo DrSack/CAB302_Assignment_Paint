@@ -10,6 +10,7 @@ public class MouseCoordinates {
 
     /**
      * Set XY value for the mouse coordinates and also convert to double
+     *
      * @param x the current x coordinate of the MouseListener
      * @param y the current y coordinate of the MouseListener
      * @param width the JPanel width
@@ -22,6 +23,7 @@ public class MouseCoordinates {
 
     /**
      * Manually set the mouseX coordinate
+     *
      * @param mouseX pass through the double values
      */
     public void setMousex(double mouseX) { }
@@ -29,6 +31,7 @@ public class MouseCoordinates {
 
     /**
      * Manually set the mouseY coordinate
+     *
      * @param mouseY pass through the double values
      */
     public void setMousey(double mouseY) { }

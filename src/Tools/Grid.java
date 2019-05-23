@@ -6,7 +6,7 @@ package Tools;
 
 public class Grid {
 
-    private int total;// private variable for keeping track of the total amount of grid lines.
+    private int total; // Private variable for keeping track of the total amount of grid lines.
 
     /**
      * @param setting amount of lines to be drawn for the grid
@@ -16,7 +16,6 @@ public class Grid {
     }
 
     /**
-     *
      * @return the total amount of lines to be drawn.
      */
     public int getSetting(){ return this.total; }

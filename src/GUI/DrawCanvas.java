@@ -391,7 +391,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
 
     @Override
-    public void mouseClicked(MouseEvent e) { //Does nothing
+    public void mouseClicked(MouseEvent e) { // Does nothing
 
     }
 
