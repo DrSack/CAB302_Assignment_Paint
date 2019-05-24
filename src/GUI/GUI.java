@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.swing.Timer;
 
 /**
  * This is the GUI class which extends the JFrame, the point of this class is that it holds all
@@ -70,7 +71,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      */
     private JButton outlineColor, fillColor;
 
-    // Colors
     /**
      * Creating a panel object
      */
@@ -152,10 +152,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      * @param title a Parameter that sets the Title of the JFrame based on the JFileChooser file source.
      */
     public GUI(String title) {
-        // Setup the JFrame
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(840, 730));
-        this.setMinimumSize(new Dimension(550,600));
+        this.setMinimumSize(new Dimension(550,730));
         this.setLocation(new Point(250, 50));
 
         this.setTitle(title);
@@ -451,132 +450,120 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Calls from DrawCanvas class to pass through the xy1 and xy2 coordinates to the canvas class in
-     * which it will add it onto an array to keep track of the shapes drawn.
+     * Set and create the Line or Plot object based on the parameters and DrawCanvas current draw settings.
      *
-     * Fill and Colour click methods also have an array that keeps track of whether they have been
-     * picked
-     *
-     * @param x1 is the x1 coordinate of what the current vecFIlE line
-     * @param y1 is the y1 coordinate of what the current vecFIlE line
-     * @param x2 is the x2 coordinate of what the current vecFIlE line
-     * @param y2 is the y2 coordinate of what the current vecFIlE line
+     * @param x1 is the x1 coordinate of what the current VECfile line
+     * @param y1 is the y1 coordinate of what the current VECfile line
+     * @param x2 is the x2 coordinate of what the current VECfile line
+     * @param y2 is the y2 coordinate of what the current VECfile line
      */
     private void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
+
     /**
-     * Calls from DrawCanvas class to pass through the xy1 and xy2 coordinates to the canvas class in
-     * which it will add it onto an array to keep track of the shapes drawn.
+     * Set and create the Rectangle object based on the parameters and DrawCanvas current draw settings.
      *
-     * Fill and Colour click methods also have an array that keeps track of whether they have been
-     * picked
-     *
-     * @param x1 is the x1 coordinate of what the current vecFIlE line
-     * @param y1 is the y1 coordinate of what the current vecFIlE line
-     * @param x2 is the x2 coordinate of what the current vecFIlE line
-     * @param y2 is the y2 coordinate of what the current vecFIlE line
+     * @param x1 is the x1 coordinate of what the current VECfile line
+     * @param y1 is the y1 coordinate of what the current VECfile line
+     * @param x2 is the x2 coordinate of what the current VECfile line
+     * @param y2 is the y2 coordinate of what the current VECfile line
      */
     private void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
     }
+
     /**
-     * Calls from DrawCanvas class to pass through the xy1 and xy2 coordinates to the canvas class in
-     * which it will add it onto an array to keep track of the shapes drawn.
+     * Set and create the Ellipse object based on the parameters and DrawCanvas current draw settings.
      *
-     * Fill and Colour click methods also have an array that keeps track of whether they have been
-     * picked
-     *
-     * @param x1 is the x1 coordinate of what the current vecFIlE line
-     * @param y1 is the y1 coordinate of what the current vecFIlE line
-     * @param x2 is the x2 coordinate of what the current vecFIlE line
-     * @param y2 is the y2 coordinate of what the current vecFIlE line
+     * @param x1 is the x1 coordinate of what the current VECfile line
+     * @param y1 is the y1 coordinate of what the current VECfile line
+     * @param x2 is the x2 coordinate of what the current VECfile line
+     * @param y2 is the y2 coordinate of what the current VECfile line
      */
     private void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
     }
 
     /**
-     * Calls from DrawCanvas class to pass through the x and y coordinates as arrays to the canvas class in
-     * which it will add it onto an array to keep track of the shapes drawn.
+     * Set and create the Polygon object based on the parameters and DrawCanvas current draw settings.
      *
-     * Fill and Colour click methods also have an array that keeps track of whether they have been
-     * picked
-     *
-     * @param xP is all the x coordinates of the current vecFIlE line
-     * @param yP is all the x coordinates of the current vecFIlE line
+     * @param xP The x coordinates of the polygon.
+     * @param yP The y coordinates of the polygon.
      */
     private void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
     }
 
     /**
-     * Calls from DrawCanvas class to parses through the outline color
-     * @param colour
+     * Set the outline colour within the DrawCanvas class
+     *
+     * @param colour The string value of the outline hex colour code from the current vecfile line.
      */
     private void parseColour(String colour) {
         canvas.SetColour(colour);
     }
 
-
     /**
-     * Calls from DrawCanvas class to parses through the fill color
-     * @param colour
+     * Set the fill colour within the DrawCanvas class
+     *
+     * @param colour The string value of the fill hex colour code from the current vecfile line.
      */
     private void parseFill(String colour) { canvas.SetFill(colour); }
 
     /**
-     * Calls from DrawCanvas class parses to make fill off
+     * Turn off fill within the canvas
      */
     private void parseFillOff() { canvas.offFill(); }
 
     /**
-     * Calls from DrawCanvas class to change color depending on which color clicked
-     * @param hex
+     * Set the outline colour of the shape that will be drawn.
+     *
+     * @param hex The string value of the hex colour code from the colour chosen by the user.
      */
     private void ColourClick(String hex) { canvas.setColourClick(hex); }
 
     /**
-     * Calls from DrawCanvas class to open
+     * Set default drawCanvas drawing settings after opening a vec file
      */
     private void open() { canvas.open(); }
 
-
     /**
-     * Calls from DrawCanvas class to undo the latest shape
+     * Call the undo function of the canvas
      */
     private void undo() { canvas.undo(); }
 
     /**
-     * Calls from DrawCanvas class to read command
+     * Parse through each line of the vecFile and put it into an arraylist within DrawCanvas
      */
     private void readCommand(String command) { canvas.setOpenCoordinates(command); }
 
     /**
-     * Calls from DrawCanvas class to change the fill hex
+     * Set the fill colour of the canvas based on what the string value vecfile line.
+     *
+     * @param hex Pass through the vecfile hex colour string into the canvas fill method
      */
     private void FillClick(String hex) { canvas.setFillClick(hex); }
 
     /**
-     * Sets all the shape tools background to null
+     * Reset the Foreground colour of the tool buttons.
      */
-    private void ToolColourReset(){
+    private void ToolColourReset() {
         toolPlot.setForeground(null);
         toolLine.setForeground(null);
         toolEllipse.setForeground(null);
         toolRect.setForeground(null);
         toolPolygon.setForeground(null);
     }
+
     /**
-     * Calls from DrawCanvas class to return the file
+     * Returns the vecFile string from the canvas class
      */
     public String returnFile() { // Return the vecFile string from the canvas class.
         return canvas.returnFile();
     }
 
-    /**
-     * Used for nothing
-     */
     @Override
     public void keyTyped(KeyEvent e) {
+
     }
 
     /**
@@ -603,17 +590,18 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
     }
 
-
     /**
-     * Used for nothing
+     * Does nothing
      */
     @Override
     public void keyReleased(KeyEvent e) {
 
     }
 
+
     /**
-     * Used to change the state of the grid
+     * Changes the state of the grid
+     * @param e
      */
     @Override
     public void stateChanged(ChangeEvent e) {
@@ -722,7 +710,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
             // If the outline button is clicked, set the color of the pen and the color preview
             if (OutlineOrFill) {
-                if(a != null){
+                if (a != null) {
                     penC = "#" + Integer.toHexString(a.getRGB()).substring(2);
                     ColourClick(penC);
                     outlineColor.setBackground(a);
@@ -731,7 +719,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
             // If the fill button is on, set the color of the pen and the color preview
             if (!OutlineOrFill) {
-                if(a != null) {
+                if (a != null) {
                     fillC = "#" + Integer.toHexString(a.getRGB()).substring(2);
                     FillClick(fillC);
                     fillColor.setBackground(a);
@@ -932,7 +920,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                 hold += "\n";
                             }
 
-                            frame.readCommand(hold);// Add command into arrayList
+                            frame.readCommand(hold); // Add command into arrayList
                             counterSTOP++;
                             VECfile = readerChoose.readLine();
                         }
@@ -1030,8 +1018,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                     frame.parseFill(data); // Set the colour on the JPanel
                                 }
                             }
-                            else if(data!=null){
+                            else if (data!=null) {
                                 JOptionPane.showMessageDialog(null, "Error: Unknown command: "+data, "Error", JOptionPane.INFORMATION_MESSAGE);
+                                frame.dispose(); // Close the window that has an error.
                                 break;
                             }
                             data = reader.readLine();
@@ -1057,9 +1046,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
     }
 
-    /**
-     * The main class to run the entire GUI
-     */
     // Main class, run GUI.
     public static void main(String[] args) {
         new GUI("untitled");
