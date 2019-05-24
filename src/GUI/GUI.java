@@ -16,134 +16,48 @@ import javax.swing.Timer;
  * buttons and functions that the rest of the program will deliver. The DrawCanvas class is also called upon
  * within this class and that class extends a JPanel which will be used to draw the shapes.
  */
-public class GUI extends JFrame implements ActionListener, KeyListener, ChangeListener{
-    /**
-     * Sets the outline color to default colour black
-     */
+public class GUI extends JFrame implements ActionListener, KeyListener, ChangeListener, ComponentListener{
+
     private Color c = Color.BLACK;
 
-    /**
-     * A string to hold the hex decimal of outline colour
-     */
     private String penC = "#000000";
-    /**
-     * A string to hold the hex decimal of fill colour
-     */
     private String fillC = "#FFFFFF";
-    /**
-     * Boolean used whether or not to change the outline or fill colour
-     */
+
     private boolean OutlineOrFill = true;
-    /**
-     * The menu bar
-     */
     private JMenuBar menuBar;
-    /**
-     * Menus containing file and edit
-     */
     private JMenu file, edit;
-    /**
-     * Menu items containing create, open, saveAs, exit, undo, clear
-     */
     private JMenuItem create, open, saveAs, exit, undo, clear;
-    /**
-     * Panel containing containerBoard, shapes, tools
-     */
+
     private JPanel containerBoard, shapes, tools;
-    /**
-     * Panel containing canvasContainer
-     */
     private JPanel canvasContainer;
-    /**
-     * Creating object from DrawCanvas
-     */
     private DrawCanvas canvas;
-    /**
-     * Buttons containing toolPlot, toolLine, toolRect, toolEllipse and toolPolygon
-     */
+
     private JButton toolPlot, toolLine, toolRect, toolEllipse, toolPolygon;
-    /**
-     * Buttons containing outline and fill
-     */
     private JButton outline, fill;
-    /**
-     * Buttons containing outlineColor and fillColor
-     */
     private JButton outlineColor, fillColor;
 
-    /**
-     * Creating a panel object
-     */
+    // Colors
     private JPanel colors = new JPanel();
-    /**
-     * Creating an ArrayList button object
-     */
     private ArrayList<JButton> colorButtons = new ArrayList<JButton>();
-    /**
-     * Creating a button object colored black
-     */
     private JButton black = new JButton();
-    /**
-     * Creating a button object colored gray
-     */
     private JButton gray = new JButton();
-    /**
-     * Creating a button object colored lightGray
-     */
     private JButton lightGray = new JButton();
-    /**
-     * Creating a button object colored white
-     */
     private JButton white = new JButton();
-    /**
-     * Creating a button object colored blue
-     */
     private JButton blue = new JButton();
-    /**
-     * Creating a button object colored cyan
-     */
     private JButton cyan = new JButton();
-    /**
-     * Creating a button object colored green
-     */
     private JButton green = new JButton();
-    /**
-     * Creating a button object colored yellow
-     */
     private JButton yellow = new JButton();
-    /**
-     * Creating a button object colored orange
-     */
     private JButton orange = new JButton();
-    /**
-     * Creating a button object colored pink
-     */
     private JButton pink = new JButton();
-    /**
-     * Creating a button object colored magenta
-     */
     private JButton magenta = new JButton();
-    /**
-     * Creating a button object colored red
-     */
     private JButton red = new JButton();
-    /**
-     * Creating a button colored extraColors
-     */
     private JButton extraColors;
-    /**
-     * Creating a button for the grid
-     */
     private JButton gridButton;
-    /**
-     * Creating a slider for the grid
-     */
+
     private JSlider gridSlider;
-    /**
-     * Creating a label for the grid
-     */
     private JLabel gridLabel;
 
+    private Timer timer;
     /**
      * This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
      * The border itself is fixed, with a menu bar on the top, the buttons listed on the side, and the DrawCanvas class
@@ -188,27 +102,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         this.pack();
         this.setVisible(true);
         this.setFocusable(true);
+
+        // Add listeners
         this.addKeyListener(this);
-        detectResize();
-    }
-
-    /**
-     * Change the size of the canvas based on the size of the window
-     */
-    private void detectResize() {
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                Component c = e.getComponent();
-
-                // Set the size of the canvas based on the height of the window if the height of the window is changed
-                canvas.setSize(new Dimension(c.getSize().height - 60, c.getSize().height - 60));
-
-                // Set the size of the canvas based on the width of the window if the window's width + the toolbar's width is smaller than the window's height
-                if (c.getWidth() - 100 <= (c.getHeight())) {
-                    canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
-                }
-            }
-        });
+        this.addComponentListener(this);
     }
 
     /**
@@ -554,9 +451,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         toolPolygon.setForeground(null);
     }
 
-    /**
-     * Returns the vecFile string from the canvas class
-     */
     public String returnFile() { // Return the vecFile string from the canvas class.
         return canvas.returnFile();
     }
@@ -590,19 +484,39 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
     }
 
-    /**
-     * Does nothing
-     */
     @Override
     public void keyReleased(KeyEvent e) {
 
     }
 
+    @Override
+    public void componentResized(ComponentEvent e) {
+        Component c = e.getComponent();
 
-    /**
-     * Changes the state of the grid
-     * @param e
-     */
+        // Set the size of the canvas based on the height of the window if the height of the window is changed
+        canvas.setSize(new Dimension(c.getSize().height - 60, c.getSize().height - 60));
+
+        // Set the size of the canvas based on the width of the window if the window's width + the toolbar's width is smaller than the window's height
+        if (c.getWidth() - 100 <= (c.getHeight())) {
+            canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
+        }
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
+    }
+
     @Override
     public void stateChanged(ChangeEvent e) {
         this.requestFocusInWindow();
@@ -745,7 +659,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             }
         }
 
-        /**
+        /*
          * With the following other if statements below, these set the boolean values of the each tool
          * to either true or false, whether a specific button is clicked.
          */
@@ -807,7 +721,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             new GUI("untitled");
         }
 
-        /**
+        /*
          * The saveAs button when pressed essentially opens up the JFileChooser, and based on where the location
          * you pick, you can set the name of the VEC file and it will pass through the string vecFile through
          * FileWriter and save it with the name you have given it + .VEC
@@ -878,7 +792,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             }
         }
 
-        /**
+        /*
          * The open button essentially reads the .VEC passed through and depeding on the text put forth,
          * this will function differently, depending on the commands given by the VEC file opened.
          */
@@ -894,7 +808,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 try { // Give out an exception error if a file doesnt exist
-                    if (file.exists()) { //If the file does exist
+                    if (file.exists()) { // If the file does exist
                         BufferedReader reader = new BufferedReader((new FileReader(file)));
                         BufferedReader readerT = new BufferedReader((new FileReader(file)));
                         BufferedReader readerChoose = new BufferedReader((new FileReader(file)));
@@ -1050,4 +964,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     public static void main(String[] args) {
         new GUI("untitled");
     }
+
+
 }
