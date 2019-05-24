@@ -6,6 +6,9 @@ package Coordinate;
  */
 public class MouseCoordinates {
 
+    /**
+     * Declaring a double mouseX and mouseY
+     */
     private double mouseX, mouseY;
 
     /**
@@ -34,11 +37,13 @@ public class MouseCoordinates {
     public void setMousey(double mouseY) { }
 
     /**
+     * MouseX double coordinate
      * @return mouseX double coordinate.
      */
     public double getX() { return  mouseX; }
 
     /**
+     * MouseY double coordinate
      * @return mouseY double coordinate.
      */
     public double getY(){ return  mouseY; }

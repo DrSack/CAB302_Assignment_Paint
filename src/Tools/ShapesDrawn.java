@@ -7,17 +7,45 @@ import java.awt.*;
  */
 public abstract class ShapesDrawn { // Initialize variables
 
+    /**
+     * Declaring integers x1, y1, x2 and y2
+     */
     private int x1, y1, x2, y2;
+    /**
+     * Declaring doubles ox1, oy1, ox2 and oy2
+     */
     private double ox1,oy1,ox2,oy2;
+    /**
+     * Declaring an integer array that will hold x coordinates for polygon
+     */
     private int[] x;
+    /**
+     * Declaring an integer array that will hold y coordinates for polygon
+     */
     private int[] y;
+    /**
+     * Declaring an integer array that will temporarily hold x coordinates for polygon
+     */
     private double[] Ax;
+    /**
+     * Declaring an integer array that will temporarily hold y coordinates for polygon
+     */
     private double[] Ay;
-
+    /**
+     * Used to change the color of pen
+     */
     private Color pen;
+    /**
+     * Used to change the color of fill
+     */
     private Color filling;
-
+    /**
+     * Used to decide whether or not to fill
+     */
     private boolean Fill;
+    /**
+     * Used to decide whether or not to change polygon coordinates
+     */
     private boolean Polygon;
 
     /**
@@ -100,6 +128,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
+     * Returns the x1 coordinate
      * @return the x1 coordinate
      */
     public int getX1() {// return x1
@@ -107,6 +136,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
+     * Returns the y1 coordinate
      * @return the y1 coordinate
      */
     public int getY1() {// return y1
@@ -114,6 +144,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
+     * Returns the x2 coordinate
      * @return the x2 coordinate
      */
     public int getX2() {// return x2
@@ -121,6 +152,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
+     * Returns the y2 coordinate
      * @return the y2 coordinate
      */
     public int getY2() {// return y2
@@ -128,6 +160,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
+     * Returns the Polygon x array coordinates
      * @return the Polygon x array coordinates
      */
     public int[] getXarray(){// return all X coordinates in the array
@@ -135,6 +168,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
+     * Returns the Polygon y array coordinates
      * @return the Polygon y array coordinates
      */
     public int[] getYarray(){// return all Y coordinates in the array
@@ -142,7 +176,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     *
+     * Returns the pen colour
      * @return Get pen colour
      */
     public Color getPenC(){
@@ -150,7 +184,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     *
+     * Returns the fill colour
      * @return Get fill colour
      */
 
@@ -159,7 +193,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     *
+     * Returns if the shape is filled or not
      * @return Return if the shape is filled or not
      */
 

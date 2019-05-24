@@ -24,12 +24,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestCases extends JPanel {
 
+    /**
+     * Tests the GUI title
+     */
     @Test
     void TestGUITitle() { // Test if the title returns the same thing
         GUI Test = new GUI( "Title");
         assertEquals("Title", Test.getTitle());
     }
 
+    /**
+     * Test to see if 1 shapes have been drawn
+     */
     @Test
     void TestCanvasCounterIncrement() {
         DrawCanvas Test = new DrawCanvas();
@@ -37,6 +43,9 @@ class TestCases extends JPanel {
         assertEquals(1, Test.returnCounter());
     }
 
+    /**
+     * Test to see if 2 shapes have been drawn
+     */
     @Test
     void TestCanvasCounterIncrement2() { // Test to see if 2 shapes have been drawn
         DrawCanvas Test = new DrawCanvas();
@@ -45,6 +54,9 @@ class TestCases extends JPanel {
         assertEquals(2,Test.returnCounter());
     }
 
+    /**
+     * Tests undo
+     */
     @Test
     void TestCanvasUndo() { // Test if undo has deleted 1 line
         DrawCanvas Test = new DrawCanvas();
@@ -56,6 +68,9 @@ class TestCases extends JPanel {
         assertEquals(0, Test.returnCounter());
     }
 
+    /**
+     * Tests multiple undo's
+     */
     @Test
     void TestCanvasMultipleUndo(){// Test for multiple undos
         DrawCanvas Test = new DrawCanvas();
@@ -74,6 +89,9 @@ class TestCases extends JPanel {
         assertEquals("", Test.returnFile());
     }
 
+    /**
+     * Tests undo with colour
+     */
     @Test
     void TestCanvasUndoColour() { // Test if undo has deletes 2 Lines
         DrawCanvas Test = new DrawCanvas();
@@ -86,6 +104,9 @@ class TestCases extends JPanel {
     }
 
 
+    /**
+     * Test undo with fill
+     */
     @Test
     void TestCanvasUndoColourFill() { // Test if undo has deletes 3 Lines
         DrawCanvas Test = new DrawCanvas();
@@ -98,6 +119,9 @@ class TestCases extends JPanel {
         assertEquals(0, Test.returnCounter());
     }
 
+    /**
+     * Tests returning the vecFile
+     */
     @Test
     void TestCanvasReturnVecFILE() { // Test to see if returnFile returns what is listed.
         DrawCanvas Test = new DrawCanvas();
@@ -105,6 +129,9 @@ class TestCases extends JPanel {
         assertEquals("PEN #000000", Test.returnFile());
     }
 
+    /**
+     * Test coordinates and colours
+     */
     @Test
     void TestCanvasColourShapes() { // Test coordinates
         DrawCanvas test = new DrawCanvas();
@@ -118,6 +145,9 @@ class TestCases extends JPanel {
         assertEquals(Color.decode("#FF0000"),test.Draw.get(0).getFillC());
     }
 
+    /**
+     * Tests the Polygon shape tool
+     */
     @Test
     void TestCanvasCoorPolygonAll() { // Test all for polygon
         DrawCanvas test = new DrawCanvas();
@@ -145,6 +175,9 @@ class TestCases extends JPanel {
         assertEquals(0, test.returnCounter());
     }
 
+    /**
+     * Check if clearing the canvas clears resets all values
+     */
     @Test
     void TestClearingCanvas() { //  Check if clearing the canvas clears resets all values
         DrawCanvas Test = new DrawCanvas();
@@ -158,6 +191,9 @@ class TestCases extends JPanel {
         assertEquals(0, Test.returnCounter());
     }
 
+    /**
+     * Set colour of ShapesDrawn class and test to see if its the correct one
+     */
     @Test
     void TestShapesColour() { // Set colour of ShapesDrawn class and test to see if its the correct one
         ArrayList<ShapesDrawn> Draw = new ArrayList<>();
@@ -168,6 +204,9 @@ class TestCases extends JPanel {
         assertEquals("#FFFFFF", hex.toUpperCase());
     }
 
+    /**
+     * Tests if all coordinates return the same value
+     */
     @Test
     void TestShapesCoordinates() { // Test if all coordinates return the same value
         ArrayList<ShapesDrawn> Draw = new ArrayList<>();
@@ -178,6 +217,9 @@ class TestCases extends JPanel {
         assertEquals(300,Draw.get(0).getY2());
     }
 
+    /**
+     * Tests if getFill returns true
+     */
     @Test
     void TestShapesFillTruth() { // Test if getFill returns true
         ArrayList<ShapesDrawn> Draw = new ArrayList<>();
@@ -185,6 +227,9 @@ class TestCases extends JPanel {
         assertTrue(Draw.get(0).getFill());
     }
 
+    /**
+     * Test case for resizing the window and checking if the dimensions of the shape changes
+     */
     @Test
     void TestShapesResizeLine() { // Test case for resizing the window and checking if the dimensions of the shape changes
         int w = 150;
@@ -197,8 +242,10 @@ class TestCases extends JPanel {
         assertEquals(w,Draw.get(0).getX2());
         assertEquals(h,Draw.get(0).getY2());
     }
-    
 
+    /**
+     * Test if setting all truth values to true are really true
+     */
     @Test
     void TestTruthValues() { // Test if setting all truth values to true are really true
         TruthValues Test = new TruthValues();
@@ -213,7 +260,9 @@ class TestCases extends JPanel {
         assertTrue(Test.isLineTruth());
         assertTrue(Test.isPolyTruth());
     }
-
+    /**
+     * Test by checking if all truth values are false by setting all to true then reseting
+     */
     @Test
     void TestTruthResetValues() { // Test by checking if all truth values are false by setting all to true then reseting
         TruthValues Test = new TruthValues();
@@ -229,7 +278,9 @@ class TestCases extends JPanel {
         assertFalse(Test.isLineTruth());
         assertFalse(Test.isPolyTruth());
     }
-
+    /**
+     * Test coordinates
+     */
     @Test
     void TestMouseCoor() { // Test coordinates
         int w = 300;
@@ -243,7 +294,9 @@ class TestCases extends JPanel {
         assertEquals(0.5, Test2.getX());
         assertEquals(0.5, Test2.getY());
     }
-
+    /**
+     * Test mouse coordinates then place within the ShapesDrawn class and return its values
+     */
     @Test
     void TestMouseCoorToDraw() { // Test mouse coordinates then place within the ShapesDrawn class and return its values
         int w = 300;
@@ -259,7 +312,9 @@ class TestCases extends JPanel {
         assertEquals(250,Draw.get(0).getX2());
         assertEquals(250,Draw.get(0).getY2());
     }
-
+    /**
+     * Test Grid values
+     */
     @Test
     void TestGrid() { // Test Grid values
         Grid test = new Grid();
@@ -271,4 +326,5 @@ class TestCases extends JPanel {
         test2.setGridFalse();//turn false
         assertFalse(test2.isGridTruth());//Test if false
     }
+
 }

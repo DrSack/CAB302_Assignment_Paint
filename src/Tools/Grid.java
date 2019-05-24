@@ -5,8 +5,10 @@ package Tools;
  */
 
 public class Grid {
-
-    private int total;// private variable for keeping track of the total amount of grid lines.
+    /**
+     * Private variable for keeping track of the total amount of grid lines
+     */
+    private int total;
 
     /**
      * @param setting amount of lines to be drawn for the grid

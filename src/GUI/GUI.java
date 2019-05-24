@@ -16,44 +16,132 @@ import java.util.Arrays;
  * within this class and that class extends a JPanel which will be used to draw the shapes.
  */
 public class GUI extends JFrame implements ActionListener, KeyListener, ChangeListener{
-
+    /**
+     * Sets the outline color to default colour black
+     */
     private Color c = Color.BLACK;
 
+    /**
+     * A string to hold the hex decimal of outline colour
+     */
     private String penC = "#000000";
+    /**
+     * A string to hold the hex decimal of fill colour
+     */
     private String fillC = "#FFFFFF";
-
+    /**
+     * Boolean used whether or not to change the outline or fill colour
+     */
     private boolean OutlineOrFill = true;
+    /**
+     * The menu bar
+     */
     private JMenuBar menuBar;
+    /**
+     * Menus containing file and edit
+     */
     private JMenu file, edit;
+    /**
+     * Menu items containing create, open, saveAs, exit, undo, clear
+     */
     private JMenuItem create, open, saveAs, exit, undo, clear;
-
+    /**
+     * Panel containing containerBoard, shapes, tools
+     */
     private JPanel containerBoard, shapes, tools;
+    /**
+     * Panel containing canvasContainer
+     */
     private JPanel canvasContainer;
+    /**
+     * Creating object from DrawCanvas
+     */
     private DrawCanvas canvas;
-
+    /**
+     * Buttons containing toolPlot, toolLine, toolRect, toolEllipse and toolPolygon
+     */
     private JButton toolPlot, toolLine, toolRect, toolEllipse, toolPolygon;
+    /**
+     * Buttons containing outline and fill
+     */
     private JButton outline, fill;
+    /**
+     * Buttons containing outlineColor and fillColor
+     */
     private JButton outlineColor, fillColor;
 
     // Colors
+    /**
+     * Creating a panel object
+     */
     private JPanel colors = new JPanel();
+    /**
+     * Creating an ArrayList button object
+     */
     private ArrayList<JButton> colorButtons = new ArrayList<JButton>();
+    /**
+     * Creating a button object colored black
+     */
     private JButton black = new JButton();
+    /**
+     * Creating a button object colored gray
+     */
     private JButton gray = new JButton();
+    /**
+     * Creating a button object colored lightGray
+     */
     private JButton lightGray = new JButton();
+    /**
+     * Creating a button object colored white
+     */
     private JButton white = new JButton();
+    /**
+     * Creating a button object colored blue
+     */
     private JButton blue = new JButton();
+    /**
+     * Creating a button object colored cyan
+     */
     private JButton cyan = new JButton();
+    /**
+     * Creating a button object colored green
+     */
     private JButton green = new JButton();
+    /**
+     * Creating a button object colored yellow
+     */
     private JButton yellow = new JButton();
+    /**
+     * Creating a button object colored orange
+     */
     private JButton orange = new JButton();
+    /**
+     * Creating a button object colored pink
+     */
     private JButton pink = new JButton();
+    /**
+     * Creating a button object colored magenta
+     */
     private JButton magenta = new JButton();
+    /**
+     * Creating a button object colored red
+     */
     private JButton red = new JButton();
+    /**
+     * Creating a button colored extraColors
+     */
     private JButton extraColors;
+    /**
+     * Creating a button for the grid
+     */
     private JButton gridButton;
-
+    /**
+     * Creating a slider for the grid
+     */
     private JSlider gridSlider;
+    /**
+     * Creating a label for the grid
+     */
     private JLabel gridLabel;
 
     /**
@@ -363,52 +451,113 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * All the parse methods below pass through the
-     * xy1 amd xy2 coordinates to the canvas class in which it will add it onto an array to keep track of the
-     * shapes drawn,
+     * Calls from DrawCanvas class to pass through the xy1 and xy2 coordinates to the canvas class in
+     * which it will add it onto an array to keep track of the shapes drawn.
      *
      * Fill and Colour click methods also have an array that keeps track of whether they have been
      * picked
      *
-     * @param x1 is the x1 coordinate of what the current VECfile line
-     * @param y1 is the y1 coordinate of what the current VECfile line
-     * @param x2 is the x2 coordinate of what the current VECfile line
-     * @param y2 is the y2 coordinate of what the current VECfile line
+     * @param x1 is the x1 coordinate of what the current vecFIlE line
+     * @param y1 is the y1 coordinate of what the current vecFIlE line
+     * @param x2 is the x2 coordinate of what the current vecFIlE line
+     * @param y2 is the y2 coordinate of what the current vecFIlE line
      */
-
     private void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
-
+    /**
+     * Calls from DrawCanvas class to pass through the xy1 and xy2 coordinates to the canvas class in
+     * which it will add it onto an array to keep track of the shapes drawn.
+     *
+     * Fill and Colour click methods also have an array that keeps track of whether they have been
+     * picked
+     *
+     * @param x1 is the x1 coordinate of what the current vecFIlE line
+     * @param y1 is the y1 coordinate of what the current vecFIlE line
+     * @param x2 is the x2 coordinate of what the current vecFIlE line
+     * @param y2 is the y2 coordinate of what the current vecFIlE line
+     */
     private void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
     }
-
+    /**
+     * Calls from DrawCanvas class to pass through the xy1 and xy2 coordinates to the canvas class in
+     * which it will add it onto an array to keep track of the shapes drawn.
+     *
+     * Fill and Colour click methods also have an array that keeps track of whether they have been
+     * picked
+     *
+     * @param x1 is the x1 coordinate of what the current vecFIlE line
+     * @param y1 is the y1 coordinate of what the current vecFIlE line
+     * @param x2 is the x2 coordinate of what the current vecFIlE line
+     * @param y2 is the y2 coordinate of what the current vecFIlE line
+     */
     private void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
     }
 
-    // This uses arrays where the vecFile x,y coordinates exceed past the typical 4.
+    /**
+     * Calls from DrawCanvas class to pass through the x and y coordinates as arrays to the canvas class in
+     * which it will add it onto an array to keep track of the shapes drawn.
+     *
+     * Fill and Colour click methods also have an array that keeps track of whether they have been
+     * picked
+     *
+     * @param xP is all the x coordinates of the current vecFIlE line
+     * @param yP is all the x coordinates of the current vecFIlE line
+     */
     private void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
     }
 
+    /**
+     * Calls from DrawCanvas class to parses through the outline color
+     * @param colour
+     */
     private void parseColour(String colour) {
         canvas.SetColour(colour);
     }
 
+
+    /**
+     * Calls from DrawCanvas class to parses through the fill color
+     * @param colour
+     */
     private void parseFill(String colour) { canvas.SetFill(colour); }
 
+    /**
+     * Calls from DrawCanvas class parses to make fill off
+     */
     private void parseFillOff() { canvas.offFill(); }
 
+    /**
+     * Calls from DrawCanvas class to change color depending on which color clicked
+     * @param hex
+     */
     private void ColourClick(String hex) { canvas.setColourClick(hex); }
 
+    /**
+     * Calls from DrawCanvas class to open
+     */
     private void open() { canvas.open(); }
 
+
+    /**
+     * Calls from DrawCanvas class to undo the latest shape
+     */
     private void undo() { canvas.undo(); }
 
+    /**
+     * Calls from DrawCanvas class to read command
+     */
     private void readCommand(String command) { canvas.setOpenCoordinates(command); }
 
+    /**
+     * Calls from DrawCanvas class to change the fill hex
+     */
     private void FillClick(String hex) { canvas.setFillClick(hex); }
 
+    /**
+     * Sets all the shape tools background to null
+     */
     private void ToolColourReset(){
         toolPlot.setForeground(null);
         toolLine.setForeground(null);
@@ -416,14 +565,18 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         toolRect.setForeground(null);
         toolPolygon.setForeground(null);
     }
-
+    /**
+     * Calls from DrawCanvas class to return the file
+     */
     public String returnFile() { // Return the vecFile string from the canvas class.
         return canvas.returnFile();
     }
 
+    /**
+     * Used for nothing
+     */
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     /**
@@ -450,11 +603,18 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
     }
 
+
+    /**
+     * Used for nothing
+     */
     @Override
     public void keyReleased(KeyEvent e) {
 
     }
 
+    /**
+     * Used to change the state of the grid
+     */
     @Override
     public void stateChanged(ChangeEvent e) {
         this.requestFocusInWindow();
@@ -897,6 +1057,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
     }
 
+    /**
+     * The main class to run the entire GUI
+     */
     // Main class, run GUI.
     public static void main(String[] args) {
         new GUI("untitled");

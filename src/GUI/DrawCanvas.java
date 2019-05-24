@@ -19,33 +19,94 @@ import java.util.ArrayList;
  * variables and declaring encapsulation classes.
  */
 public class DrawCanvas extends JPanel implements MouseListener, MouseMotionListener {
-
+    /**
+     * Boolean set to true to enable temporary draw
+     */
     private boolean drawingLine = false;
+    /**
+     * Boolean set to true to enable filling when drawing
+     */
     private boolean Filling = false;
+    /**
+     * Boolean set to true to enable outline
+     */
     private boolean Pen = false;
+    /**
+     * Boolean set to true whenever drawing a polygon shape until finished
+     */
     boolean drawingPoly = false;
-    private int tempEx; // Store the last known integer to keep track of ExCommands
+    /**
+     * Store the last known integer to keep track of ExCommands
+     */
+    private int tempEx;
+    /**
+     * A string to hold colors and the hex
+     */
     private String colourTemp = "";
+    /**
+     * A string to hold pen and the hex
+     */
     private String penTemp = "";
+    /**
+     * A string to hold temporarily
+     */
     private String tempF;
+    /**
+     * A string to hold the polygon coordinates then add into commands
+     */
     private String polyStr;
 
+    /**
+     * An ArrayList for storing shape information
+     */
     public ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>(); // Setup arrayList for storing shape information.
+    /**
+     * An ArrayList to store all commands here
+     */
     private ArrayList<String> commands = new ArrayList<>(); // Store all commands here
+    /**
+     * An ArrayList to store polygon coordinates to draw
+     */
     private ArrayList<Double> polylines = new ArrayList<>(); // Store polygon coordinates to draw
+    /**
+     * An ArrayList to store the index value of every PEN and FILL in commands arrayList
+     */
     private ArrayList<Integer> ExCommands = new ArrayList<>(); // The index value of every PEN and FILL in commands arrayList.
-
+    /**
+     * Making a format to update String double variables to 5 decimal places
+     */
     private DecimalFormat df = new DecimalFormat("#.00000"); // Updates double variables to 5 decimal places.
+    /**
+     * Set the outline color to default color black
+     */
     private Color c = Color.black;
+    /**
+     * Set the Color f used for fill
+     */
     private Color f;
-
+    /**
+     * An integer to count every click when drawing polygon
+     */
     private int MouseIncrement = 0;
+    /**
+     * To hold the x and y coordinates of polygon
+     */
     private double[] xP, yP;
-
-
+    /**
+     * Making a xy1 object
+     */
     private MouseCoordinates Mxy = new XY1();
+    /**
+     * Making a xy2 object
+     */
     private MouseCoordinates Mxy2 = new XY2();
+    /**
+     * Making a TruthValues object
+     */
     TruthValues t = new TruthValues();
+    /**
+     * Making a Grid object
+     */
     private Grid grid = new Grid();
 
     /**
@@ -190,9 +251,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * @return Return the pen outline colour
+     * Return the pen outline color
+     * @return the pen outline colour
      */
-
     public Color returnColour() { return c; }
 
     /**
@@ -227,13 +288,14 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * @return Return the fill colour
+     * Return the fill color
+     * @return Return the fill color
      */
-
     public Color returnFill(){ return f; }
 
     /**
-     * @return Return the Filling current boolean value
+     * Return the Filling current boolean value
+     * @return the Filling current boolean value
      */
     public boolean returnFilltruth(){return Filling;}
 
@@ -300,7 +362,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      *
      * @param setting pass the double value of initiating the setting
      */
-
     void SetGrid(double setting) {
         grid.setSetting((int)setting);
     }
@@ -309,7 +370,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * Makes it so that all drawings are within the canvas itself.
      * @param M Pass the MouseCoordinates class object
      */
-
     private void SetBoundaries(MouseCoordinates M){
         if ((M.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
             M.setMousex(0.0);
@@ -390,8 +450,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
-
-
+    /**
+     * Used for nothing
+     */
     @Override
     public void mouseClicked(MouseEvent e) { //Does nothing
 
@@ -533,7 +594,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         this.repaint();
     }
 
-
     /**
      * Whenever the mouse is dragged get the X,Y2 coordinates then repaint to temporarily see the shapes outline.
      *
@@ -548,10 +608,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         this.repaint();
     }
 
-    @Override
     /**
      * Where the mouse is released get the final X,Y2 coordinates and set the MouseTrack
      */
+
+    @Override
     public void mouseReleased(MouseEvent e) {
         Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         drawingLine = false;
@@ -597,10 +658,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         this.repaint();
     }
 
-    @Override
     /**
      * This is used to temporarily draw the polygon lines
      */
+    @Override
     public void mouseMoved(MouseEvent e) {
         // Used to temporarily draw polygon lines
         if (MouseIncrement >0) {
@@ -613,13 +674,18 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         this.repaint();
     }
 
+    /**
+     * Used for nothing
+     */
     @Override
     public void mouseEntered(MouseEvent e) { // Does nothing
-
     }
+
+    /**
+     * Used for nothing
+     */
 
     @Override
     public void mouseExited(MouseEvent e) { // Does nothing
-
     }
 }
