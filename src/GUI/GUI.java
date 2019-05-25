@@ -430,6 +430,13 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     private void undo() { canvas.undo(); }
 
     /**
+     * Returns drawingPoly for testing purposes
+     */
+    public boolean returnPoly(){
+        return canvas.drawingPoly = true;
+    }
+
+    /**
      * Parse through each line of the vecFile and put it into an arraylist within DrawCanvas
      */
     private void readCommand(String command) { canvas.setOpenCoordinates(command); }
@@ -459,6 +466,40 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         return canvas.returnFile();
     }
 
+    /**
+     * Calls undo and catches exceptions
+     * @throws Exception
+     */
+    public void CallUndo() throws Exception {
+        if(!canvas.drawingPoly) {
+            try {
+                undo();
+            } catch (Exception ex) {
+                throw new Exception("Error: Nothing left to undo");
+            }
+        }
+        else{
+            throw new Exception("Error: Please finish drawing");
+        }
+    }
+
+    /**
+     * Calls clear and catches exceptions when drawing poly
+     * @throws Exception
+     */
+    public void DrawPolyClear() throws Exception{
+        if (!canvas.drawingPoly) {
+            canvas.clearCanvas();
+            canvas.repaint();
+        }
+        else{
+            throw new Exception("Error: Please finish drawing");
+        }
+    }
+
+    /**
+     * Used for nothing
+     */
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -473,21 +514,18 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) { // Can only ctrl+z when not drawing polygon
-            if (canvas.returnCounter() > 0) {
-                if (!canvas.drawingPoly) {
-                    undo();
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
-                }
+            try {
+                CallUndo();
             }
-
-            else {
-                JOptionPane.showMessageDialog(null, "Error: Nothing left to undo", "Empty", JOptionPane.INFORMATION_MESSAGE);
+            catch (Exception ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
     }
 
+    /**
+     * Used for nothing
+     */
     @Override
     public void keyReleased(KeyEvent e) {
 
@@ -510,22 +548,30 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
         }
     }
-
+    /**
+     * Used for nothing
+     */
     @Override
     public void componentMoved(ComponentEvent e) {
 
     }
-
+    /**
+     * Used for nothing
+     */
     @Override
     public void componentShown(ComponentEvent e) {
 
     }
-
+    /**
+     * Used for nothing
+     */
     @Override
     public void componentHidden(ComponentEvent e) {
 
     }
-
+    /**
+     * Used when the state of the grid is changed
+     */
     @Override
     public void stateChanged(ChangeEvent e) {
         this.requestFocusInWindow();
@@ -544,12 +590,13 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
     }
 
+
     /**
      * Find the source of the button clicks from users to do different things.
      *
      * @param e this parameter is the ActionEvent that's detected from the users' mouse click.
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
         this.requestFocusInWindow();
         Object btnSrc = e.getSource();
 
@@ -579,17 +626,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
 
         if (btnSrc == undo) {
-            if (canvas.returnCounter() > 0) {
-                if (!canvas.drawingPoly) {
-                    undo();
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
-                }
-
+            try{
+                CallUndo();
             }
-            else {
-                JOptionPane.showMessageDialog(null, "Error: Nothing left to undo", "Empty", JOptionPane.INFORMATION_MESSAGE);
+            catch (Exception ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
 
@@ -659,12 +700,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             fill.setForeground(null);
             outline.setForeground(Color.BLUE);
             ToolColourReset();
-            if (!canvas.drawingPoly) {
-                canvas.clearCanvas();
-                canvas.repaint();
+            try{
+                DrawPolyClear();
             }
-            else{
-                JOptionPane.showMessageDialog(null, "Error: Please finish drawing", "Error", JOptionPane.INFORMATION_MESSAGE);
+            catch(Exception ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
 
@@ -969,6 +1009,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
     }
 
+    /**
+     * Main class to run GUI
+     * @param args
+     */
     // Main class, run GUI.
     public static void main(String[] args) {
         new GUI("untitled");

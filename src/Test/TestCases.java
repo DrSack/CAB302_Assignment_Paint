@@ -42,7 +42,6 @@ class TestCases extends JPanel {
         Test.SetCoordinateDrawingPlotting(0.0,0.0,0.0,0.0);
         assertEquals(1, Test.returnCounter());
     }
-
     /**
      * Test to see if 2 shapes have been drawn
      */
@@ -53,7 +52,6 @@ class TestCases extends JPanel {
         Test.SetCoordinateRectangle(0.0,0.0,0.0,0.0);
         assertEquals(2,Test.returnCounter());
     }
-
     /**
      * Tests undo
      */
@@ -117,6 +115,66 @@ class TestCases extends JPanel {
         Test.undo();
         assertEquals("", Test.returnFile());
         assertEquals(0, Test.returnCounter());
+    }
+
+    /**
+     * Tests undo with no shapes, pops up error
+     */
+    @Test
+    void TestUndoNoShapes(){
+        GUI Undo = new GUI("untitled");
+        Exception thrown = assertThrows(Exception.class, ()->{
+            Undo.CallUndo();
+        });
+        assertEquals("Error: Nothing left to undo", thrown.getMessage());
+    }
+
+    /**
+     * Tests undo with a shape and again after when there's nothing, pops up error
+     */
+    @Test
+    void TestUndoNoShapes2(){
+        GUI Undo = new GUI("untitled");
+        DrawCanvas Test = new DrawCanvas();
+        Test.setOpenCoordinates("ELLIPSE 0.0 0.0 1.0 1.0");
+        Test.SetCoordinateEllipse(0.0, 0.0, 1.0, 1.0);
+        Test.undo();
+        Exception thrown = assertThrows(Exception.class, ()->{
+            Undo.CallUndo();
+        });
+        assertEquals("Error: Nothing left to undo", thrown.getMessage());
+    }
+
+    /**
+     * Tests Undo while drawing polygon, pops up error
+     */
+    @Test
+    void TestUndoDrawingPoly(){
+        DrawCanvas Test = new DrawCanvas();
+        GUI Undo = new GUI("untitled");
+        Undo.returnPoly();//Used to mimic drawing a polygon shape
+        Test.setOpenCoordinates("ELLIPSE 0.0 0.0 1.0 1.0");
+        Test.SetCoordinateEllipse(0.0, 0.0, 1.0, 1.0);
+        Exception thrown = assertThrows(Exception.class, ()->{
+            Undo.CallUndo();
+        });
+        assertEquals("Error: Please finish drawing", thrown.getMessage());
+    }
+
+    /**
+     * Tests clear while drawing polygon, pops up error
+     */
+    @Test
+    void TestClearDrawingPoly(){
+        DrawCanvas Test = new DrawCanvas();
+        GUI Undo = new GUI("untitled");
+        Undo.returnPoly();//Used to mimic drawing a polygon shape
+        Test.setOpenCoordinates("ELLIPSE 0.0 0.0 1.0 1.0");
+        Test.SetCoordinateEllipse(0.0, 0.0, 1.0, 1.0);
+        Exception thrown = assertThrows(Exception.class, ()->{
+            Undo.DrawPolyClear();
+        });
+        assertEquals("Error: Please finish drawing", thrown.getMessage());
     }
 
     /**
