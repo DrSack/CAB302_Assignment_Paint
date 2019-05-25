@@ -9,19 +9,19 @@ import java.awt.*;
 public class TemporaryDraw {
 
     /**
-     * Passes parameters into temporary drawing the current tool selected and drawing based on its current listed coordinate
+     * Passes parameters into temporary drawing the current tool selected and drawing based on its current listed coordinate.
      *
      * @param g the graphics parameter which originates from the paint method.
-     * @param x1 the mouse x1 coordinate
-     * @param y1 the mouse y1 coordinate
-     * @param x2 the mouse x2 coordinate
-     * @param y2 the mouse y2 coordinate
-     * @param c the current pen colour of DrawCanvas
-     * @param f the current fill colour of DrawCanvas
-     * @param Line the boolean value of LineTruth
-     * @param Rec  the boolean value of RecTruth
-     * @param Ell the boolean value of ElliTruth
-     * @param Poly the boolean value of PolyTruth
+     * @param x1 the mouse x1 coordinate.
+     * @param y1 the mouse y1 coordinate.
+     * @param x2 the mouse x2 coordinate.
+     * @param y2 the mouse y2 coordinate.
+     * @param c the current pen colour of DrawCanvas.
+     * @param f the current fill colour of DrawCanvas.
+     * @param Line the boolean value of LineTruth.
+     * @param Rec  the boolean value of RecTruth.
+     * @param Ell the boolean value of ElliTruth.
+     * @param Poly the boolean value of PolyTruth.
      * @param Fill the boolean value whether fill is selected.
      */
     public void temporary(Graphics g, int x1, int y1, int x2,int y2, Color c,Color f, boolean Line, boolean Rec, boolean Ell, boolean Poly, boolean Fill) {

@@ -3,20 +3,20 @@ package Tools;
 import java.awt.*;
 
 /**
- * This class extends the ShapesDrawn class to draw and fill ellipses
+ * This class extends the ShapesDrawn class to draw and fill ellipses.
  */
 public class Ellipse extends ShapesDrawn {
 
-    /** Pass all parameters into the super method to instantiate the Ellipse class
+    /** Pass all parameters into the super method to instantiate the Ellipse class.
      *
-     * @param x1 the x1 double coordinate
-     * @param y1 the y1 double coordinate
-     * @param x2 the x2 double coordinate
-     * @param y2 the y2 double coordinate
-     * @param width the width of the JPanel
-     * @param height the height of the JPanel
-     * @param Fill if fill is true of not from the DrawCanvas Class
-     * @param c the pen colour
+     * @param x1 the x1 double coordinate.
+     * @param y1 the y1 double coordinate.
+     * @param x2 the x2 double coordinate.
+     * @param y2 the y2 double coordinate.
+     * @param width the width of the JPanel.
+     * @param height the height of the JPanel.
+     * @param Fill if fill is true of not from the DrawCanvas Class.
+     * @param c the pen colour.
      * @param f the fill colour.
      */
     public Ellipse(double x1 , double y1, double x2, double y2, int width, int height, boolean Fill ,Color c, Color f) {
@@ -24,7 +24,7 @@ public class Ellipse extends ShapesDrawn {
     }
 
     /**
-     * Draw this particular shape
+     * Draw or fill the ellipse.
      *
      * @param g the graphics parameter which is called from the paint method.
      */

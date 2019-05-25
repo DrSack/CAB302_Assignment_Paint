@@ -16,7 +16,7 @@ import javax.swing.Timer;
  * buttons and functions that the rest of the program will deliver. The DrawCanvas class is also called upon
  * within this class and that class extends a JPanel which will be used to draw the shapes.
  */
-public class GUI extends JFrame implements ActionListener, KeyListener, ChangeListener, ComponentListener{
+public class GUI extends JFrame implements ActionListener, KeyListener, ChangeListener, ComponentListener {
 
     private Color c = Color.BLACK;
 
@@ -58,6 +58,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     private JLabel gridLabel;
 
     private Timer timer;
+
     /**
      * This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
      * The border itself is fixed, with a menu bar on the top, the buttons listed on the side, and the DrawCanvas class
@@ -263,10 +264,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Create JMenuItem and return the object with action listener
+     * Create JMenuItem and return the object with action listener.
      *
-     * @param title is a string that the user can the name of the JMenuItem
-     * @return the JMenuItem
+     * @param title is a string that the user can the name of the JMenuItem.
+     * @return the JMenuItem.
      */
     private JMenuItem createMenuItem(String title) {
         JMenuItem btn = new JMenuItem();
@@ -276,10 +277,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Create JButton and return the object with action listener
+     * Create JButton and return the object with action listener.
      *
-     * @param title is a string that the user can the name of the JButton
-     * @return the JButton
+     * @param title is a string that the user can the name of the JButton.
+     * @return the JButton.
      */
     private JButton createButton(String title) {
         JButton btn = new JButton();
@@ -289,7 +290,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Setup the buttons and associate the buttons created to the private variable JButtons
+     * Setup the buttons and associate the buttons created to the private variable JButtons.
      */
     private void setupButtons() {
         toolPlot = createButton("Plot");
@@ -300,7 +301,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Setup the buttons and associate the buttons created to the private variable JMenuItems
+     * Setup the buttons and associate the buttons created to the private variable JMenuItems.
      */
     private void setupMenuItemsFile() {
         create = createMenuItem("New");
@@ -310,7 +311,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Setup the buttons and associate the buttons created to the private variable JMenuItems
+     * Setup the buttons and associate the buttons created to the private variable JMenuItems.
      */
     private void setupMenuItemsEdit() {
         undo = createMenuItem("Undo");
@@ -318,7 +319,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Setup the MenuBar with 2 JMenus File and Edit and add their JMenuItems
+     * Setup the MenuBar with 2 JMenus File and Edit and add their JMenuItems.
      */
     private void setupMenuBar() {
         // Menu bar
@@ -349,20 +350,20 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     /**
      * Set and create the Line or Plot object based on the parameters and DrawCanvas current draw settings.
      *
-     * @param x1 is the x1 coordinate of what the current VECfile line
-     * @param y1 is the y1 coordinate of what the current VECfile line
-     * @param x2 is the x2 coordinate of what the current VECfile line
-     * @param y2 is the y2 coordinate of what the current VECfile line
+     * @param x1 is the x1 coordinate of the current VECFile line.
+     * @param y1 is the y1 coordinate of the current VECFile line.
+     * @param x2 is the x2 coordinate of the current VECFile line.
+     * @param y2 is the y2 coordinate of the current VECFile line.
      */
     private void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
 
     /**
      * Set and create the Rectangle object based on the parameters and DrawCanvas current draw settings.
      *
-     * @param x1 is the x1 coordinate of what the current VECfile line
-     * @param y1 is the y1 coordinate of what the current VECfile line
-     * @param x2 is the x2 coordinate of what the current VECfile line
-     * @param y2 is the y2 coordinate of what the current VECfile line
+     * @param x1 is the x1 coordinate of the current VECFile line.
+     * @param y1 is the y1 coordinate of the current VECFile line.
+     * @param x2 is the x2 coordinate of the current VECFile line.
+     * @param y2 is the y2 coordinate of the current VECFile line.
      */
     private void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
@@ -371,10 +372,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     /**
      * Set and create the Ellipse object based on the parameters and DrawCanvas current draw settings.
      *
-     * @param x1 is the x1 coordinate of what the current VECfile line
-     * @param y1 is the y1 coordinate of what the current VECfile line
-     * @param x2 is the x2 coordinate of what the current VECfile line
-     * @param y2 is the y2 coordinate of what the current VECfile line
+     * @param x1 is the x1 coordinate of the current VECFile line
+     * @param y1 is the y1 coordinate of the current VECFile line
+     * @param x2 is the x2 coordinate of the current VECFile line
+     * @param y2 is the y2 coordinate of the current VECFile line
      */
     private void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
@@ -434,7 +435,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     private void readCommand(String command) { canvas.setOpenCoordinates(command); }
 
     /**
-     * Set the fill colour of the canvas based on what the string value vecfile line.
+     * Set the fill colour of the canvas based on what the string value VECFile line.
      *
      * @param hex Pass through the vecfile hex colour string into the canvas fill method
      */
@@ -451,7 +452,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         toolPolygon.setForeground(null);
     }
 
-    public String returnFile() { // Return the vecFile string from the canvas class.
+    /**
+     * Return the vecFile string from the canvas class.
+     */
+    public String returnFile() {
         return canvas.returnFile();
     }
 
@@ -489,6 +493,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     }
 
+    /**
+     * Resize the size of the canvas based on the size of the JFrame window.
+     *
+     * @param e a change event in the component.
+     */
     @Override
     public void componentResized(ComponentEvent e) {
         Component c = e.getComponent();
@@ -536,9 +545,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Find the source of the button clicks from users to do different things
+     * Find the source of the button clicks from users to do different things.
      *
-     * @param e this parameter is the ActionEvent that's detected from the users' mouse click
+     * @param e this parameter is the ActionEvent that's detected from the users' mouse click.
      */
     public void actionPerformed(ActionEvent e) {
         this.requestFocusInWindow();

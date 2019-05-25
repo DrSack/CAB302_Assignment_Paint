@@ -37,14 +37,14 @@ public class XY1 extends MouseCoordinates {
     }
 
     /**
-     * Get x1.
+     * Get the x1 coordinate.
      *
      * @return mouseX coordinate.
      */
     public double getX() { return  mouseX; }
 
     /**
-     * Get y1.
+     * Get the y1 coordinate.
      *
      * @return mouseY coordinate.
      */

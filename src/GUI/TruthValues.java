@@ -1,121 +1,120 @@
 package GUI;
 
 /**
- * An Encapsulation class for setting and getting all boolean values whether a specific tool has been activated
+ * An Encapsulation class for setting and getting all boolean values whether a specific tool has been activated.
  */
 public class TruthValues {
 
     // Set all boolean values to false by default.
 
     /**
-     * Boolean set to truth when Plot tool is clicked
+     * Boolean set to truth when Plot tool is clicked.
      */
     private boolean PlotTruth = false;
 
     /**
-     * Boolean set to truth when Line tool is clicked
+     * Boolean set to truth when Line tool is clicked.
      */
     private boolean LineTruth = false;
 
     /**
-     * Boolean set to truth when Rectangle tool is clicked
+     * Boolean set to truth when Rectangle tool is clicked.
      */
     private boolean RecTruth = false;
 
     /**
-     * Boolean set to truth when Ellipse tool is clicked
+     * Boolean set to truth when Ellipse tool is clicked.
      */
     private boolean ElliTruth = false;
 
     /**
-     * Boolean set to truth when Polygon tool is clicked
+     * Boolean set to truth when Polygon tool is clicked.
      */
     private boolean PolyTruth = false;
 
     /**
-     * Boolean set to truth when Grid tool is clicked
+     * Boolean set to truth when Grid tool is clicked.
      */
     private boolean GridTruth = false;
 
     /**
-     * Get the ElliTruth value
+     * Get the ElliTruth value.
      *
-     * @return ElliTruth value
+     * @return ElliTruth value.
      */
     public boolean isElliTruth() { return ElliTruth; }
 
     /**
-     * Set ElliTruth to true
+     * Set ElliTruth to true.
      */
     public void setElliTruth() {
         ElliTruth = true;
     }
 
     /**
-     * Get the LineTruth value
+     * Get the LineTruth value.
      *
-     * @return LineTruth value
+     * @return LineTruth value.
      */
     public boolean isLineTruth() { return LineTruth; }
 
     /**
-     * Set LineTruth to true
+     * Set LineTruth to true.
      */
     public void setLineTruth() {
         LineTruth = true;
     }
 
     /**
-     * Get the PlotTruth value
+     * Get the PlotTruth value.
      *
-     * @return PlotTruth value
+     * @return PlotTruth value.
      */
     public boolean isPlotTruth() { return PlotTruth; }
 
     /**
-     * Set PlotTruth to true
+     * Set PlotTruth to true.
      */
     public void setPlotTruth() { PlotTruth = true; }
 
     /**
-     * Get the PolyTruth value
+     * Get the PolyTruth value.
      *
-     * @return PolyTruth value
+     * @return PolyTruth value.
      */
     public boolean isPolyTruth() { return PolyTruth; }
 
     /**
-     * Set PolyTruth to true
+     * Set PolyTruth to true.
      */
     public void setPolyTruth() { PolyTruth = true; }
 
     /**
-     * Get the RecTruth value
+     * Get the RecTruth value.
      *
-     * @return RecTruth value
+     * @return RecTruth value.
      */
     public boolean isRecTruth() { return RecTruth; }
 
     /**
-     * Set RecTruth to true
+     * Set RecTruth to true.
      */
     public void setRecTruth() { RecTruth = true; }
 
     /**
-     * Get the GridTruth value
+     * Get the GridTruth value.
      *
-     * @return GridTruth value
+     * @return GridTruth value.
      */
-
     public boolean isGridTruth() { return GridTruth; }
 
     /**
-     * Set GridTruth to false
+     * Set GridTruth to false.
      */
     public void setGridFalse() { GridTruth = false; }
 
     /**
-     * Set GridTruth to true
+     * Set GridTruth to true.
      */
     public void setGridTruth() { GridTruth = true; }
 

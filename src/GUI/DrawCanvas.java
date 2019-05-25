@@ -299,7 +299,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     /**
      * Pass through the dimensions of each coordinate into Drawing Plotting which is responsible for creating object
-     * within the ShapesDraw class and storing them into the Draw arraylist. This method is used for both line and plot.
+     * within the ShapesDraw class and storing them into the Draw ArrayList. This method is used for both line and plot.
      *
      * @param X1 Pass though the double X1 value
      * @param Y1 Pass though the double Y1 value
@@ -314,7 +314,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     /**
      * Pass through the dimensions of each coordinate into drawing a rectangle. This creates a new object and stores it inside
-     * the Draw arraylist
+     * the Draw ArrayList.
      *
      * @param X1 Pass though the double X1 value
      * @param Y1 Pass though the double Y1 value
@@ -329,7 +329,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     /**
      * Pass through the dimensions of each coordinate into drawing a Ellipse. This creates a new object and stores it inside
-     * the Draw arraylist
+     * the Draw ArrayList.
      *
      * @param X1 Pass though the double X1 value
      * @param Y1 Pass though the double Y1 value
@@ -344,7 +344,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     /**
      * Pass through the dimensions of each coordinate within 2 arrays into drawing a Polygon.
-     * This creates a new object and stores it inside the Draw arraylist.
+     * This creates a new object and stores it inside the Draw ArrayList.
      *
      * @param xP passes the x coordinates array.
      * @param yP passes the y coordinates array.
@@ -428,9 +428,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int x2 = (int)(Mxy2.getX() * this.getWidth());
         int y2 = (int)(Mxy2.getY() * this.getHeight());
 
-        if (t.isGridTruth()) {// If the grid is active then draw it here
+        if (t.isGridTruth()) { // If the grid is active then draw it here
             double s = 0;
-            for (int i = 0; i < grid.getSetting(); i++) {//Use the settings number to dictate how many lines are to be drawn.
+            for (int i = 0; i < grid.getSetting(); i++) { // Use the settings number to dictate how many lines are to be drawn.
                 g.setColor(Color.LIGHT_GRAY);
                 g.drawLine(0,((int) (s*this.getHeight())), this.getWidth(), ((int) (s*this.getHeight())));
                 g.drawLine(((int) (s*this.getWidth())),0,((int) (s*this.getWidth())), this.getHeight());
@@ -496,7 +496,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
 
         if (Pen && !t.isPolyTruth()) { // If the user decides to draw with a colour outline present
-            commands.add(penTemp); //Add outline colour command
+            commands.add(penTemp); // Add outline colour command
             ExCommands.add(commands.size());
             tempEx = commands.size();
             if (!DoubleC) {
@@ -608,9 +608,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * Where the mouse is released get the final X,Y2 coordinates and set the MouseTrack
+     * When the mouse is released get the final X,Y2 coordinates and set the MouseTrack.
      */
-
     @Override
     public void mouseReleased(MouseEvent e) {
         Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
@@ -623,14 +622,14 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double my2;
 
         //Latch onto the nearest grid intersection.
-        SetGridBoundaries(e.getX(),e.getY(),Mxy2);//Sets what is being drawn to be latched onto the nearest grid intersection.
-        mx2 = Mxy2.getX();//set mx2 to the current mxy2 X coordinate.
-        my2 = Mxy2.getY();//set mx2 to the current mxy2 Y coordinate.
+        SetGridBoundaries(e.getX(),e.getY(),Mxy2); // Set what is being drawn to be latched onto the nearest grid intersection.
+        mx2 = Mxy2.getX(); // Set mx2 to the current mxy2 X coordinate.
+        my2 = Mxy2.getY(); // Set mx2 to the current mxy2 Y coordinate.
 
         //set mx2 and mxy to be within the canvas
-        SetBoundaries(Mxy2);// Only permits shapes to be drawn within the drawing canvas.
-        mx2 = Mxy2.getX();//set mx2 to the current mxy2 X coordinate.
-        my2 = Mxy2.getY();//set mx2 to the current mxy2 Y coordinate.
+        SetBoundaries(Mxy2); // Only permits shapes to be drawn within the drawing canvas.
+        mx2 = Mxy2.getX(); // Set mx2 to the current mxy2 X coordinate.
+        my2 = Mxy2.getY(); // Set mx2 to the current mxy2 Y coordinate.
 
         // Convert the double formats to String with 2decimal places.
         String x1 = df.format(mx1);
@@ -654,36 +653,39 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             // Add mouse coordinates to commands arrayList
             commands.add("ELLIPSE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
         }
+
         this.repaint();
     }
 
     /**
-     * This is used to temporarily draw the polygon lines
+     * This is used to temporarily draw the polygon lines.
      */
     @Override
     public void mouseMoved(MouseEvent e) {
         // Used to temporarily draw polygon lines
-        if (MouseIncrement >0) {
+        if (MouseIncrement > 0) {
             Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
             SetGridBoundaries(e.getX(), e.getY(), Mxy2);
             SetBoundaries(Mxy2);
             drawingLine = true;
         }
-        else drawingLine = false;
+        else {
+            drawingLine = false;
+        }
+
         this.repaint();
     }
 
     /**
-     * Used for nothing
+     * Used for nothing.
      */
     @Override
     public void mouseEntered(MouseEvent e) { // Does nothing
     }
 
     /**
-     * Used for nothing
+     * Used for nothing.
      */
-
     @Override
     public void mouseExited(MouseEvent e) { // Does nothing
     }

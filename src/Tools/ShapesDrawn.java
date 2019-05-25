@@ -3,72 +3,72 @@ package Tools;
 import java.awt.*;
 
 /**
- * This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes
+ * This is the abstract class that's extended by LineOrPlot, Rectangle and Ellipse classes.
  */
 public abstract class ShapesDrawn { // Initialize variables
 
     /**
-     * Declaring integers x1, y1, x2 and y2
+     * Declaring integers x1, y1, x2 and y2.
      */
     private int x1, y1, x2, y2;
 
     /**
-     * Declaring doubles ox1, oy1, ox2 and oy2
+     * Declaring doubles ox1, oy1, ox2 and oy2.
      */
-    private double ox1,oy1,ox2,oy2;
+    private double ox1, oy1, ox2, oy2;
 
     /**
-     * Declaring an integer array that will hold x coordinates for polygon
+     * Declaring an integer array that will hold x coordinates for polygon.
      */
     private int[] x;
 
     /**
-     * Declaring an integer array that will hold y coordinates for polygon
+     * Declaring an integer array that will hold y coordinates for polygon.
      */
     private int[] y;
 
     /**
-     * Declaring an integer array that will temporarily hold x coordinates for polygon
+     * Declaring an integer array that will temporarily hold x coordinates for polygon.
      */
     private double[] Ax;
 
     /**
-     * Declaring an integer array that will temporarily hold y coordinates for polygon
+     * Declaring an integer array that will temporarily hold y coordinates for polygon.
      */
     private double[] Ay;
 
     /**
-     * Used to change the color of pen
+     * Used to change the color of pen.
      */
     private Color pen;
 
     /**
-     * Used to change the color of fill
+     * Used to change the color of fill.
      */
     private Color filling;
 
     /**
-     * Used to decide whether or not to fill
+     * Used to decide whether or not to fill.
      */
     private boolean Fill;
 
     /**
-     * Used to decide whether or not to change polygon coordinates
+     * Used to decide whether or not to change polygon coordinates.
      */
     private boolean Polygon;
 
     /**
-     * Set all variables of the particular shape
+     * Set all variables of the particular shape.
      *
-     * @param x1 Set x1 coordinate
-     * @param y1 Set y1 coordinate
-     * @param x2 Set x2 coordinate
-     * @param y2 Set y2 coordinate
-     * @param width Scale shape with the current width of the JPanel
-     * @param height Scale shape with the current height of the JPanel
-     * @param Fill Set if a shape should be filled
-     * @param pen Set the pen colour
-     * @param filling Set fill colour
+     * @param x1 Set x1 coordinate.
+     * @param y1 Set y1 coordinate.
+     * @param x2 Set x2 coordinate.
+     * @param y2 Set y2 coordinate.
+     * @param width Scale shape with the current width of the JPanel.
+     * @param height Scale shape with the current height of the JPanel.
+     * @param Fill Set if a shape should be filled.
+     * @param pen Set the pen colour.
+     * @param filling Set fill colour.
      */
     ShapesDrawn(double x1, double y1, double x2, double y2, int width, int height, boolean Fill, Color pen, Color filling) {
         this.filling = filling;
@@ -89,8 +89,8 @@ public abstract class ShapesDrawn { // Initialize variables
     /**
      * Set all variables of the particular shape, especially for Polygons as it requires arrays to draw.
      *
-     * @param x Set x coordinate into array
-     * @param y Set y coordinate into array
+     * @param x Set x coordinate into array.
+     * @param y Set y coordinate into array.
      */
     ShapesDrawn(double[] x, double[] y, int width, int height, boolean Fill, Color pen, Color filling) {
         this.filling = filling;
@@ -112,6 +112,8 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
+     * Draw the shapes
+     *
      * @param g the graphics parameter which is called from the paint method.
      */
     public abstract void draw(Graphics g);
@@ -119,8 +121,8 @@ public abstract class ShapesDrawn { // Initialize variables
     /**
      * Every  time the window is resized scale the shape to the JPanels new dimensions.
      *
-     * @param width The width of the JPanel
-     * @param height The height of the JPanel
+     * @param width The width of the JPanel.
+     * @param height The height of the JPanel.
      */
     public void resize(int width, int height) {
         if (Polygon) {
@@ -140,7 +142,7 @@ public abstract class ShapesDrawn { // Initialize variables
     /**
      * Get the x1 coordinate.
      *
-     * @return the x1 coordinate
+     * @return the x1 coordinate.
      */
     public int getX1() {// return x1
         return x1;
@@ -149,7 +151,7 @@ public abstract class ShapesDrawn { // Initialize variables
     /**
      * Get the y1 coordinate.
      *
-     * @return the y1 coordinate
+     * @return the y1 coordinate.
      */
     public int getY1() {// return y1
         return y1;

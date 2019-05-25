@@ -19,7 +19,7 @@ public class XY2 extends MouseCoordinates {
     }
 
     /**
-     * Set mouse x1.
+     * Set mouse x2.
      *
      * @param mouseX pass through double values.
      */
@@ -28,7 +28,7 @@ public class XY2 extends MouseCoordinates {
     }
 
     /**
-     * Set mouse y1.
+     * Set mouse y2.
      *
      * @param mouseY pass through double values.
      */
@@ -37,14 +37,14 @@ public class XY2 extends MouseCoordinates {
     }
 
     /**
-     * Get x1.
+     * Get the x2 coordinate.
      *
      * @return mouseX coordinate.
      */
     public double getX() { return  mouseX; }
 
     /**
-     * Get y1.
+     * Get the y2 coordinate.
      *
      * @return mouseY coordinate.
      */
