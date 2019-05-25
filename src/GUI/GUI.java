@@ -431,6 +431,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Returns drawingPoly for testing purposes
+     * @return boolean value for drawing a polygon.
      */
     public boolean returnPoly(){
         return canvas.drawingPoly = true;
@@ -438,6 +439,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Parse through each line of the vecFile and put it into an arraylist within DrawCanvas
+     * @param command The vecfile command line.
      */
     private void readCommand(String command) { canvas.setOpenCoordinates(command); }
 
@@ -461,6 +463,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Return the vecFile string from the canvas class.
+     * @return The entire vecfile string.
      */
     public String returnFile() {
         return canvas.returnFile();
@@ -468,7 +471,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Calls undo and catches exceptions
-     * @throws Exception
+     * @throws Exception The Nothing left to do exception message when an exception error occurs within undo()
+     *          or Please finish drawing error message when the drawPoly boolean value is true.
      */
     public void CallUndo() throws Exception {
         if(!canvas.drawingPoly) {
@@ -485,7 +489,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Calls clear and catches exceptions when drawing poly
-     * @throws Exception
+     * @throws Exception Polygon exception message
      */
     public void DrawPolyClear() throws Exception{
         if (!canvas.drawingPoly) {
@@ -506,8 +510,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * If Ctrl+Z is pressed run the undo method, if the returnCounter of the canvas is above 0 then do operations
-     * normally, but if it is below then display an error message.
+     * If Ctrl+Z is pressed run the undo method, if the method doesn't catch the exception then do operations
+     * normally, but if it catches it then display an error message.
      *
      * @param e will be used to get the key code for both ctrl and z
      */
@@ -1011,7 +1015,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Main class to run GUI
-     * @param args
+     * @param args main argument parameter
      */
     // Main class, run GUI.
     public static void main(String[] args) {

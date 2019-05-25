@@ -91,6 +91,11 @@ public abstract class ShapesDrawn { // Initialize variables
      *
      * @param x Set x coordinate into array.
      * @param y Set y coordinate into array.
+     * @param width Scale shape with the current width of the JPanel.
+     * @param height Scale shape with the current height of the JPanel.
+     * @param Fill Set if a shape should be filled.
+     * @param pen Set the pen colour.
+     * @param filling Set fill colour.
      */
     ShapesDrawn(double[] x, double[] y, int width, int height, boolean Fill, Color pen, Color filling) {
         this.filling = filling;
