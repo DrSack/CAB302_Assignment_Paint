@@ -21,7 +21,7 @@ public class Polygon extends ShapesDrawn {
      * @param f the fill colour.
      */
     public Polygon(double[] x, double[] y, int width, int height, boolean Fill , Color c, Color f) {
-        super(x,y,width,height,Fill,c,f); // Pass the values through the super class.
+        super(x,y,width,height,Fill,c,f); // Pass the values through the super class
     }
 
     /**

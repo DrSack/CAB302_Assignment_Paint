@@ -110,7 +110,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Add all tools to the shape JPanel
+     * Add all tools to the shape JPanel.
      */
     private void setupShapes() {
         shapes = new JPanel(new GridLayout(5,1));
@@ -123,7 +123,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Setup the tool panel that contains the Fill and Outline tool buttons as well
-     * as 2 color preview fields for those 2 buttons
+     * as 2 color preview fields for those 2 buttons.
      */
     private void setupTools() {
         tools = new JPanel(new GridBagLayout());
@@ -165,7 +165,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Setup a JSlider to adjust the size of the Grid
+     * Setup a JSlider to adjust the size of the Grid.
      */
     private void setupSize() {
         gridSlider = new JSlider(JSlider.VERTICAL, 50, 300, 100);
@@ -185,7 +185,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Setup all JPanels and their layouts
+     * Setup all JPanels and their layouts.
      */
     private void setupPanels() {
         // Container board
@@ -235,7 +235,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Setup all colour buttons to make a color palette
+     * Setup all colour buttons to make a color palette.
      */
     private void setupColors() {
         black.setBackground(Color.BLACK);
@@ -372,10 +372,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     /**
      * Set and create the Ellipse object based on the parameters and DrawCanvas current draw settings.
      *
-     * @param x1 is the x1 coordinate of the current VECFile line
-     * @param y1 is the y1 coordinate of the current VECFile line
-     * @param x2 is the x2 coordinate of the current VECFile line
-     * @param y2 is the y2 coordinate of the current VECFile line
+     * @param x1 is the x1 coordinate of the current VECFile line.
+     * @param y1 is the y1 coordinate of the current VECFile line.
+     * @param x2 is the x2 coordinate of the current VECFile line.
+     * @param y2 is the y2 coordinate of the current VECFile line.
      */
     private void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
@@ -392,7 +392,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Set the outline colour within the DrawCanvas class
+     * Set the outline colour within the DrawCanvas class.
      *
      * @param colour The string value of the outline hex colour code from the current vecfile line.
      */
@@ -401,7 +401,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Set the fill colour within the DrawCanvas class
+     * Set the fill colour within the DrawCanvas class.
      *
      * @param colour The string value of the fill hex colour code from the current vecfile line.
      */
@@ -420,17 +420,18 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     private void ColourClick(String hex) { canvas.setColourClick(hex); }
 
     /**
-     * Set default drawCanvas drawing settings after opening a vec file
+     * Set default drawCanvas drawing settings after opening a vec file.
      */
     private void open() { canvas.open(); }
 
     /**
-     * Call the undo function of the canvas
+     * Call the undo function of the canvas.
      */
     private void undo() { canvas.undo(); }
 
     /**
-     * Returns drawingPoly for testing purposes
+     * Returns drawingPoly for testing purposes.
+     *
      * @return boolean value for drawing a polygon.
      */
     public boolean returnPoly(){
@@ -438,7 +439,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Parse through each line of the vecFile and put it into an arraylist within DrawCanvas
+     * Parse through each line of the vecFile and put it into an ArrayList within DrawCanvas.
+     *
      * @param command The vecfile command line.
      */
     private void readCommand(String command) { canvas.setOpenCoordinates(command); }
@@ -446,7 +448,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     /**
      * Set the fill colour of the canvas based on what the string value VECFile line.
      *
-     * @param hex Pass through the vecfile hex colour string into the canvas fill method
+     * @param hex Pass through the vecfile hex colour string into the canvas fill method.
      */
     private void FillClick(String hex) { canvas.setFillClick(hex); }
 
@@ -463,6 +465,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
     /**
      * Return the vecFile string from the canvas class.
+     *
      * @return The entire vecfile string.
      */
     public String returnFile() {
@@ -488,8 +491,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Calls clear and catches exceptions when drawing poly
-     * @throws Exception Polygon exception message
+     * Calls clear and catches exceptions when drawing polygon.
+     *
+     * @throws Exception Polygon exception message.
      */
     public void DrawPolyClear() throws Exception{
         if (!canvas.drawingPoly) {
@@ -502,7 +506,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Used for nothing
+     * Used for nothing.
      */
     @Override
     public void keyTyped(KeyEvent e) {
@@ -513,7 +517,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      * If Ctrl+Z is pressed run the undo method, if the method doesn't catch the exception then do operations
      * normally, but if it catches it then display an error message.
      *
-     * @param e will be used to get the key code for both ctrl and z
+     * @param e will be used to get the key code for both ctrl and z.
      */
     @Override
     public void keyPressed(KeyEvent e) {
@@ -528,7 +532,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Used for nothing
+     * Used for nothing.
      */
     @Override
     public void keyReleased(KeyEvent e) {
@@ -552,29 +556,30 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
         }
     }
+
     /**
-     * Used for nothing
+     * Used for nothing.
      */
     @Override
     public void componentMoved(ComponentEvent e) {
 
     }
     /**
-     * Used for nothing
+     * Used for nothing.
      */
     @Override
     public void componentShown(ComponentEvent e) {
 
     }
     /**
-     * Used for nothing
+     * Used for nothing.
      */
     @Override
     public void componentHidden(ComponentEvent e) {
 
     }
     /**
-     * Used when the state of the grid is changed
+     * Used when the state of the grid is changed.
      */
     @Override
     public void stateChanged(ChangeEvent e) {
@@ -593,7 +598,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             }
         }
     }
-
 
     /**
      * Find the source of the button clicks from users to do different things.
@@ -700,7 +704,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             this.dispose();
         }
 
-        if (btnSrc == clear) { // If clear is clicked on clear the canvas and repaint.
+        if (btnSrc == clear) { // If clear is clicked on clear the canvas and repaint
             fill.setForeground(null);
             outline.setForeground(Color.BLUE);
             ToolColourReset();
@@ -714,7 +718,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
         /*
          * With the following other if statements below, these set the boolean values of the each tool
-         * to either true or false, whether a specific button is clicked.
+         * to either true or false, whether a specific button is clicked
          */
         if (btnSrc == toolPlot) {
             if (!canvas.drawingPoly) {
@@ -770,7 +774,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             canvas.t.setPolyTruth();
         }
 
-        if (btnSrc == create) { // Create a new JFrame Window.
+        if (btnSrc == create) { // Create a new JFrame Window
             new GUI("untitled");
         }
 
@@ -789,8 +793,9 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
             final String ext = ".VEC";
             String filePathWithoutExt = "";
+
             int value = fcSave.showSaveDialog(fcSave);
-            if (value == JFileChooser.APPROVE_OPTION) { // Save button is clicked.
+            if (value == JFileChooser.APPROVE_OPTION) { // Save button is clicked
                 // If the files name contains a .VEC replace it with nothing this is to prevent a double .VEC.VEC file
                 if (fcSave.getSelectedFile().getAbsolutePath().contains(".VEC")) {
                     filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath().replace(".VEC", "");
@@ -804,11 +809,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                 File file = new File(filePathWithoutExt + ".VEC");
 
                 // If the save button is pressed save the file followed with the file name inputted the .VEC extension
-                if (file.exists()) { // If the file already exist pop up a confirm Dialog panel.
+                if (file.exists()) { // If the file already exist pop up a confirm Dialog panel
                     value = JOptionPane.showConfirmDialog(this,
-                            "Replace existing file?"); // Asks if the user wants to replace the file.
+                            "Replace existing file?"); // Asks if the user wants to replace the file
                     if (value == JOptionPane.YES_OPTION) {
-                        try { // if yes then replace the file with the current vecFile string.
+                        try { // if yes then replace the file with the current vecFile string
                             FileWriter filewrite = new FileWriter(file);
                             filewrite.flush();
                             filewrite.write(returnFile());
@@ -819,13 +824,12 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                             e1.printStackTrace();
                         }
                     }
-
                     if (value == JOptionPane.NO_OPTION) // If no then do nothing
                         return;
                 }
 
                 if (!file.exists()) {
-                    try { // If the file doesn't already exist, create it and write the file with the current vecFile string.
+                    try { // If the file doesn't already exist, create it and write the file with the current vecFile string
                         FileWriter filewrite = new FileWriter(file);
                         filewrite.flush();
                         filewrite.write(returnFile());
@@ -836,7 +840,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                         e1.printStackTrace();
                     }
                 }
-
             }
 
             // If cancel is selected on the JFileChooser do nothing and return to normal operations.
@@ -898,8 +901,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
                         while (data != null) { // If there is data keep reading each line
                             if (data.startsWith("LINE")) {
-                                // Replaces PLOT with nothing
-                                data = data.replace("LINE ", "");
+                                data = data.replace("LINE ", ""); // Replaces LINE with nothing
 
                                 // Splits params into an array
                                 String param[] = data.split(" ");
@@ -911,8 +913,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                             }
 
                             else if (data.startsWith("PLOT")) {
-                                // Replaces PLOT with nothing
-                                data = data.replace("PLOT ", "");
+                                data = data.replace("PLOT ", ""); // Replaces PLOT with nothing
 
                                 // Splits params into an array
                                 String param[] = data.split(" ");
@@ -922,8 +923,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                             }
 
                             else if (data.startsWith("RECTANGLE")) {
-                                // Replaces RECTANGLE with nothing
-                                data = data.replace("RECTANGLE ", "");
+                                data = data.replace("RECTANGLE ", ""); // Replaces RECTANGLE with nothing
 
                                 // Splits params into an array
                                 String param[] = data.split(" ");
@@ -935,8 +935,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                             }
 
                             else if (data.startsWith("ELLIPSE")) {
-                                // Replaces ELLIPSE with nothing
-                                data = data.replace("ELLIPSE ", "");
+                                data = data.replace("ELLIPSE ", ""); // Replaces ELLIPSE with nothing
 
                                 // Splits params into an array
                                 String param[] = data.split(" ");
@@ -966,6 +965,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                     xP[i] = Double.parseDouble(param[2 * i]);
                                     yP[i] = Double.parseDouble(param[2 * i + 1]);
                                 }
+
                                 frame.parsePolygon(xP, yP);
                             }
 
@@ -985,21 +985,23 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                                     frame.parseFill(data); // Set the colour on the JPanel
                                 }
                             }
+
                             else if (data!=null) {
                                 JOptionPane.showMessageDialog(null, "Error: Unknown command: "+data, "Error", JOptionPane.INFORMATION_MESSAGE);
-                                frame.dispose(); // Close the window that has an error.
+                                frame.dispose(); // Close the window that has an error
                                 break;
                             }
+
                             data = reader.readLine();
                         }
 
-                        // Redraw the canvas and display shapes/lines.
+                        // Redraw the canvas and display shapes/lines
                         frame.open();
                         canvas.repaint();
                         canvas.setVisible(true);
                     }
 
-                    else { // Give an error message if the file does not exist.
+                    else { // Give an error message if the file does not exist
                         JOptionPane.showMessageDialog(null, "Error: File not found", "Error", JOptionPane.INFORMATION_MESSAGE);
                     }
 
@@ -1007,17 +1009,17 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                     e1.printStackTrace();
                 }
 
-            } else if (returnVal == JFileChooser.CANCEL_OPTION) { // Do nothing return to normal operations.
-
+            } else if (returnVal == JFileChooser.CANCEL_OPTION) {
+                // Do nothing return to normal operations
             }
         }
     }
 
     /**
-     * Main class to run GUI
-     * @param args main argument parameter
+     * Main class to run GUI.
+     *
+     * @param args main argument parameter.
      */
-    // Main class, run GUI.
     public static void main(String[] args) {
         new GUI("untitled");
     }

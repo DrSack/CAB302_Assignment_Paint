@@ -33,7 +33,7 @@ public class TemporaryDraw {
         if (Rec) {
             if (Fill) { // If this has fill enabled fill the Rectangle
                 g.setColor(f);
-                if (x2 <= x1 && y2 <= y1) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                if (x2 <= x1 && y2 <= y1) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards
                     g.fillRect(x2,y2,x1-x2,y1-y2);
                 }
                 else if (x2 <= x1) { //If X2 goes behind X1 then draw backwards
@@ -83,7 +83,7 @@ public class TemporaryDraw {
 
             g.setColor(c);
 
-            if (x2 <= x1 && y2 <= y1) { // Temporarily draw an Ellipse.
+            if (x2 <= x1 && y2 <= y1) { // Temporarily draw an Ellipse
                 g.drawOval(x2,y2,x1-x2,y1-y2);
             }
             else if (x2 <= x1) {

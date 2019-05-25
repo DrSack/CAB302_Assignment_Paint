@@ -23,34 +23,42 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * Boolean set to true to enable temporary draw
      */
     private boolean drawingLine = false;
+
     /**
      * Boolean set to true to enable filling when drawing
      */
     private boolean Filling = false;
+
     /**
      * Boolean set to true to enable outline
      */
     private boolean Pen = false;
+
     /**
      * Boolean set to true whenever drawing a polygon shape until finished
      */
     boolean drawingPoly = false;
+
     /**
      * Store the last known integer to keep track of ExCommands
      */
     private int tempEx;
+
     /**
      * A string to hold colors and the hex
      */
     private String colourTemp = "";
+
     /**
      * A string to hold pen and the hex
      */
     private String penTemp = "";
+
     /**
      * A string to hold temporarily
      */
     private String tempF;
+
     /**
      * A string to hold the polygon coordinates then add into commands
      */
@@ -60,50 +68,62 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * An ArrayList for storing shape information
      */
     public ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>(); // Setup arrayList for storing shape information.
+
     /**
      * An ArrayList to store all commands here
      */
     private ArrayList<String> commands = new ArrayList<>(); // Store all commands here
+
     /**
      * An ArrayList to store polygon coordinates to draw
      */
     private ArrayList<Double> polylines = new ArrayList<>(); // Store polygon coordinates to draw
+
     /**
      * An ArrayList to store the index value of every PEN and FILL in commands arrayList
      */
     private ArrayList<Integer> ExCommands = new ArrayList<>(); // The index value of every PEN and FILL in commands arrayList.
+
     /**
      * Making a format to update String double variables to 5 decimal places
      */
     private DecimalFormat df = new DecimalFormat("#.00000"); // Updates double variables to 5 decimal places.
+
     /**
      * Set the outline color to default color black
      */
     private Color c = Color.black;
+
     /**
      * Set the Color f used for fill
      */
     private Color f;
+
     /**
      * An integer to count every click when drawing polygon
      */
     private int MouseIncrement = 0;
+
     /**
      * To hold the x and y coordinates of polygon
      */
     private double[] xP, yP;
+
     /**
      * Making a xy1 object
      */
     private MouseCoordinates Mxy = new XY1();
+
     /**
      * Making a xy2 object
      */
     private MouseCoordinates Mxy2 = new XY2();
+
     /**
      * Making a TruthValues object
      */
-    TruthValues t = new TruthValues();
+    public TruthValues t = new TruthValues();
+
     /**
      * Making a Grid object
      */
@@ -205,6 +225,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             for (String command : commands) {
                 vecFile += command;
             }
+
             System.out.println(vecFile);
         }
     }
@@ -229,7 +250,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * This method is called from the GUI whether the button "outline" is enabled, and the colours picked also have
      * outline button enabled.
      *
-     * @param hex passes the hex string and puts it into the colour array
+     * @param hex passes the hex string and puts it into the colour array.
      */
     public void setColourClick(String hex) {
         c = (Color.decode(hex));
@@ -249,8 +270,9 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * Return the pen outline color
-     * @return the pen outline colour
+     * Get the pen outline color.
+     *
+     * @return the pen outline colour.
      */
     public Color returnColour() { return c; }
 
@@ -275,7 +297,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void SetFill(String hex) {
         Filling = true;
-        f = (Color.decode(hex)); // Add the Hex colour code to f.
+        f = (Color.decode(hex)); // Add the Hex colour code to f
     }
 
     /**
@@ -286,14 +308,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * Return the fill color
-     * @return Return the fill color
+     * Get the fill color.
+     *
+     * @return Return the fill color.
      */
     public Color returnFill(){ return f; }
 
     /**
-     * Return the Filling current boolean value
-     * @return the Filling current boolean value
+     * Get the Filling current boolean value.
+     *
+     * @return the Filling current boolean value.
      */
     public boolean returnFilltruth(){return Filling;}
 
@@ -306,8 +330,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * @param X2 Pass though the double X2 value
      * @param Y2 Pass though the double Y2 value
      */
-
-    // Set coordinates for Lines or Plotting
     public void SetCoordinateDrawingPlotting(double X1, double Y1, double X2, double Y2) {
         Draw.add(new LineOrPlot(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,returnColour(), returnFill()));
     }
@@ -321,8 +343,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * @param X2 Pass though the double X2 value
      * @param Y2 Pass though the double Y2 value
      */
-
-    // Set coordinates for Rectangle
     public void SetCoordinateRectangle(double X1, double Y1, double X2, double Y2) {
         Draw.add(new Rectangle(X1,Y1,X2,Y2,this.getWidth(),this.getHeight(),Filling,returnColour(),returnFill()));
     }
@@ -336,8 +356,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * @param X2 Pass though the double X2 value
      * @param Y2 Pass though the double Y2 value
      */
-
-    // Set coordinates for Ellipse
     public void SetCoordinateEllipse(double X1, double Y1, double X2, double Y2) {
         Draw.add(new Ellipse(X1,Y1,X2,Y2,this.getWidth(),this.getHeight(),Filling,returnColour(),returnFill()));
     }
@@ -349,7 +367,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * @param xP passes the x coordinates array.
      * @param yP passes the y coordinates array.
      */
-
     public void SetCoordinatePolygon(double[] xP, double[] yP) {
         Draw.add(new Polygon(xP, yP, this.getWidth(), this.getHeight(), Filling, returnColour(), returnFill()));
     }
@@ -397,9 +414,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double sy = 0.0;
         int mx;
         int my;
+
         if (t.isGridTruth()) {
-            for (int y = 0; y < grid.getSetting()+1; y++) {
-                for (int x = 0; x < grid.getSetting()+1; x++) {
+            for (int y = 0; y < grid.getSetting() + 1; y++) {
+                for (int x = 0; x < grid.getSetting() + 1; x++) {
                     my = (int)(sy*this.getHeight());
                     mx = (int)(sx*this.getWidth());
                     if (xy > my-25 && xy < my+25 && xm > mx-25 && xm < mx+25 ) {
@@ -411,7 +429,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 }
                 sx = 0.0;
                 sy += (1.0/grid.getSetting());
-
             }
         }
     }
@@ -439,7 +456,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
 
         for (ShapesDrawn s : Draw) { // For loop for redrawing all shapes
-            s.resize(this.getWidth(),this.getHeight());
+            s.resize(this.getWidth(), this.getHeight());
             s.draw(g);
         }
 
@@ -450,11 +467,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * Used for nothing
+     * Used for nothing.
      */
     @Override
-    public void mouseClicked(MouseEvent e) { // Does nothing
-
+    public void mouseClicked(MouseEvent e) {
+        // Does nothing
     }
 
     /**
@@ -475,7 +492,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
         Mxy2.setMouseXY(e.getX(),e.getY(), this.getWidth(), this.getHeight());
 
-        //Set the grid boundaries whether the grid is triggered.
+        // Set the grid boundaries whether the grid is triggered.
         SetGridBoundaries(e.getX(),e.getY(),Mxy);
 
         if (Filling && !t.isPolyTruth()) { // If the user decides to draw with a fill colour present
@@ -516,27 +533,37 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         // If polygon button is selected, able to draw polygon
         if (t.isPolyTruth()) {
-            // First left click gets position, adds string into polyStr and adds coordinates into polylines arrays,
-            // increments the mouseIncrement every click. Also makes drawingPoly into true so you can't undo until finished.
+            /*
+             * First left click gets position, adds string into polyStr and adds coordinates into polylines arrays,
+             * increments the mouseIncrement every click. Also makes drawingPoly into true so you can't undo until finished.
+             */
             if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement == 0) {
                 drawingPoly = true; // Sets drawingPoly to true, if true cannot undo or clear
                 MouseIncrement++;
+
                 mx1 = Mxy.getX(); // Gets x coordinate
                 my1 = Mxy.getY(); // Gets y coordinate
+
                 String x1 = df.format(mx1); // Formats the x coordinate into a string
                 String y1 = df.format(my1); // Formats the y coordinate into a string
+
                 polyStr = ("POLYGON " + "0" + x1 + " 0" + y1); //polyStr will be used to store into commands after right click
                 polylines.add(Mxy.getX()); // Adds coordinate into polylines used later to draw
                 polylines.add(Mxy.getY()); // Adds coordinate into polylines used later to draw
             }
-            // Second left click and every other click draws line, increments mouseIncrement every click, adds
-            // coordinates into polyLines array, repaints the program every click to show line.
+
+            /*
+             * Second left click and every other click draws line, increments mouseIncrement every click, adds
+             * coordinates into polyLines array, repaints the program every click to show line.
+             */
             else if (SwingUtilities.isLeftMouseButton(e) && MouseIncrement > 0) {
                 MouseIncrement++;
                 Mxy2.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight()); // Sets the x2 and y2
                 SetCoordinateDrawingPlotting(mx1, my1, mx2, my2); //Draws a line depending on mouse clicked
+
                 String x2 = df.format(mx2);
                 String y2 = df.format(my2);
+
                 polyStr += (" 0" + x2 + " 0" + y2);
                 polylines.add(Mxy.getX());
                 polylines.add(Mxy.getY());
@@ -548,13 +575,16 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 drawingPoly = false; // Make it into false to be able to undo the entire shape or clear
                 xP = new double[polylines.size()/2];
                 yP = new double[polylines.size()/2];
+
                 for (int i = 0; i<polylines.size()/2; i++) { // Access the polylines array and setting x and y coordinates another set of arrays
                     xP[i] = polylines.get(2*i);
                     yP[i] = polylines.get(2*i+1);
                 }
+
                 for (int i = 0; i<MouseIncrement-1; i++) { // Remove all the lines created based on how many mouse clicks
                     Draw.remove(Draw.size()-1);
                 }
+
                 polyStr += "\n";
                 polylines.clear(); // Clears polylines to create another polygon shape
                 MouseIncrement = 0; // Sets mouseIncrement to 0 to be able to create another polygon shape
@@ -586,10 +616,12 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                         tempEx = commands.size();
                     }
                 }
+
                 commands.add(polyStr); // Adds polyStr into the command list
                 SetCoordinatePolygon(xP, yP); //Redraws the polygon by calling this function
             }
         }
+
         this.repaint();
     }
 
@@ -621,12 +653,12 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         double mx2;
         double my2;
 
-        //Latch onto the nearest grid intersection.
+        // Latch onto the nearest grid intersection.
         SetGridBoundaries(e.getX(),e.getY(),Mxy2); // Set what is being drawn to be latched onto the nearest grid intersection.
         mx2 = Mxy2.getX(); // Set mx2 to the current mxy2 X coordinate.
         my2 = Mxy2.getY(); // Set mx2 to the current mxy2 Y coordinate.
 
-        //set mx2 and mxy to be within the canvas
+        // Set mx2 and mxy to be within the canvas
         SetBoundaries(Mxy2); // Only permits shapes to be drawn within the drawing canvas.
         mx2 = Mxy2.getX(); // Set mx2 to the current mxy2 X coordinate.
         my2 = Mxy2.getY(); // Set mx2 to the current mxy2 Y coordinate.
@@ -644,13 +676,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         if (t.isRecTruth()) { // If Rectangle tool is picked then draw a rectangle.
             SetCoordinateRectangle(mx1, my1, mx2, my2);
-            // Add mouse coordinates to commands arrayList
             commands.add("RECTANGLE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
         }
 
         if (t.isElliTruth()) { // If Ellipse tool is picked then draw an ellipse.
             SetCoordinateEllipse(mx1, my1, mx2, my2);
-            // Add mouse coordinates to commands arrayList
             commands.add("ELLIPSE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
         }
 
@@ -680,13 +710,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * Used for nothing.
      */
     @Override
-    public void mouseEntered(MouseEvent e) { // Does nothing
+    public void mouseEntered(MouseEvent e) {
+        // Does nothing
     }
 
     /**
      * Used for nothing.
      */
     @Override
-    public void mouseExited(MouseEvent e) { // Does nothing
+    public void mouseExited(MouseEvent e) {
+        // Does nothing
     }
 }

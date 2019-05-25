@@ -7,7 +7,8 @@ import java.awt.*;
  */
 public class LineOrPlot extends ShapesDrawn {
 
-    /** Pass all parameters into the super method to instantiate the LineOrPlot class.
+    /**
+     * Pass all parameters into the super method to instantiate the LineOrPlot class.
      *
      * @param x1 the x1 double coordinate.
      * @param y1 the y1 double coordinate.
