@@ -7,7 +7,8 @@ import java.awt.*;
  */
 public class Rectangle extends ShapesDrawn {
 
-    /** Pass all parameters into the super method to instantiate the Rectangle class
+    /**
+     * Pass all parameters into the super method to instantiate the Rectangle class
      *
      * @param x1 the x1 double coordinate
      * @param y1 the y1 double coordinate

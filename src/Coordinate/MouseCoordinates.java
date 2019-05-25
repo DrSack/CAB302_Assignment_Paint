@@ -7,17 +7,17 @@ package Coordinate;
 public class MouseCoordinates {
 
     /**
-     * Declaring a double mouseX and mouseY
+     * Declaring a double mouseX and mouseY.
      */
     private double mouseX, mouseY;
 
     /**
-     * Set XY value for the mouse coordinates and also convert to double
+     * Set XY value for the mouse coordinates and also convert to double.
      *
-     * @param x the current x coordinate of the MouseListener
-     * @param y the current y coordinate of the MouseListener
-     * @param width the JPanel width
-     * @param height the JPanel height
+     * @param x the current x coordinate of the MouseListener.
+     * @param y the current y coordinate of the MouseListener.
+     * @param width the JPanel width.
+     * @param height the JPanel height.
      */
     public void setMouseXY(int x, int y, int width, int height) {
         mouseX = (double) x/width;
@@ -25,28 +25,30 @@ public class MouseCoordinates {
     }
 
     /**
-     * Manually set the mouseX coordinate
+     * Manually set the mouseX coordinate.
      *
-     * @param mouseX pass through the double values
+     * @param mouseX pass through the double values.
      */
     public void setMousex(double mouseX) { }
 
 
     /**
-     * Manually set the mouseY coordinate
+     * Manually set the mouseY coordinate.
      *
-     * @param mouseY pass through the double values
+     * @param mouseY pass through the double values.
      */
     public void setMousey(double mouseY) { }
 
     /**
-     * MouseX double coordinate
+     * Get mouseX coordinate.
+     *
      * @return mouseX double coordinate.
      */
     public double getX() { return  mouseX; }
 
     /**
-     * MouseY double coordinate
+     * Get mouseY coordinate.
+     *
      * @return mouseY double coordinate.
      */
     public double getY(){ return  mouseY; }

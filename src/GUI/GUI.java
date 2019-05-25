@@ -807,7 +807,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                try { // Give out an exception error if a file doesnt exist
+                try { // Give out an exception error if a file doesn't exist
                     if (file.exists()) { // If the file does exist
                         BufferedReader reader = new BufferedReader((new FileReader(file)));
                         BufferedReader readerT = new BufferedReader((new FileReader(file)));

@@ -8,7 +8,8 @@ import java.awt.*;
  */
 public class TemporaryDraw {
 
-    /**Passes parameters into temporary drawing the current tool selected and drawing based on its current listed coordinate
+    /**
+     * Passes parameters into temporary drawing the current tool selected and drawing based on its current listed coordinate
      *
      * @param g the graphics parameter which originates from the paint method.
      * @param x1 the mouse x1 coordinate
@@ -32,16 +33,16 @@ public class TemporaryDraw {
         if (Rec) {
             if (Fill) { // If this has fill enabled fill the Rectangle
                 g.setColor(f);
-                if (x2 <= x1 && y2 <= y1) {// Both X2 and Y2 and behind X1 and Y1 then draw backwards.
+                if (x2 <= x1 && y2 <= y1) { // Both X2 and Y2 and behind X1 and Y1 then draw backwards.
                     g.fillRect(x2,y2,x1-x2,y1-y2);
                 }
-                else if (x2 <= x1) {//If X2 goes behind X1 then draw backwards
+                else if (x2 <= x1) { //If X2 goes behind X1 then draw backwards
                     g.fillRect(x2,y1,x1-x2,y2-y1);
                 }
-                else if (y2 <= y1) {// If Y2 goes behind Y1 then draw backwards
+                else if (y2 <= y1) { // If Y2 goes behind Y1 then draw backwards
                     g.fillRect(x1,y2,x2-x1,y1-y2);
                 }
-                else {// If operations are normal then draw normally
+                else { // If operations are normal then draw normally
                     g.fillRect(x1,y1,x2-x1,y2-y1);
                 }
             }

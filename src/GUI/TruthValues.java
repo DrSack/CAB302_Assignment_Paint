@@ -3,37 +3,43 @@ package GUI;
 /**
  * An Encapsulation class for setting and getting all boolean values whether a specific tool has been activated
  */
-
 public class TruthValues {
 
-    //Set all boolean values to false by default.
+    // Set all boolean values to false by default.
+
     /**
      * Boolean set to truth when Plot tool is clicked
      */
     private boolean PlotTruth = false;
+
     /**
      * Boolean set to truth when Line tool is clicked
      */
     private boolean LineTruth = false;
+
     /**
      * Boolean set to truth when Rectangle tool is clicked
      */
     private boolean RecTruth = false;
+
     /**
      * Boolean set to truth when Ellipse tool is clicked
      */
     private boolean ElliTruth = false;
+
     /**
      * Boolean set to truth when Polygon tool is clicked
      */
     private boolean PolyTruth = false;
+
     /**
      * Boolean set to truth when Grid tool is clicked
      */
     private boolean GridTruth = false;
 
     /**
-     * Returns ElliTruth value
+     * Get the ElliTruth value
+     *
      * @return ElliTruth value
      */
     public boolean isElliTruth() { return ElliTruth; }
@@ -46,7 +52,8 @@ public class TruthValues {
     }
 
     /**
-     * Returns LineTruth value
+     * Get the LineTruth value
+     *
      * @return LineTruth value
      */
     public boolean isLineTruth() { return LineTruth; }
@@ -59,7 +66,8 @@ public class TruthValues {
     }
 
     /**
-     * Returns PlotTruth value
+     * Get the PlotTruth value
+     *
      * @return PlotTruth value
      */
     public boolean isPlotTruth() { return PlotTruth; }
@@ -70,7 +78,8 @@ public class TruthValues {
     public void setPlotTruth() { PlotTruth = true; }
 
     /**
-     * Returns PolyTruth value
+     * Get the PolyTruth value
+     *
      * @return PolyTruth value
      */
     public boolean isPolyTruth() { return PolyTruth; }
@@ -81,17 +90,20 @@ public class TruthValues {
     public void setPolyTruth() { PolyTruth = true; }
 
     /**
-     * Returns RecTruth value
+     * Get the RecTruth value
+     *
      * @return RecTruth value
      */
     public boolean isRecTruth() { return RecTruth; }
+
     /**
      * Set RecTruth to true
      */
     public void setRecTruth() { RecTruth = true; }
 
     /**
-     * Returns GridTruth value
+     * Get the GridTruth value
+     *
      * @return GridTruth value
      */
 

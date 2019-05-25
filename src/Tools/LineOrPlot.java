@@ -20,7 +20,7 @@ public class LineOrPlot extends ShapesDrawn {
      * @param f the fill colour.
      */
     public LineOrPlot(double x1 , double y1, double x2, double y2, int width, int height,boolean Fill, Color c, Color f) {
-        super(x1,y1,x2,y2,width,height,Fill,c,f);//pass the values through the super class.
+        super(x1,y1,x2,y2,width,height,Fill,c,f); // Pass the values through the super class.
     }
 
     /**

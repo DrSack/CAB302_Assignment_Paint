@@ -22,6 +22,7 @@ public class Ellipse extends ShapesDrawn {
     public Ellipse(double x1 , double y1, double x2, double y2, int width, int height, boolean Fill ,Color c, Color f) {
         super(x1,y1,x2,y2,width,height,Fill,c,f); // Pass the values through the super class.
     }
+
     /**
      * Draw this particular shape
      *
@@ -43,7 +44,6 @@ public class Ellipse extends ShapesDrawn {
             else { // If operations are normal then draw normally
                 g.fillOval(getX1(),getY1(),getX2()-getX1(),getY2()-getY1());
             }
-
         }
 
         g.setColor(getPenC()); // Draw the outline

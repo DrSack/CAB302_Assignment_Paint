@@ -11,38 +11,47 @@ public abstract class ShapesDrawn { // Initialize variables
      * Declaring integers x1, y1, x2 and y2
      */
     private int x1, y1, x2, y2;
+
     /**
      * Declaring doubles ox1, oy1, ox2 and oy2
      */
     private double ox1,oy1,ox2,oy2;
+
     /**
      * Declaring an integer array that will hold x coordinates for polygon
      */
     private int[] x;
+
     /**
      * Declaring an integer array that will hold y coordinates for polygon
      */
     private int[] y;
+
     /**
      * Declaring an integer array that will temporarily hold x coordinates for polygon
      */
     private double[] Ax;
+
     /**
      * Declaring an integer array that will temporarily hold y coordinates for polygon
      */
     private double[] Ay;
+
     /**
      * Used to change the color of pen
      */
     private Color pen;
+
     /**
      * Used to change the color of fill
      */
     private Color filling;
+
     /**
      * Used to decide whether or not to fill
      */
     private boolean Fill;
+
     /**
      * Used to decide whether or not to change polygon coordinates
      */
@@ -78,7 +87,7 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     * Set all variables of the particular shape, especially for Polygons as it requires arrays to draw
+     * Set all variables of the particular shape, especially for Polygons as it requires arrays to draw.
      *
      * @param x Set x coordinate into array
      * @param y Set y coordinate into array
@@ -108,7 +117,8 @@ public abstract class ShapesDrawn { // Initialize variables
     public abstract void draw(Graphics g);
 
     /**
-     * Every  time the window is resized scale the shape to the JPanels new dimensions
+     * Every  time the window is resized scale the shape to the JPanels new dimensions.
+     *
      * @param width The width of the JPanel
      * @param height The height of the JPanel
      */
@@ -128,7 +138,8 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     * Returns the x1 coordinate
+     * Get the x1 coordinate.
+     *
      * @return the x1 coordinate
      */
     public int getX1() {// return x1
@@ -136,7 +147,8 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     * Returns the y1 coordinate
+     * Get the y1 coordinate.
+     *
      * @return the y1 coordinate
      */
     public int getY1() {// return y1
@@ -144,48 +156,52 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     * Returns the x2 coordinate
-     * @return the x2 coordinate
+     * Get the x2 coordinate.
+     *
+     * @return the x2 coordinate.
      */
     public int getX2() {// return x2
         return x2;
     }
 
     /**
-     * Returns the y2 coordinate
-     * @return the y2 coordinate
+     * Get the y2 coordinate.
+     *
+     * @return the y2 coordinate.
      */
-    public int getY2() {// return y2
-        return y2;
-    }
+    public int getY2() { return y2; }
 
     /**
-     * Returns the Polygon x array coordinates
-     * @return the Polygon x array coordinates
+     * Get the Polygon x array coordinates.
+     *
+     * @return the Polygon x array coordinates.
      */
     public int[] getXarray(){// return all X coordinates in the array
         return x;
     }
 
     /**
-     * Returns the Polygon y array coordinates
-     * @return the Polygon y array coordinates
+     * Get the Polygon y array coordinates.
+     *
+     * @return the Polygon y array coordinates.
      */
     public int[] getYarray(){// return all Y coordinates in the array
         return y;
     }
 
     /**
-     * Returns the pen colour
-     * @return Get pen colour
+     * Get the pen colour.
+     *
+     * @return Get pen colour.
      */
     public Color getPenC(){
         return pen;
     }
 
     /**
-     * Returns the fill colour
-     * @return Get fill colour
+     * Get the fill colour.
+     *
+     * @return Get fill colour.
      */
 
     public Color getFillC(){
@@ -193,10 +209,10 @@ public abstract class ShapesDrawn { // Initialize variables
     }
 
     /**
-     * Returns if the shape is filled or not
-     * @return Return if the shape is filled or not
+     * Check if the shape is filled or not.
+     *
+     * @return Return if the shape is filled or not.
      */
-
     public boolean getFill(){
         return Fill;
     }

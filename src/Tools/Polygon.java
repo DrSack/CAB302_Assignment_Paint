@@ -9,7 +9,8 @@ import java.awt.*;
  */
 public class Polygon extends ShapesDrawn {
 
-    /** Pass all parameters into the super method to instantiate the LineOrPlot class
+    /**
+     * Pass all parameters into the super method to instantiate the LineOrPlot class
      *
      * @param x the array of x double coordinates.
      * @param y the array of y double coordinates.

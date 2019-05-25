@@ -3,8 +3,8 @@ package Tools;
 /**
  * Encapsulation class responsible for getting and setting the total amount of lines to be drawn for the grid
  */
-
 public class Grid {
+
     /**
      * Private variable for keeping track of the total amount of grid lines
      */
@@ -18,7 +18,6 @@ public class Grid {
     }
 
     /**
-     *
      * @return the total amount of lines to be drawn.
      */
     public int getSetting(){ return this.total; }

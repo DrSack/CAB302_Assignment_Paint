@@ -324,7 +324,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     // Set coordinates for Rectangle
     public void SetCoordinateRectangle(double X1, double Y1, double X2, double Y2) {
-        Draw.add(new Rectangle(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,returnColour(),returnFill()));
+        Draw.add(new Rectangle(X1,Y1,X2,Y2,this.getWidth(),this.getHeight(),Filling,returnColour(),returnFill()));
     }
 
     /**
@@ -339,7 +339,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     // Set coordinates for Ellipse
     public void SetCoordinateEllipse(double X1, double Y1, double X2, double Y2) {
-        Draw.add(new Ellipse(X1,Y1,X2,Y2, this.getWidth(), this.getHeight(),Filling,returnColour(),returnFill()));
+        Draw.add(new Ellipse(X1,Y1,X2,Y2,this.getWidth(),this.getHeight(),Filling,returnColour(),returnFill()));
     }
 
     /**
@@ -351,7 +351,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
 
     public void SetCoordinatePolygon(double[] xP, double[] yP) {
-        Draw.add(new Polygon(xP, yP, this.getWidth(), this.getHeight(), Filling, returnColour(),returnFill()));
+        Draw.add(new Polygon(xP, yP, this.getWidth(), this.getHeight(), Filling, returnColour(), returnFill()));
     }
 
     /**
@@ -366,6 +366,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
     /**
      * Makes it so that all drawings are within the canvas itself.
+     *
      * @param M Pass the MouseCoordinates class object
      */
     private void SetBoundaries(MouseCoordinates M){
