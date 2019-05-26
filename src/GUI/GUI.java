@@ -81,7 +81,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
 
         canvas = new DrawCanvas();
         canvas.setBackground(Color.WHITE);
-        canvas.setSize(new Dimension(665, 665));
+        canvas.setSize(new Dimension(670, 670));
 
         // Setup components
         setupMenuBar();
@@ -549,12 +549,15 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         Component c = e.getComponent();
 
         // Set the size of the canvas based on the height of the window if the height of the window is changed
-        canvas.setSize(new Dimension(c.getSize().height - 60, c.getSize().height - 60));
+        canvas.setSize(new Dimension(c.getSize().height - 65, c.getSize().height - 65));
 
         // Set the size of the canvas based on the width of the window if the window's width + the toolbar's width is smaller than the window's height
         if (c.getWidth() - 100 <= (c.getHeight())) {
             canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
         }
+
+        System.out.println("Canvas: " + canvas.getWidth() + "x" + canvas.getHeight());
+        System.out.println("Window: " + c.getWidth() + "x" + c.getHeight());
     }
 
     /**
@@ -612,7 +615,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             if (!canvas.t.isGridTruth()) {
                 double amount;
                 gridButton.setForeground(Color.BLUE);
-                System.out.println("true");
                 canvas.t.setGridTruth();
                 if (gridSlider.getValue()%50 == 0) {
                     amount = (double) (gridSlider.getValue()/100.0)*6.0;
@@ -626,7 +628,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                 }
             }
             else {
-                System.out.println("false");
                 gridButton.setForeground(null);
                 canvas.t.setGridFalse();
                 canvas.repaint();
