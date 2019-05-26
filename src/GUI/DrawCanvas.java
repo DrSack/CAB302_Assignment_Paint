@@ -87,7 +87,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     /**
      * Making a format to update String double variables to 5 decimal places
      */
-    private DecimalFormat df = new DecimalFormat("#.00000"); // Updates double variables to 5 decimal places.
+    private DecimalFormat df = new DecimalFormat("#0.00000"); // Updates double variables to 5 decimal places.
 
     /**
      * Set the outline color to default color black
@@ -527,7 +527,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         if (t.isPlotTruth()) { // If only plotting then get the position, add command to string, then repaint.
             Mxy.setMouseXY(e.getX(), e.getY(), this.getWidth(), this.getHeight());
             SetCoordinateDrawingPlotting(Mxy.getX(), Mxy.getY(), Mxy.getX(), Mxy.getY());
-            commands.add("PLOT " + "0" + df.format(Mxy.getX()) + " 0" + df.format(Mxy.getY()) + "\n");
+            commands.add("PLOT "  + df.format(Mxy.getX()) + " " + df.format(Mxy.getY()) + "\n");
             this.repaint();
         }
 
@@ -547,7 +547,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 String x1 = df.format(mx1); // Formats the x coordinate into a string
                 String y1 = df.format(my1); // Formats the y coordinate into a string
 
-                polyStr = ("POLYGON " + "0" + x1 + " 0" + y1); //polyStr will be used to store into commands after right click
+                polyStr = ("POLYGON " + x1 + " " + y1); //polyStr will be used to store into commands after right click
                 polylines.add(Mxy.getX()); // Adds coordinate into polylines used later to draw
                 polylines.add(Mxy.getY()); // Adds coordinate into polylines used later to draw
             }
@@ -564,7 +564,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 String x2 = df.format(mx2);
                 String y2 = df.format(my2);
 
-                polyStr += (" 0" + x2 + " 0" + y2);
+                polyStr += (" " + x2 + " " + y2);
                 polylines.add(Mxy.getX());
                 polylines.add(Mxy.getY());
                 this.repaint(); // Used to display the drawing
@@ -671,17 +671,17 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
         if (t.isLineTruth()) { // If Line tool is picked then draw a line
             SetCoordinateDrawingPlotting(mx1, my1, mx2, my2);
-            commands.add("LINE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
+            commands.add("LINE " + x1 + " " + y1 + " " + x2 + " " + y2 + "\n");
         }
 
         if (t.isRecTruth()) { // If Rectangle tool is picked then draw a rectangle.
             SetCoordinateRectangle(mx1, my1, mx2, my2);
-            commands.add("RECTANGLE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
+            commands.add("RECTANGLE " + x1 + " " + y1 + " " + x2 + " " + y2 + "\n");
         }
 
         if (t.isElliTruth()) { // If Ellipse tool is picked then draw an ellipse.
             SetCoordinateEllipse(mx1, my1, mx2, my2);
-            commands.add("ELLIPSE " + "0" + x1 + " 0" + y1 + " 0" + x2 + " 0" + y2 + "\n");
+            commands.add("ELLIPSE "  + x1 + " " + y1 + " " + x2 + " " + y2 + "\n");
         }
 
         this.repaint();
