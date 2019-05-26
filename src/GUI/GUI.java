@@ -549,7 +549,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         Component c = e.getComponent();
 
         // Set the size of the canvas based on the height of the window if the height of the window is changed
-        canvas.setSize(new Dimension(c.getSize().height - 65, c.getSize().height - 65));
+        canvas.setSize(new Dimension(c.getSize().height - 62, c.getSize().height - 62));
 
         // Set the size of the canvas based on the width of the window if the window's width + the toolbar's width is smaller than the window's height
         if (c.getWidth() - 100 <= (c.getHeight())) {
