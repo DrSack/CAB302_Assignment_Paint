@@ -137,26 +137,24 @@ public abstract class ShapesDrawn { // Initialize variables
             }
         }
 
-        else {
+        else { // If the coordinates of the shape are at maximum, reduce by 1 to fit in the screen
             this.x1 = (int) (ox1 * width);
             this.y1 = (int) (oy1 * height);
             this.x2 = (int) (ox2 * width);
             this.y2 = (int) (oy2 * height);
 
-            if(ox1 == 1.0){
-                this.x1-=1;
+            if (ox1 == 1.0) {
+                this.x1 -= 1;
             }
-            if(oy1 == 1.0){
-                this.y1-=1;
+            if (oy1 == 1.0) {
+                this.y1 -= 1;
             }
-            if(ox2 == 1.0){
-                this.x2-=1;
+            if (ox2 == 1.0) {
+                this.x2 -= 1;
             }
-            if(oy2 == 1.0){
-                this.y2-=1;
+            if (oy2 == 1.0) {
+                this.y2 -= 1;
             }
-
-
         }
     }
 
