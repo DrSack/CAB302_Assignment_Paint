@@ -136,6 +136,7 @@ public abstract class ShapesDrawn { // Initialize variables
                 this.y[i] = (int) (Ay[i] * height);
             }
         }
+
         else {
             this.x1 = (int) (ox1 * width);
             this.y1 = (int) (oy1 * height);
