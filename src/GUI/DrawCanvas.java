@@ -193,7 +193,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * if there is PEN and or FILL before or after the current command line.
      */
     public void undo() {
-        if(!drawingPoly) {
+        if (!drawingPoly) {
             if (ExCommands.size() > 0) { // Delete extra commands if it is a PEN or FILL Colour
                 int i = ExCommands.get(ExCommands.size() - 1);
 
@@ -312,14 +312,14 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      *
      * @return Return the fill color.
      */
-    public Color returnFill(){ return f; }
+    public Color returnFill() { return f; }
 
     /**
      * Get the Filling current boolean value.
      *
      * @return the Filling current boolean value.
      */
-    public boolean returnFilltruth(){return Filling;}
+    public boolean returnFilltruth() {return Filling;}
 
     /**
      * Pass through the dimensions of each coordinate into Drawing Plotting which is responsible for creating object
@@ -386,7 +386,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      *
      * @param M Pass the MouseCoordinates class object
      */
-    private void SetBoundaries(MouseCoordinates M){
+    private void SetBoundaries(MouseCoordinates M) {
         if ((M.getX())< 0.0) { // If the x value is behind 0 set mx2 as 0
             M.setMousex(0.0);
         }
@@ -409,7 +409,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * @param xy passes the MouseListener y coordinate
      * @param M pass the MouseCoordinates class object
      */
-    private void SetGridBoundaries(int xm, int xy, MouseCoordinates M){
+    private void SetGridBoundaries(int xm, int xy, MouseCoordinates M) {
         double sx = 0.0;
         double sy = 0.0;
         int mx;
@@ -445,16 +445,17 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int x2 = (int)(Mxy2.getX() * this.getWidth());
         int y2 = (int)(Mxy2.getY() * this.getHeight());
 
-        if(x1 == this.getWidth()){
+        // If the coordinates of the shape are at maximum, reduce by 1 to fit in the screen
+        if (x1 == this.getWidth()) {
             x1--;
         }
-        if(y1 == this.getWidth()){
+        if (y1 == this.getWidth()) {
             y1--;
         }
-        if(x2 == this.getWidth()){
+        if (x2 == this.getWidth()) {
             x2--;
         }
-        if(y2 == this.getWidth()){
+        if (y2 == this.getWidth()) {
             y2--;
         }
 
