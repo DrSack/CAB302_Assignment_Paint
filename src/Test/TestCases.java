@@ -294,7 +294,7 @@ class TestCases extends JPanel {
         int h = 150;
         ArrayList<ShapesDrawn> Draw = new ArrayList<>();
         Draw.add(new LineOrPlot(1.0,1.0,1.0,1.0,300,300,true, Color.black,Color.WHITE));
-        Draw.get(0).resize(w,h);
+        Draw.get(0).refit(w,h);
         assertEquals(w,Draw.get(0).getX1());
         assertEquals(h,Draw.get(0).getY1());
         assertEquals(w,Draw.get(0).getX2());

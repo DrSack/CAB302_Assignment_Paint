@@ -445,6 +445,19 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         int x2 = (int)(Mxy2.getX() * this.getWidth());
         int y2 = (int)(Mxy2.getY() * this.getHeight());
 
+        if(x1 == this.getWidth()){
+            x1--;
+        }
+        if(y1 == this.getWidth()){
+            y1--;
+        }
+        if(x2 == this.getWidth()){
+            x2--;
+        }
+        if(y2 == this.getWidth()){
+            y2--;
+        }
+
         if (t.isGridTruth()) { // If the grid is active then draw it here
             double s = 0;
             for (int i = 0; i < grid.getSetting(); i++) { // Use the settings number to dictate how many lines are to be drawn.
@@ -456,7 +469,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         }
 
         for (ShapesDrawn s : Draw) { // For loop for redrawing all shapes
-            s.resize(this.getWidth(), this.getHeight());
+            s.refit(this.getWidth(), this.getHeight());
             s.draw(g);
         }
 

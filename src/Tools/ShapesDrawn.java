@@ -80,10 +80,10 @@ public abstract class ShapesDrawn { // Initialize variables
         ox2 = x2;
         oy2 = y2;
 
-        this.x1 = (int)(x1*width);
-        this.y1 = (int)(y1*height);
-        this.x2 = (int)(x2*width);
-        this.y2 = (int)(y2*height);
+        this.x1 = ((int)(x1*width));
+        this.y1 = ((int)(y1*height));
+        this.x2 = ((int)(x2*width));
+        this.y2 = ((int)(y2*height));
     }
 
     /**
@@ -129,7 +129,7 @@ public abstract class ShapesDrawn { // Initialize variables
      * @param width The width of the JPanel.
      * @param height The height of the JPanel.
      */
-    public void resize(int width, int height) {
+    public void refit(int width, int height) {
         if (Polygon) {
             for (int i = 0; i < x.length; i++) {
                 this.x[i] = (int) (Ax[i] * width);
@@ -141,6 +141,21 @@ public abstract class ShapesDrawn { // Initialize variables
             this.y1 = (int) (oy1 * height);
             this.x2 = (int) (ox2 * width);
             this.y2 = (int) (oy2 * height);
+
+            if(ox1 == 1.0){
+                this.x1-=1;
+            }
+            if(oy1 == 1.0){
+                this.y1-=1;
+            }
+            if(ox2 == 1.0){
+                this.x2-=1;
+            }
+            if(oy2 == 1.0){
+                this.y2-=1;
+            }
+
+
         }
     }
 
