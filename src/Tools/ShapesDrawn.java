@@ -134,6 +134,13 @@ public abstract class ShapesDrawn { // Initialize variables
             for (int i = 0; i < x.length; i++) {
                 this.x[i] = (int) (Ax[i] * width);
                 this.y[i] = (int) (Ay[i] * height);
+
+                if(Ax[i] == 1.0){
+                    this.x[i] -= 1;
+                }
+                if (Ay[i] == 1.0) {
+                    this.y[i] -= 1;
+                }
             }
         }
 
