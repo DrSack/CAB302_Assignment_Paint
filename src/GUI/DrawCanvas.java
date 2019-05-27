@@ -218,6 +218,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
             Draw.remove(Draw.size() - 1); // Delete the regular command.
             commands.remove(commands.size() - 1);
+            if(Draw.size() == 0){
+                commands.clear();
+            }
+
             this.repaint();
 
             String vecFile = "";

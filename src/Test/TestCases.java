@@ -118,6 +118,22 @@ class TestCases extends JPanel {
     }
 
     /**
+     * Test undo with fill
+     */
+    @Test
+    void TestCanvasUndo4Commands() { // Test if undo has deletes 3 Lines
+        DrawCanvas Test = new DrawCanvas();
+        Test.setOpenCoordinates("FILL #000000");
+        Test.setOpenCoordinates("PEN #000000");
+        Test.setOpenCoordinates("FILL OFF");
+        Test.setOpenCoordinates("LINE 0.0 0.0 1.0 1.0");
+        Test.SetCoordinateDrawingPlotting(0.0,0.0,1.0,1.0);
+        Test.undo();
+        assertEquals("", Test.returnFile());
+        assertEquals(0, Test.returnCounter());
+    }
+
+    /**
      * Tests undo with no shapes, pops up error
      */
     @Test
@@ -286,19 +302,35 @@ class TestCases extends JPanel {
     }
 
     /**
-     * Test case for resizing the window and checking if the dimensions of the shape changes
+     * Test case for resizing the window and checking if the dimensions of the shape changes and fits within the screen.
      */
     @Test
-    void TestShapesResizeLine() { // Test case for resizing the window and checking if the dimensions of the shape changes
+    void TestShapesResizeMaximum() { // Test case for resizing the window and checking if 1.0 x,y commands -1 to fit on screen.
         int w = 150;
         int h = 150;
         ArrayList<ShapesDrawn> Draw = new ArrayList<>();
         Draw.add(new LineOrPlot(1.0,1.0,1.0,1.0,300,300,true, Color.black,Color.WHITE));
         Draw.get(0).refit(w,h);
-        assertEquals(w,Draw.get(0).getX1());
-        assertEquals(h,Draw.get(0).getY1());
-        assertEquals(w,Draw.get(0).getX2());
-        assertEquals(h,Draw.get(0).getY2());
+        assertEquals(w-1,Draw.get(0).getX1());
+        assertEquals(h-1,Draw.get(0).getY1());
+        assertEquals(w-1,Draw.get(0).getX2());
+        assertEquals(h-1,Draw.get(0).getY2());
+    }
+
+    /**
+     * Test case for resizing the window and checking if the dimensions of the shape changes and with normal dimensions
+     */
+    @Test
+    void TestShapesResizeLine() { // Test case for resizing the window and checking for < 1.0 x,y commands
+        int w = 150;
+        int h = 150;
+        ArrayList<ShapesDrawn> Draw = new ArrayList<>();
+        Draw.add(new LineOrPlot(0.5,0.5,0.5,0.5,300,300,true, Color.black,Color.WHITE));
+        Draw.get(0).refit(w,h);
+        assertEquals(75,Draw.get(0).getX1());
+        assertEquals(75,Draw.get(0).getY1());
+        assertEquals(75,Draw.get(0).getX2());
+        assertEquals(75,Draw.get(0).getY2());
     }
 
     /**
