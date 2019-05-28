@@ -218,7 +218,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
 
             Draw.remove(Draw.size() - 1); // Delete the regular command.
             commands.remove(commands.size() - 1);
-            if(Draw.size() == 0){
+            if (Draw.size() == 0) {
                 commands.clear();
             }
 
@@ -589,7 +589,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             }
 
             // If right click without any lines drawn, don't draw polygon
-            else if (SwingUtilities.isRightMouseButton(e) && MouseIncrement == 1){
+            else if (SwingUtilities.isRightMouseButton(e) && MouseIncrement == 1) {
                 drawingPoly = false;
                 MouseIncrement = 0;
                 polylines.clear();

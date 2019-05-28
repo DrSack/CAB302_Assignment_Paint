@@ -57,7 +57,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     private JSlider gridSlider;
     private JLabel gridLabel;
 
-    private Timer timer;
+    private javax.swing.Timer timer;
 
     /**
      * This is the constructor, the contents of the VEC file are passed through as a String, and the Title is also set.
@@ -75,7 +75,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         this.setTitle(title);
         this.setLayout(new BorderLayout(6, 0));
 
-        canvasContainer = new JPanel(new BorderLayout());
+        canvasContainer = new JPanel(new GridLayout(1,1));
         canvasContainer.setBackground(Color.LIGHT_GRAY);
         canvasContainer.setSize(new Dimension(670, 670));
 
@@ -96,7 +96,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         this.setJMenuBar(menuBar);
         this.add(containerBoard, BorderLayout.WEST);
         this.add(canvasContainer, BorderLayout.CENTER);
-        canvasContainer.add(canvas, BorderLayout.CENTER);
+        canvasContainer.add(canvas);
 
         // Display
         this.requestFocusInWindow();
@@ -434,7 +434,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      *
      * @return boolean value for drawing a polygon.
      */
-    public boolean returnPoly(){
+    public boolean returnPoly() {
         return canvas.drawingPoly = true;
     }
 
@@ -478,14 +478,14 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      *          or Please finish drawing error message when the drawPoly boolean value is true.
      */
     public void CallUndo() throws Exception {
-        if(!canvas.drawingPoly) {
+        if (!canvas.drawingPoly) {
             try {
                 undo();
             } catch (Exception ex) {
                 throw new Exception("Error: Nothing left to undo");
             }
         }
-        else{
+        else {
             throw new Exception("Error: Please finish drawing");
         }
     }
@@ -500,7 +500,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             canvas.clearCanvas();
             canvas.repaint();
         }
-        else{
+        else {
             throw new Exception("Error: Please finish drawing");
         }
     }
@@ -525,7 +525,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             try {
                 CallUndo();
             }
-            catch (Exception ex){
+            catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
@@ -540,20 +540,31 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     }
 
     /**
-     * Resize the size of the canvas based on the size of the JFrame window.
-     *
-     * @param e a change event in the component.
+     * Handle resize events so that the canvas only resize after the user is done resizing the JFrame.
      */
     @Override
     public void componentResized(ComponentEvent e) {
-        Component c = e.getComponent();
+        if (this.timer == null) { // Initiate timer and wait for delay
+            this.timer = new Timer(300, this);
+            this.timer.start();
+        }
+        else { // Restart the timer if there are still resizing events
+            this.timer.restart();
+        }
+    }
+
+    /**
+     * Resize the size of the canvas based on the size of the JFrame window.
+     */
+    public void resizeCanvas() {
+        Component c = this.getContentPane();
 
         // Set the size of the canvas based on the height of the window if the height of the window is changed
-        canvas.setSize(new Dimension(c.getSize().height - 62, c.getSize().height - 62));
+        canvas.setSize(new Dimension(c.getSize().height - 3, c.getSize().height - 3));
 
         // Set the size of the canvas based on the width of the window if the window's width + the toolbar's width is smaller than the window's height
         if (c.getWidth() - 100 <= (c.getHeight())) {
-            canvas.setSize(new Dimension(c.getWidth() - 170, c.getWidth() - 170));
+            canvas.setSize(new Dimension(c.getWidth() - 160, c.getWidth() - 160));
         }
 
         System.out.println("Canvas: " + canvas.getWidth() + "x" + canvas.getHeight());
@@ -607,9 +618,16 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      *
      * @param e this parameter is the ActionEvent that's detected from the users' mouse click.
      */
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent e) {
         this.requestFocusInWindow();
         Object btnSrc = e.getSource();
+
+        // If timer is finished, stop and clear the timer and resize the canvas
+        if (e.getSource() == this.timer) {
+            this.timer.stop();
+            this.timer = null;
+            this.resizeCanvas();
+        }
 
         if (btnSrc == gridButton) {
             if (!canvas.t.isGridTruth()) {
@@ -635,10 +653,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
 
         if (btnSrc == undo) {
-            try{
+            try {
                 CallUndo();
             }
-            catch (Exception ex){
+            catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
@@ -709,10 +727,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             fill.setForeground(null);
             outline.setForeground(Color.BLUE);
             ToolColourReset();
-            try{
+            try {
                 DrawPolyClear();
             }
-            catch(Exception ex){
+            catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
