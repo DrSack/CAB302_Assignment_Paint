@@ -67,7 +67,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     /**
      * An ArrayList for storing shape information
      */
-    public ArrayList<ShapesDrawn> Draw = new ArrayList<ShapesDrawn>(); // Setup arrayList for storing shape information.
+    public ArrayList<ShapesDrawn> Draw = new ArrayList<>(); // Setup arrayList for storing shape information.
 
     /**
      * An ArrayList to store all commands here
@@ -586,6 +586,13 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 polylines.add(Mxy.getX());
                 polylines.add(Mxy.getY());
                 this.repaint(); // Used to display the drawing
+            }
+
+            // If right click without any lines drawn, don't draw polygon
+            else if (SwingUtilities.isRightMouseButton(e) && MouseIncrement == 1){
+                drawingPoly = false;
+                MouseIncrement = 0;
+                polylines.clear();
             }
 
             // Right click draws from x2 and y2 of the latest line to the start
