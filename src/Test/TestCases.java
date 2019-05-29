@@ -121,7 +121,7 @@ class TestCases extends JPanel {
      * Test undo with fill
      */
     @Test
-    void TestCanvasUndo4Commands() { // Test if undo has deletes 3 Lines
+    void TestCanvasUndo4Commands() { // Test undo fail safe to undo all commands even if there are still remaining.
         DrawCanvas Test = new DrawCanvas();
         Test.setOpenCoordinates("FILL #000000");
         Test.setOpenCoordinates("PEN #000000");

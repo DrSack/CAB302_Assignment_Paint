@@ -40,11 +40,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     boolean drawingPoly = false;
 
     /**
-     * Store the last known integer to keep track of ExCommands
-     */
-    private int tempEx;
-
-    /**
      * A string to hold colors and the hex
      */
     private String colourTemp = "";
@@ -78,11 +73,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      * An ArrayList to store polygon coordinates to draw
      */
     private ArrayList<Double> polylines = new ArrayList<>(); // Store polygon coordinates to draw
-
-    /**
-     * An ArrayList to store the index value of every PEN and FILL in commands arrayList
-     */
-    private ArrayList<Integer> ExCommands = new ArrayList<>(); // The index value of every PEN and FILL in commands arrayList.
 
     /**
      * Making a format to update String double variables to 5 decimal places
@@ -147,11 +137,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void setOpenCoordinates(String command) {
         commands.add(command);
-        if (command.contains("PEN") || command.contains("FILL")) {
-            if (commands.size() > 0) {
-                ExCommands.add(commands.size());
-            }
-        }
     }
 
     /**
@@ -194,35 +179,52 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void undo() {
         if (!drawingPoly) {
-            if (ExCommands.size() > 0) { // Delete extra commands if it is a PEN or FILL Colour
-                int i = ExCommands.get(ExCommands.size() - 1);
+                String current = commands.get(commands.size()-1);// Get the current command String
+                if(!current.contains("FILL") || !current.contains("PEN")){// If it isn't a FILL or PEN command
+                    commands.remove(commands.size()-1);// Remove the shape and its coordinates from the commands arraylist.
+                    Draw.remove(Draw.size() - 1);// Remove the shape from the Canvas
+                    if(commands.size() != 0){// Check whenever commands is still over 0.
+                        current = commands.get(commands.size()-1);//Set current command String to the latest array index
+                    }
+                }
+                    if((current.contains("FILL") || current.contains("fill")) && commands.size() > 0){//If it is a FILL command
+                        if(current.contains("OFF")){//If it is FILL OFF
+                            Pen = true;//Set pen to true
+                            commands.remove(commands.size()-1);//remove the command
+                            if(commands.size() != 0){// Check whenever commands is still over 0.
+                                current = commands.get(commands.size()-1);//Set current command String to the latest array index
+                            }
+                            if((current.contains("PEN") || current.contains("pen")) && commands.size() > 0){//If there is a pen command after fill
+                                Pen = true;//Set pen to true
+                                commands.remove(commands.size()-1);//remove the command
+                            }
+                        }
+                        else{
+                            tempF = "";//Clear tempF
+                            commands.remove(commands.size()-1);//remove the command
+                        }
+                        if(commands.size() != 0){// Check whenever commands is still over 0.
+                            current = commands.get(commands.size()-1);//Set current command String to the latest array index
+                        }
 
-                if (i == commands.size() - 1) { // If FILL or PEN is behind said command then only delete itself
-                    commands.remove(commands.size() - 1);
-                    ExCommands.remove(ExCommands.size() - 1);
-
-                    if (ExCommands.size() > 0) {
-                        i = ExCommands.get(ExCommands.size() - 1);
-
-                        if (commands.size() - 1 == i) { // If there is another command even if its the last string, delete it
-                            commands.remove(commands.size() - 1);
-                            ExCommands.remove(ExCommands.size() - 1);
+                    }
+                    if((current.contains("PEN") || current.contains("pen")) && commands.size() > 0){//If it is a PEN command
+                        Pen = true;//set Pen true
+                        commands.remove(commands.size()-1);//remove the command
+                        if(commands.size() != 0){// Check whenever commands is still over 0.
+                            current = commands.get(commands.size()-1);//Set current command String to the latest array index
+                        }
+                        if((current.contains("fill")||current.contains("FILL"))&& commands.size() > 0) {//If it is a FILL command
+                            tempF = "";//Clear tempF
+                            commands.remove(commands.size()-1);//remove the command
                         }
                     }
-                } else if (i == commands.size()) { // If FILL or PEN is in front of said command then delete the command and itself
-                    commands.remove(commands.size() - 1);
-                    commands.remove(commands.size() - 1);
-                    ExCommands.remove(ExCommands.size() - 1);
-                }
-            }
 
-            Draw.remove(Draw.size() - 1); // Delete the regular command.
-            commands.remove(commands.size() - 1);
-            if (Draw.size() == 0) {
+            this.repaint();
+            if(Draw.size() == 0){
                 commands.clear();
             }
 
-            this.repaint();
 
             String vecFile = "";
             System.out.println("Commands left: " + commands.size());
@@ -239,13 +241,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public void clearCanvas() {
         Draw.clear();
-        ExCommands.clear();
         commands.clear();
         offFill();
         t.resetTruth();
         colourTemp = "";
         penTemp = "";
-        tempEx = 0;
         tempF = "";
         drawingLine = false;
     }
@@ -513,35 +513,21 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         // Set the grid boundaries whether the grid is triggered.
         SetGridBoundaries(e.getX(),e.getY(),Mxy);
 
-        if (Filling && !t.isPolyTruth()) { // If the user decides to draw with a fill colour present
+        if (Filling && !t.isPolyTruth() && !t.isPlotTruth() && !t.isLineTruth()) { // If the user decides to draw with a fill colour present
             if (Pen) {
                 DoubleC = true;
             }
 
-            if (colourTemp != tempF || ExCommands.size() < tempEx) {
-                System.out.println(tempF);
-                System.out.println(tempEx);
-                System.out.println(ExCommands.size());
-                System.out.println(colourTemp);
+            if (colourTemp != tempF) {
                 tempF = colourTemp;
                 commands.add(colourTemp); // Add fill command to commands arrayList
-                ExCommands.add(commands.size());
-                if (ExCommands.size() < tempEx) {
-                    Pen = true;
-                    DoubleC = true;
-                }
-                tempEx = ExCommands.size();
             }
         }
 
         if (Pen && !t.isPolyTruth()) { // If the user decides to draw with a colour outline present
             commands.add(penTemp); // Add outline colour command
-            ExCommands.add(commands.size());
-            tempEx = ExCommands.size();
-            if (!DoubleC) {
+            if (!DoubleC && (!t.isLineTruth() && !t.isPlotTruth())) {
                 commands.add("FILL OFF" + "\n");
-                ExCommands.add(commands.size());
-                tempEx = ExCommands.size();
             }
             Pen = false; // Deactivate to not add more string to commands arrayList.
         }
@@ -622,27 +608,15 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                     if (Pen) {
                         DoubleC = true;
                     }
-
-                    if (colourTemp != tempF || ExCommands.size() < tempEx) {
+                    if (colourTemp != tempF) {
                         tempF = colourTemp;
                         commands.add(colourTemp); // Add fill command to commands arrayList
-                        ExCommands.add(commands.size());
-                        if (ExCommands.size() < tempEx) {
-                            Pen = true;
-                            DoubleC = true;
-                        }
-                        tempEx = ExCommands.size();
                     }
                 }
-
                 if (Pen) {
                     commands.add(penTemp); // Add outline colour command
-                    ExCommands.add(commands.size());
-                    tempEx = ExCommands.size();
                     if (!DoubleC) {
                         commands.add("FILL OFF" + "\n");
-                        ExCommands.add(commands.size());
-                        tempEx = ExCommands.size();
                     }
                     Pen = false;
                 }

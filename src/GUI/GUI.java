@@ -566,9 +566,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         if (c.getWidth() - 100 <= (c.getHeight())) {
             canvas.setSize(new Dimension(c.getWidth() - 160, c.getWidth() - 160));
         }
-
-        System.out.println("Canvas: " + canvas.getWidth() + "x" + canvas.getHeight());
-        System.out.println("Window: " + c.getWidth() + "x" + c.getHeight());
     }
 
     /**
