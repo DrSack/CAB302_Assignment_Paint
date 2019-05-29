@@ -519,6 +519,10 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
             }
 
             if (colourTemp != tempF || ExCommands.size() < tempEx) {
+                System.out.println(tempF);
+                System.out.println(tempEx);
+                System.out.println(ExCommands.size());
+                System.out.println(colourTemp);
                 tempF = colourTemp;
                 commands.add(colourTemp); // Add fill command to commands arrayList
                 ExCommands.add(commands.size());
@@ -533,11 +537,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
         if (Pen && !t.isPolyTruth()) { // If the user decides to draw with a colour outline present
             commands.add(penTemp); // Add outline colour command
             ExCommands.add(commands.size());
-            tempEx = commands.size();
+            tempEx = ExCommands.size();
             if (!DoubleC) {
                 commands.add("FILL OFF" + "\n");
                 ExCommands.add(commands.size());
-                tempEx = commands.size();
+                tempEx = ExCommands.size();
             }
             Pen = false; // Deactivate to not add more string to commands arrayList.
         }
@@ -634,11 +638,11 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                 if (Pen) {
                     commands.add(penTemp); // Add outline colour command
                     ExCommands.add(commands.size());
-                    tempEx = commands.size();
+                    tempEx = ExCommands.size();
                     if (!DoubleC) {
                         commands.add("FILL OFF" + "\n");
                         ExCommands.add(commands.size());
-                        tempEx = commands.size();
+                        tempEx = ExCommands.size();
                     }
                     Pen = false;
                 }
