@@ -807,22 +807,22 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
             FileNameExtensionFilter filter = new FileNameExtensionFilter("VEC files", "VEC");
             fcSave.addChoosableFileFilter(filter);
 
-            final String ext = ".VEC";
+            final String ext = ".VEC";//Extension
             String filePathWithoutExt = "";
 
             int value = fcSave.showSaveDialog(fcSave);
             if (value == JFileChooser.APPROVE_OPTION) { // Save button is clicked
                 // If the files name contains a .VEC replace it with nothing this is to prevent a double .VEC.VEC file
-                if (fcSave.getSelectedFile().getAbsolutePath().contains(".VEC")) {
-                    filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath().replace(".VEC", "");
+                if (fcSave.getSelectedFile().getAbsolutePath().contains(ext)) {
+                    filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath().replace(ext, "");
                 }
 
-                // If there is no establish .VEC file set the file as is
+                // If there is no established .VEC file set the file as is
                 else {
                     filePathWithoutExt = fcSave.getSelectedFile().getAbsolutePath();
                 }
 
-                File file = new File(filePathWithoutExt + ".VEC");
+                File file = new File(filePathWithoutExt + ext);
 
                 // If the save button is pressed save the file followed with the file name inputted the .VEC extension
                 if (file.exists()) { // If the file already exist pop up a confirm Dialog panel
@@ -881,41 +881,17 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
                 File file = fc.getSelectedFile();
                 try { // Give out an exception error if a file doesn't exist
                     if (file.exists()) { // If the file does exist
-                        BufferedReader reader = new BufferedReader((new FileReader(file)));
-                        BufferedReader readerT = new BufferedReader((new FileReader(file)));
-                        BufferedReader readerChoose = new BufferedReader((new FileReader(file)));
+                        BufferedReader reader = new BufferedReader((new FileReader(file)));//Set buffer reader.
+                        String data = reader.readLine();// set data string to the current vecfile line
+                        double x1, y1, x2, y2;// initialize coordiantes
 
-                        String VECfile = readerChoose.readLine();
-                        String VECfileTEST = readerT.readLine();
-                        String data = reader.readLine();
-
-                        double x1, y1, x2, y2;
-                        int counter = 0; // Amount of lines count
-                        int counterSTOP = 0; // Stop to notify the loop when to stop adding "\n"
-
-                        while (VECfileTEST != null) { // This checks the amount of line the File has
-                            VECfileTEST = readerT.readLine();
-                            counter++;
-                        }
-
-                        GUI frame = new GUI(fc.getSelectedFile().getAbsolutePath());
-
-                        while (VECfile != null) {
-                            String hold = VECfile;
-                            if (counterSTOP < counter) { // If the file isn't at the end add another line
-                                hold += "\n";
-                            }
-
-                            frame.readCommand(hold); // Add command into arrayList
-                            counterSTOP++;
-                            VECfile = readerChoose.readLine();
-                        }
-
+                        GUI frame = new GUI(fc.getSelectedFile().getAbsolutePath());// set the title of the GUI to the file path of the vecfile
                         if (file.length() == 0) {
                             canvas.setVisible(false);
                         }
 
                         while (data != null) { // If there is data keep reading each line
+                            frame.readCommand(data+"\n");
                             if (data.startsWith("LINE")) {
                                 data = data.replace("LINE ", ""); // Replaces LINE with nothing
 
