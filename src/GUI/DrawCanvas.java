@@ -640,6 +640,7 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
                         ExCommands.add(commands.size());
                         tempEx = commands.size();
                     }
+                    Pen = false;
                 }
 
                 commands.add(polyStr); // Adds polyStr into the command list

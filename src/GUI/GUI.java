@@ -545,7 +545,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
     @Override
     public void componentResized(ComponentEvent e) {
         if (this.timer == null) { // Initiate timer and wait for delay
-            this.timer = new Timer(300, this);
+            this.timer = new Timer(200, this);
             this.timer.start();
         }
         else { // Restart the timer if there are still resizing events
@@ -560,7 +560,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         Component c = this.getContentPane();
 
         // Set the size of the canvas based on the height of the window if the height of the window is changed
-        canvas.setSize(new Dimension(c.getSize().height - 3, c.getSize().height - 3));
+        canvas.setSize(new Dimension(c.getSize().height, c.getSize().height));
 
         // Set the size of the canvas based on the width of the window if the window's width + the toolbar's width is smaller than the window's height
         if (c.getWidth() - 100 <= (c.getHeight())) {
