@@ -355,7 +355,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      * @param x2 is the x2 coordinate of the current VECFile line.
      * @param y2 is the y2 coordinate of the current VECFile line.
      */
-    private void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
+    void parseLine(double x1, double y1, double x2, double y2) { canvas.SetCoordinateDrawingPlotting(x1,y1,x2,y2); }
 
     /**
      * Set and create the Rectangle object based on the parameters and DrawCanvas current draw settings.
@@ -365,7 +365,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      * @param x2 is the x2 coordinate of the current VECFile line.
      * @param y2 is the y2 coordinate of the current VECFile line.
      */
-    private void parseRect(double x1, double y1, double x2, double y2) {
+    void parseRect(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateRectangle(x1,y1,x2,y2);
     }
 
@@ -377,7 +377,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      * @param x2 is the x2 coordinate of the current VECFile line.
      * @param y2 is the y2 coordinate of the current VECFile line.
      */
-    private void parseEllipse(double x1, double y1, double x2, double y2) {
+    void parseEllipse(double x1, double y1, double x2, double y2) {
         canvas.SetCoordinateEllipse(x1,y1,x2,y2);
     }
 
@@ -387,7 +387,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      * @param xP The x coordinates of the polygon.
      * @param yP The y coordinates of the polygon.
      */
-    private void parsePolygon(double xP[], double yP[]) {
+    void parsePolygon(double xP[], double yP[]) {
         canvas.SetCoordinatePolygon(xP, yP);
     }
 
@@ -396,7 +396,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      *
      * @param colour The string value of the outline hex colour code from the current vecfile line.
      */
-    private void parseColour(String colour) {
+    void parseColour(String colour) {
         canvas.SetColour(colour);
     }
 
@@ -405,29 +405,42 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      *
      * @param colour The string value of the fill hex colour code from the current vecfile line.
      */
-    private void parseFill(String colour) { canvas.SetFill(colour); }
+    void parseFill(String colour){
+            canvas.SetFill(colour);
+    }
 
     /**
      * Turn off fill within the canvas
      */
-    private void parseFillOff() { canvas.offFill(); }
+    void parseFillOff() { canvas.offFill(); }
 
     /**
      * Set the outline colour of the shape that will be drawn.
      *
      * @param hex The string value of the hex colour code from the colour chosen by the user.
      */
-    private void ColourClick(String hex) { canvas.setColourClick(hex); }
+    void ColourClick(String hex) { canvas.setColourClick(hex); }
 
+    /**
+     *  Set the visibility of the canvas
+     * @param option Set the boolean value of setting whether the canvas is visible or not
+     */
+    void canvasVisible(Boolean option){ canvas.setVisible(option); }
+
+    /**
+     *  Repaint the Canvas
+     */
+
+    void canvasRepaint(){canvas.repaint();}
     /**
      * Set default drawCanvas drawing settings after opening a vec file.
      */
-    private void open() { canvas.open(); }
+    void open() { canvas.open(); }
 
     /**
      * Call the undo function of the canvas.
      */
-    private void undo() { canvas.undo(); }
+    void undo() { canvas.undo(); }
 
     /**
      * Returns drawingPoly for testing purposes.
@@ -443,19 +456,19 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      *
      * @param command The vecfile command line.
      */
-    private void readCommand(String command) { canvas.setOpenCoordinates(command); }
+     void readCommand(String command) { canvas.setOpenCoordinates(command); }
 
     /**
      * Set the fill colour of the canvas based on what the string value VECFile line.
      *
      * @param hex Pass through the vecfile hex colour string into the canvas fill method.
      */
-    private void FillClick(String hex) { canvas.setFillClick(hex); }
+    void FillClick(String hex) { canvas.setFillClick(hex); }
 
     /**
      * Reset the Foreground colour of the tool buttons.
      */
-    private void ToolColourReset() {
+    void ToolColourReset() {
         toolPlot.setForeground(null);
         toolLine.setForeground(null);
         toolEllipse.setForeground(null);
@@ -468,7 +481,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
      *
      * @return The entire vecfile string.
      */
-    public String returnFile() {
+     String returnFile() {
         return canvas.returnFile();
     }
 
@@ -868,138 +881,33 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
          * The open button essentially reads the .VEC passed through and depeding on the text put forth,
          * this will function differently, depending on the commands given by the VEC file opened.
          */
+
         if (btnSrc == open) {
             final JFileChooser fc = new JFileChooser();
             fc.setCurrentDirectory( new File( "./") ); // Set Directory to its root directory
-
             fc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("VEC files", "VEC");
             fc.addChoosableFileFilter(filter); // Filter out all extensions except for .VEC
 
             int returnVal = fc.showOpenDialog(this);
+
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 try { // Give out an exception error if a file doesn't exist
                     if (file.exists()) { // If the file does exist
-                        BufferedReader reader = new BufferedReader((new FileReader(file)));//Set buffer reader.
-                        String data = reader.readLine();// set data string to the current vecfile line
-                        double x1, y1, x2, y2;// initialize coordiantes
-
-                        GUI frame = new GUI(fc.getSelectedFile().getAbsolutePath());// set the title of the GUI to the file path of the vecfile
-                        if (file.length() == 0) {
-                            canvas.setVisible(false);
-                        }
-
-                        while (data != null) { // If there is data keep reading each line
-                            frame.readCommand(data+"\n");
-                            if (data.startsWith("LINE")) {
-                                data = data.replace("LINE ", ""); // Replaces LINE with nothing
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                x1 = Double.parseDouble(param[0]);
-                                y1 = Double.parseDouble(param[1]);
-                                x2 = Double.parseDouble(param[2]);
-                                y2 = Double.parseDouble(param[3]);
-                                frame.parseLine(x1, y1, x2, y2);
-                            }
-
-                            else if (data.startsWith("PLOT")) {
-                                data = data.replace("PLOT ", ""); // Replaces PLOT with nothing
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                x1 = Double.parseDouble(param[0]);
-                                y1 = Double.parseDouble(param[1]);
-                                frame.parseLine(x1, y1, x1, y1);
-                            }
-
-                            else if (data.startsWith("RECTANGLE")) {
-                                data = data.replace("RECTANGLE ", ""); // Replaces RECTANGLE with nothing
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                x1 = Double.parseDouble(param[0]);
-                                y1 = Double.parseDouble(param[1]);
-                                x2 = Double.parseDouble(param[2]);
-                                y2 = Double.parseDouble(param[3]);
-                                frame.parseRect(x1, y1, x2, y2);
-                            }
-
-                            else if (data.startsWith("ELLIPSE")) {
-                                data = data.replace("ELLIPSE ", ""); // Replaces ELLIPSE with nothing
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                x1 = Double.parseDouble(param[0]);
-                                y1 = Double.parseDouble(param[1]);
-                                x2 = Double.parseDouble(param[2]);
-                                y2 = Double.parseDouble(param[3]);
-                                frame.parseEllipse(x1, y1, x2, y2);
-                            }
-
-                            else if (data.startsWith("POLYGON")) {
-                                int numbers;
-
-                                // Replaces POLYGON with nothing
-                                data = data.replace("POLYGON ", "");
-
-                                // Splits params into an array
-                                String param[] = data.split(" ");
-                                numbers = param.length;
-
-                                // Initializing xP and yP
-                                double xP[] = new double[numbers / 2];
-                                double yP[] = new double[numbers / 2];
-
-                                // Parsing numbers into array
-                                for (int i = 0; i < numbers / 2; i++) {
-                                    xP[i] = Double.parseDouble(param[2 * i]);
-                                    yP[i] = Double.parseDouble(param[2 * i + 1]);
-                                }
-
-                                frame.parsePolygon(xP, yP);
-                            }
-
-                            else if (data.startsWith("PEN") || data.startsWith("pen")) { // If the line contains pen
-                                data = data.replace("PEN ", "");
-                                data = data.replace("pen ", "");
-                                frame.parseColour(data); // Set the colour on the JPanel
-                            }
-
-                            else if (data.startsWith("FILL") || data.startsWith("fill")) { // If the line contains Fill
-                                data = data.replace("FILL ", "");
-                                data = data.replace("fill ", "");
-
-                                if (data.contains("OFF")) {
-                                    frame.parseFillOff(); // Set the colour on the JPanel
-                                } else {
-                                    frame.parseFill(data); // Set the colour on the JPanel
-                                }
-                            }
-
-                            else if (data!=null) {
-                                JOptionPane.showMessageDialog(null, "Error: Unknown command: "+data, "Error", JOptionPane.INFORMATION_MESSAGE);
-                                frame.dispose(); // Close the window that has an error
-                                break;
-                            }
-
-                            data = reader.readLine();
-                        }
-
-                        // Redraw the canvas and display shapes/lines
-                        frame.open();
-                        canvas.repaint();
-                        canvas.setVisible(true);
+                        Parse Open = new Parse(file,fc.getSelectedFile().getAbsolutePath());
+                        Open.Parsing();
                     }
-
                     else { // Give an error message if the file does not exist
-                        JOptionPane.showMessageDialog(null, "Error: File not found", "Error", JOptionPane.INFORMATION_MESSAGE);
+                        Parse.NoFile();
                     }
-
-                } catch (IOException e1) { // Catch IOException
-                    e1.printStackTrace();
                 }
+                catch (IOException e1) { // Catch IOException
+                    e1.printStackTrace();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE);
+                }
+
 
             } else if (returnVal == JFileChooser.CANCEL_OPTION) {
                 // Do nothing return to normal operations

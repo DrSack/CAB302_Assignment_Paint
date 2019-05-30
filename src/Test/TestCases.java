@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
 import javax.swing.*;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -417,4 +420,69 @@ class TestCases extends JPanel {
         assertFalse(test2.isGridTruth());//Test if false
     }
 
+    /**
+     * Test parsing through a normal command
+     */
+    @Test
+    void TestWorkingOpen() { // Test Grid values
+        File file = new File("test");
+        Parse test = new Parse(file, "Title");
+        Exception thrown = assertThrows(Exception.class, ()->{
+            test.Open("PEN #000000");
+        });
+        assertEquals(null, thrown.getMessage());
+    }
+
+    /**
+     * Test parsing an incorrect pen command
+     */
+    @Test
+    void TestFalsePenOpen() { // Test Grid values
+        File file = new File("test");
+        Parse test = new Parse(file, "Title");
+        String error = "000000";
+        Exception thrown = assertThrows(Exception.class, ()->{
+            test.Open("PEN "+error);
+        });
+        assertEquals("Error: Unknown pen command: "+error, thrown.getMessage());
+    }
+
+    /**
+     * Test parsing an incorrect fill command
+     */
+    @Test
+    void TestFalseFillOpen() { // Test Grid values
+        File file = new File("test");
+        Parse test = new Parse(file, "Title");
+        String error = "000000";
+        Exception thrown = assertThrows(Exception.class, ()->{
+            test.Open("FILL "+error);
+        });
+        assertEquals("Error: Unknown fill command: "+error, thrown.getMessage());
+    }
+
+    /**
+     * Test parsing an unknown command
+     */
+    @Test
+    void TestUnknownOpen() { // Test Grid values
+        File file = new File("test");
+        Parse test = new Parse(file, "Title");
+        String error = "Nice";
+        Exception thrown = assertThrows(Exception.class, ()->{
+            test.Open(error);
+        });
+        assertEquals("Error: Unknown command: "+error, thrown.getMessage());
+    }
+
+    /**
+     * Test parsing nothing
+     */
+    @Test
+    void TestOpenNothing() { // Test Grid values
+        Exception thrown = assertThrows(Exception.class, ()->{
+            Parse.NoFile();
+        });
+        assertEquals("Error: File not found", thrown.getMessage());
+    }
 }

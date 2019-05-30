@@ -165,8 +165,6 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
      */
     public String returnFile() {
         String vecFile = "";
-        System.out.println(commands.size());
-
         for (String command : commands) {
             vecFile += command;
         }
