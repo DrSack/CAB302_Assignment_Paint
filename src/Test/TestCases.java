@@ -4,18 +4,11 @@ import Coordinate.MouseCoordinates;
 import Coordinate.XY1;
 import Coordinate.XY2;
 import GUI.*;
-import Tools.Grid;
-import Tools.LineOrPlot;
-import Tools.Rectangle;
-import Tools.ShapesDrawn;
+import Tools.*;
 import org.junit.jupiter.api.Test;
-
 import javax.swing.*;
-
 import java.awt.*;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;

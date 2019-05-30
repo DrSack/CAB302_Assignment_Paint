@@ -734,9 +734,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener, ChangeLi
         }
 
         if (btnSrc == clear) { // If clear is clicked on clear the canvas and repaint
-            fill.setForeground(null);
-            outline.setForeground(Color.BLUE);
-            ToolColourReset();
             try {
                 DrawPolyClear();
             }

@@ -240,11 +240,8 @@ public class DrawCanvas extends JPanel implements MouseListener, MouseMotionList
     public void clearCanvas() {
         Draw.clear();
         commands.clear();
-        offFill();
-        t.resetTruth();
-        colourTemp = "";
-        penTemp = "";
         tempF = "";
+        Pen = true;
         drawingLine = false;
     }
 
