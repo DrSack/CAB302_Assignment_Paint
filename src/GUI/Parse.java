@@ -43,11 +43,13 @@ public class Parse {
      * @throws Exception Throw error messages based on unknown commands
      */
      public void Open(String data) throws Exception {
-        double x1, y1, x2, y2;// initialize coordiantes
+        int Line = 0;
+         double x1, y1, x2, y2;// initialize coordiantes
         if (file.length() == 0) {
             this.frame.canvasVisible(false);
         }
         while (data != null) { // If there is data keep reading each line
+            Line++;
             this.frame.readCommand(data+"\n");
             if (data.startsWith("LINE")) {
                 data = data.replace("LINE ", ""); // Replaces LINE with nothing
@@ -126,7 +128,7 @@ public class Parse {
                 }
                 else{
                     this.frame.dispose();
-                    throw new Exception("Error: Unknown pen command: "+data);
+                    throw new Exception("Error: Unknown pen command: '"+data+"' Line: "+Line);
                 }
             }
 
@@ -142,14 +144,16 @@ public class Parse {
                     }
                     else{
                         this.frame.dispose();
-                        throw new Exception("Error: Unknown fill command: "+data);
+                        throw new Exception("Error: Unknown fill command: '"+data+"' Line: "+Line);
                     }
                 }
             }
 
             else if (data!=null) {
                 this.frame.dispose(); // Close the window that has an error
-                throw new Exception("Error: Unknown command: "+data);
+                throw new Exception("Error: Unknown command: '"+data+"' Line: "+Line);
+
+
             }
 
             data = this.reader.readLine();

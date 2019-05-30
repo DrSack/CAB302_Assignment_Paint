@@ -444,7 +444,7 @@ class TestCases extends JPanel {
         Exception thrown = assertThrows(Exception.class, ()->{
             test.Open("PEN "+error);
         });
-        assertEquals("Error: Unknown pen command: "+error, thrown.getMessage());
+        assertEquals("Error: Unknown pen command: '"+error+"' Line: 1", thrown.getMessage());
     }
 
     /**
@@ -458,7 +458,7 @@ class TestCases extends JPanel {
         Exception thrown = assertThrows(Exception.class, ()->{
             test.Open("FILL "+error);
         });
-        assertEquals("Error: Unknown fill command: "+error, thrown.getMessage());
+        assertEquals("Error: Unknown fill command: '"+error+"' Line: 1", thrown.getMessage());
     }
 
     /**
@@ -472,7 +472,7 @@ class TestCases extends JPanel {
         Exception thrown = assertThrows(Exception.class, ()->{
             test.Open(error);
         });
-        assertEquals("Error: Unknown command: "+error, thrown.getMessage());
+        assertEquals("Error: Unknown command: '"+error+"' Line: 1", thrown.getMessage());
     }
 
     /**
